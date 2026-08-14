@@ -2,6 +2,7 @@ import type {
   AnalyticsSnapshot,
   Article,
   Category,
+  FaqItem,
   Quote,
   ResourceItem,
   Story,
@@ -9,37 +10,102 @@ import type {
   Testimonial,
   Video,
 } from "@/types";
+import { names } from "@/lib/i18n/content";
+import {
+  ARTICLE_COPY,
+  FAQ_COPY,
+  RESOURCE_COPY,
+  STORY_COPY,
+  TEAM_COPY,
+  TESTIMONIAL_COPY,
+} from "@/lib/i18n/editorial";
 
 export const categories: Category[] = [
   {
-    id: "cat-hope",
-    slug: "hope",
-    name: "Hope",
-    nameHi: "आशा",
+    id: "cat-inspiration",
+    slug: "inspiration",
+    name: "Inspiration",
+    names: names("Inspiration", "ప్రేరణ", "प्रेरणा", "ஊக்கம்", "ಪ್ರೇರಣೆ", "പ്രചോദനം"),
     description: "Gentle reminders that brighter days are possible.",
     type: "video",
   },
   {
-    id: "cat-recovery",
-    slug: "recovery",
-    name: "Recovery",
-    nameHi: "स्वस्थ होना",
-    description: "Stories and practices that support healing over time.",
+    id: "cat-success",
+    slug: "success-stories",
+    name: "Success stories",
+    names: names("Success stories", "విజయ కథలు", "सफलता की कहानियाँ", "வெற்றிக் கதைகள்", "ಯಶಸ್ಸಿನ ಕಥೆಗಳು", "വിജയകഥകൾ"),
+    description: "Journeys of people who rebuilt hope.",
     type: "video",
   },
   {
-    id: "cat-wellness",
-    slug: "wellness",
-    name: "Wellness",
-    nameHi: "कल्याण",
+    id: "cat-students",
+    slug: "for-students",
+    name: "For students",
+    names: names("For students", "విద్యార్థులకు", "विद्यार्थियों के लिए", "மாணவர்களுக்கு", "ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ", "വിദ്യാർത്ഥികൾക്ക്"),
+    description: "Support for study, pressure, and belonging.",
+    type: "video",
+  },
+  {
+    id: "cat-parents",
+    slug: "for-parents",
+    name: "For parents",
+    names: names("For parents", "తల్లిదండ్రులకు", "माता-पिता के लिए", "பெற்றோருக்கு", "ತಂದೆತಾಯಿಯರಿಗೆ", "മാതാപിതാക്കൾക്ക്"),
+    description: "How to listen, support, and stay connected.",
+    type: "video",
+  },
+  {
+    id: "cat-youth",
+    slug: "for-youth",
+    name: "For youth",
+    names: names("For youth", "యువత కోసం", "युवाओं के लिए", "இளைஞர்களுக்கு", "ಯುವಜನರಿಗೆ", "യുവാക്കൾക്ക്"),
+    description: "Hopeful messages for young adults.",
+    type: "video",
+  },
+  {
+    id: "cat-mental-health",
+    slug: "mental-health",
+    name: "Mental health",
+    names: names("Mental health", "మానసిక ఆరోగ్యం", "मानसिक स्वास्थ्य", "மனநலம்", "ಮಾನಸಿಕ ಆರೋಗ್ಯ", "മാനസികാരോഗ്യം"),
     description: "Everyday habits that nourish mind and body.",
+    type: "video",
+  },
+  {
+    id: "cat-meditation",
+    slug: "meditation",
+    name: "Meditation",
+    names: names("Meditation", "ధ్యానం", "ध्यान", "தியானம்", "ಧ್ಯಾನ", "ധ്യാനം"),
+    description: "Breath, pause, and gentle presence.",
+    type: "video",
+  },
+  {
+    id: "cat-spiritual",
+    slug: "spiritual",
+    name: "Spiritual",
+    names: names("Spiritual", "ఆధ్యాత్మికం", "आध्यात्मिक", "ஆன்மீகம்", "ಆಧ್ಯಾತ್ಮಿಕ", "ആധ്യാത്മികം"),
+    description: "Quiet meaning without sensational claims.",
+    type: "video",
+  },
+  {
+    id: "cat-life-advice",
+    slug: "life-advice",
+    name: "Life advice",
+    names: names("Life advice", "జీవిత సలహాలు", "जीवन सलाह", "வாழ்க்கை அறிவுரை", "ಜೀವನ ಸಲಹೆ", "ജീവിത ഉപദേശം"),
+    description: "Small practices for ordinary days.",
+    type: "video",
+  },
+  {
+    id: "cat-confidence",
+    slug: "self-confidence",
+    name: "Self-confidence",
+    names: names("Self-confidence", "ఆత్మవిశ్వాసం", "आत्मविश्वास", "ஆத்மநம்பிக்கை", "ಆತ್ಮವಿಶ್ವಾಸ", "ആത്മവിശ്വാസം"),
+    description: "Kind strength and a steadier inner voice.",
     type: "video",
   },
   {
     id: "cat-family",
     slug: "family",
     name: "Family & Friends",
-    nameHi: "परिवार और मित्र",
+    names: names("Family & Friends", "కుటుంబం, స్నేహితులు", "परिवार और मित्र", "குடும்பம் நண்பர்கள்", "ಕುಟುಂಬ ಸ್ನೇಹಿತರು", "കുടുംബവും സുഹൃത്തുക്കളും"),
     description: "How to listen, support, and stay connected.",
     type: "story",
   },
@@ -47,7 +113,7 @@ export const categories: Category[] = [
     id: "cat-resilience",
     slug: "resilience",
     name: "Resilience",
-    nameHi: "लचीलापन",
+    names: names("Resilience", "ధైర్యం", "लचीलापन", "நெகிழ்ச்சி", "ಸ್ಥಿತಿಸ್ಥಾಪಕತ್ವ", "സ്ഥിരോത്സാഹം"),
     description: "Building strength through small, steady steps.",
     type: "story",
   },
@@ -55,16 +121,8 @@ export const categories: Category[] = [
     id: "cat-mind",
     slug: "mind",
     name: "Mind & Mood",
-    nameHi: "मन और मनोदशा",
+    names: names("Mind & Mood", "మనసు, మానసిక స్థితి", "मन और मनोदशा", "மனமும் மனநிலையும்", "ಮನಸ್ಸು ಮತ್ತು ಮನಸ್ಥಿತಿ", "മനസ്സും മാനസികാവസ്ഥയും"),
     description: "Understanding feelings with compassion.",
-    type: "blog",
-  },
-  {
-    id: "cat-inspire",
-    slug: "inspiration",
-    name: "Inspiration",
-    nameHi: "प्रेरणा",
-    description: "Words and ideas that lift the spirit.",
     type: "blog",
   },
 ];
@@ -77,7 +135,7 @@ export const videos: Video[] = [
     description:
       "A quiet visual reminder that connection is always possible. Let the rhythm of the waves steady your breathing.",
     tags: ["hope", "calm", "connection"],
-    categoryId: "cat-hope",
+    categoryId: "cat-inspiration",
     featured: true,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
@@ -97,7 +155,7 @@ export const videos: Video[] = [
     description:
       "Begin the day with sunlight, slow movement, and a message of self-kindness.",
     tags: ["wellness", "morning", "ritual"],
-    categoryId: "cat-wellness",
+    categoryId: "cat-mental-health",
     featured: true,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1600&q=80",
@@ -117,7 +175,7 @@ export const videos: Video[] = [
     description:
       "Recovery is rarely a straight line. This film honours the courage of taking one kind step at a time.",
     tags: ["recovery", "hope"],
-    categoryId: "cat-recovery",
+    categoryId: "cat-success",
     featured: true,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80",
@@ -137,7 +195,7 @@ export const videos: Video[] = [
     description:
       "A practical, compassionate guide for families and friends who want to show up with care.",
     tags: ["family", "support", "listening"],
-    categoryId: "cat-family",
+    categoryId: "cat-parents",
     featured: false,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80",
@@ -156,7 +214,7 @@ export const videos: Video[] = [
     description:
       "A short guided pause. Follow the clouds, lengthen your exhale, and give your nervous system a rest.",
     tags: ["calm", "breathing", "wellness"],
-    categoryId: "cat-wellness",
+    categoryId: "cat-meditation",
     featured: true,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80",
@@ -176,7 +234,7 @@ export const videos: Video[] = [
     description:
       "People who chose to stay share what helped them rebuild meaning, friendship, and purpose.",
     tags: ["recovery", "stories", "hope"],
-    categoryId: "cat-recovery",
+    categoryId: "cat-success",
     featured: true,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
@@ -195,7 +253,7 @@ export const videos: Video[] = [
     description:
       "Resilience often looks like making tea, sending a message, or stepping outside for five minutes of air.",
     tags: ["resilience", "everyday"],
-    categoryId: "cat-hope",
+    categoryId: "cat-life-advice",
     featured: false,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=80",
@@ -215,7 +273,7 @@ export const videos: Video[] = [
     description:
       "An invitation to imagine a kinder tomorrow and to leave a message of encouragement for the person you are becoming.",
     tags: ["inspiration", "hope"],
-    categoryId: "cat-hope",
+    categoryId: "cat-confidence",
     featured: false,
     thumbnailUrl:
       "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1600&q=80",
@@ -246,7 +304,7 @@ Recovery, for Ananya, looks like morning walks, medicine taken on time, and a gr
 If you are in a similar season, she wants you to know this: staying is not a small thing. It is a beginning.`,
     authorName: "Ananya M.",
     authorRole: "Student, Bengaluru",
-    categoryId: "cat-recovery",
+    categoryId: "cat-success",
     thumbnailUrl:
       "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1600&q=80",
     readingMinutes: 4,
@@ -317,7 +375,10 @@ He still plays. He also keeps therapy appointments the way he keeps training. Hi
     featured: false,
     publishedAt: "2026-07-19T00:00:00.000Z",
   },
-];
+].map((story) => ({
+  ...story,
+  ...STORY_COPY[story.id],
+}));
 
 export const articles: Article[] = [
   {
@@ -354,7 +415,7 @@ If the day still feels too heavy, reach out to a trusted person or a professiona
 You do not have to feel hopeful to act with hope. Sending the message, filling the prescription, walking to the balcony — these are hopeful acts. They do not erase pain. They keep a door open.
 
 If hope feels far away, borrow it from a story, a friend, a sunrise, or a helpline. Community can hold the light until you can carry it again.`,
-    categoryId: "cat-inspire",
+    categoryId: "cat-inspiration",
     thumbnailUrl:
       "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
     tags: ["hope", "inspiration"],
@@ -392,7 +453,7 @@ Take care of yourself too. Supporting someone is meaningful work, and you are al
 If you are in a season of endurance, honour that. You are allowed to rest. You are allowed to ask for company. You are allowed to believe that your life still holds unwritten chapters.
 
 May you meet yourself with the same gentleness you would offer a friend.`,
-    categoryId: "cat-inspire",
+    categoryId: "cat-inspiration",
     thumbnailUrl:
       "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1600&q=80",
     tags: ["inspiration", "resilience"],
@@ -421,55 +482,107 @@ These are not replacements for therapy or medical care. They are companions to i
     readingMinutes: 4,
     publishedAt: "2026-02-14T00:00:00.000Z",
   },
-];
+].map((article) => ({
+  ...article,
+  ...ARTICLE_COPY[article.id],
+}));
 
 export const quotes: Quote[] = [
   {
     id: "q1",
-    text: "You are not alone. Help is real, and so is hope.",
-    textHi: "आप अकेले नहीं हैं। मदद सच है, और आशा भी।",
+    text: "However deep the night, sunrise still comes.",
+    translations: names(
+      "However deep the night, sunrise still comes.",
+      "చీకటి ఎంత గాఢమైనా...\nసూర్యోదయం తప్పకుండా వస్తుంది.",
+      "रात जितनी गहरी हो, सूर्योदय आता ही है।",
+      "இருள் எவ்வளவு ஆழமானாலும் சூரிய உதயம் வரும்.",
+      "ಕತ್ತಲೆ ಎಷ್ಟೇ ಆಳವಾದರೂ ಸೂರ್ಯೋದಯ ಬರುತ್ತದೆ.",
+      "ഇരുട്ട് എത്ര ആഴമുള്ളതായാലും സൂര്യോദയം വരും.",
+    ),
     author: "stopsuicide.in",
     active: true,
   },
   {
     id: "q2",
-    text: "Healing is not a straight line. Keep walking anyway.",
-    textHi: "उपचार सीधी रेखा नहीं है। फिर भी चलते रहिए।",
+    text: "Your life is precious.",
+    translations: names(
+      "Your life is precious.",
+      "మీ జీవితం అమూల్యం.",
+      "आपका जीवन अमूल्य है।",
+      "உங்கள் வாழ்க்கை விலைமதிப்பற்றது.",
+      "ನಿಮ್ಮ ಜೀವನ ಅಮೂಲ್ಯ.",
+      "നിങ്ങളുടെ ജീവിതം അമൂല്യമാണ്.",
+    ),
     author: "Community voices",
     active: true,
   },
   {
     id: "q3",
-    text: "The bravest thing you can do is reach out.",
-    textHi: "सबसे साहसी काम है किसी तक पहुँचना।",
+    text: "The world needs your smile.",
+    translations: names(
+      "The world needs your smile.",
+      "మీ నవ్వు ప్రపంచానికి అవసరం.",
+      "दुनिया को आपकी मुस्कान चाहिए।",
+      "உலகிற்கு உங்கள் புன்னகை தேவை.",
+      "ಜಗತ್ತಿಗೆ ನಿಮ್ಮ ನಗು ಬೇಕು.",
+      "ലോകത്തിന് നിങ്ങളുടെ പുഞ്ചിരി വേണം.",
+    ),
     author: "Survivor community",
     active: true,
   },
   {
     id: "q4",
-    text: "Even the smallest light can make a room feel safer.",
-    textHi: "सबसे छोटी रोशनी भी कमरे को सुरक्षित बना सकती है।",
-    author: "Anonymous",
+    text: "Stand today. Tomorrow’s victory can still be yours.",
+    translations: names(
+      "Stand today. Tomorrow’s victory can still be yours.",
+      "ఈ రోజు నిలబడండి...\nరేపు విజయం మీదే.",
+      "आज खड़े रहिए। कल की जीत अभी भी आपकी हो सकती है।",
+      "இன்று நில்லுங்கள். நாளை வெற்றி உங்களுடையதாக இருக்கலாம்.",
+      "ಇಂದು ನಿಲ್ಲಿ. ನಾಳೆಯ ಗೆಲುವು ನಿಮ್ಮದಾಗಬಹುದು.",
+      "ഇന്ന് നിൽക്കുക. നാളത്തെ വിജയം നിങ്ങളുടേതാകാം.",
+    ),
+    author: "Hope notes",
     active: true,
   },
   {
     id: "q5",
-    text: "Stay. Tomorrow has not had its chance to surprise you.",
-    textHi: "रुकिए। कल को आपको आश्चर्य देने का अवसर अभी मिला नहीं है।",
-    author: "Hope notes",
+    text: "Your story is not finished yet.",
+    translations: names(
+      "Your story is not finished yet.",
+      "మీ కథ ఇంకా పూర్తికాలేదు.",
+      "आपकी कहानी अभी खत्म नहीं हुई।",
+      "உங்கள் கதை இன்னும் முடியவில்லை.",
+      "ನಿಮ್ಮ ಕಥೆ ಇನ್ನೂ ಮುಗಿದಿಲ್ಲ.",
+      "നിങ്ങളുടെ കഥ ഇനിയും തീർന്നിട്ടില്ല.",
+    ),
+    author: "stopsuicide.in",
     active: true,
   },
   {
     id: "q6",
     text: "Connection is medicine. Let someone sit beside you.",
-    textHi: "जुड़ाव एक दवा है। किसी को अपने पास बैठने दीजिए।",
+    translations: names(
+      "Connection is medicine. Let someone sit beside you.",
+      "అనుబంధం ఒక మందు. ఎవరినైనా పక్కన కూర్చోనివ్వండి.",
+      "जुड़ाव एक दवा है। किसी को अपने पास बैठने दीजिए।",
+      "இணைப்பு ஒரு மருந்து. யாரையாவது அருகில் அமர விடுங்கள்.",
+      "ಸಂಪರ್ಕವೇ ಔಷಧ. ಯಾರನ್ನಾದರೂ ಹತ್ತಿರ ಕುಳಿತುಕೊಳ್ಳಲು ಬಿಡಿ.",
+      "ബന്ധം ഒരു മരുന്നാണ്. ആരെയെങ്കിലും അരികിൽ ഇരിക്കാൻ അനുവദിക്കുക.",
+    ),
     author: "Wellness circle",
     active: true,
   },
   {
     id: "q7",
-    text: "Your story is still being written. Leave room for light.",
-    textHi: "आपकी कहानी अभी लिखी जा रही है। रोशनी के लिए जगह छोड़िए।",
+    text: "You are not alone. Help is real, and so is hope.",
+    translations: names(
+      "You are not alone. Help is real, and so is hope.",
+      "మీరు ఒంటరివారు కాదు. సహాయం నిజం, ఆశ కూడా నిజం.",
+      "आप अकेले नहीं हैं। मदद सच है, और आशा भी।",
+      "நீங்கள் தனியாக இல்லை. உதவியும் நம்பிக்கையும் உண்மை.",
+      "ನೀವು ಒಂಟಿಯಲ್ಲ. ಸಹಾಯ ನಿಜ, ಆಶೆಯೂ ನಿಜ.",
+      "നിങ്ങൾ ഒറ്റയ്ക്കല്ല. സഹായവും പ്രത്യാശയും സത്യമാണ്.",
+    ),
     author: "stopsuicide.in",
     active: true,
   },
@@ -482,6 +595,8 @@ export const testimonials: Testimonial[] = [
     role: "Teacher, Jaipur",
     quote:
       "The stories reminded me that recovery can be quiet and still be real. I sent the Get Help page to a student who needed it.",
+    quotes: TESTIMONIAL_COPY.t1.quotes,
+    roles: TESTIMONIAL_COPY.t1.roles,
     avatarUrl:
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
   },
@@ -491,6 +606,8 @@ export const testimonials: Testimonial[] = [
     role: "Software engineer, Hyderabad",
     quote:
       "I watched the breathing film on a difficult night. It did not fix everything. It helped me stay until morning.",
+    quotes: TESTIMONIAL_COPY.t2.quotes,
+    roles: TESTIMONIAL_COPY.t2.roles,
     avatarUrl:
       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
   },
@@ -500,6 +617,8 @@ export const testimonials: Testimonial[] = [
     role: "Parents, Chennai",
     quote:
       "The family guidance taught us to listen without rushing to solutions. Our home feels safer for our son.",
+    quotes: TESTIMONIAL_COPY.t3.quotes,
+    roles: TESTIMONIAL_COPY.t3.roles,
     avatarUrl:
       "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
   },
@@ -514,6 +633,7 @@ export const resources: ResourceItem[] = [
     category: "tips",
     icon: "sun",
     body: `Protect sleep, eat regularly, and get a little morning light. Limit late-night news if it agitates you. Keep a short list of people you can text. Move your body in a way that feels kind, not punishing. Notice caffeine and alcohol, which can intensify anxiety for some people. None of this replaces professional care, but each habit can make care more possible.`,
+    ...RESOURCE_COPY["res-1"],
   },
   {
     id: "res-2",
@@ -523,6 +643,7 @@ export const resources: ResourceItem[] = [
     category: "coping",
     icon: "heart",
     body: `Try the 5-4-3-2-1 senses exercise. Hold something cool or warm. Name the feeling without judging it. Breathe out longer than you breathe in. If thoughts race, write them down and close the notebook. Put your feet on the floor and describe the room out loud. If you feel unsafe, contact a helpline or someone you trust immediately.`,
+    ...RESOURCE_COPY["res-2"],
   },
   {
     id: "res-3",
@@ -532,6 +653,7 @@ export const resources: ResourceItem[] = [
     category: "family",
     icon: "users",
     body: `Listen more than you lecture. Avoid dismissing feelings. Ask what would help today. Reduce access to isolation when someone is struggling, and involve professionals early. Take threats of self-harm seriously and seek urgent help. Caregivers need rest and their own support. You can love someone and still set boundaries that keep everyone safer.`,
+    ...RESOURCE_COPY["res-3"],
   },
   {
     id: "res-4",
@@ -541,31 +663,17 @@ export const resources: ResourceItem[] = [
     category: "faq",
     icon: "help",
     body: `Is this a crisis service? No. We share hope and education, and we always point people toward trained helplines and clinicians. Is content moderated? Yes. We do not publish graphic or sensational material. Can I share my story? Yes, through the contact and volunteer forms. We edit for safety and dignity. Do you replace therapy? Never. Professional support saves lives.`,
+    ...RESOURCE_COPY["res-4"],
   },
 ];
 
-export const faqs = [
-  {
-    question: "Is stopsuicide.in a crisis hotline?",
-    answer:
-      "No. We are an educational and inspirational platform. If you need immediate support, please contact Tele-MANAS (14416), KIRAN (1800-599-0019), or another helpline listed on this site.",
-  },
-  {
-    question: "Will you publish graphic stories?",
-    answer:
-      "No. We focus on hope, recovery, and connection. We do not share sensational or graphic details.",
-  },
-  {
-    question: "Can I remain anonymous when sharing a story?",
-    answer:
-      "Yes. Tell us your preference in the form. We protect dignity first.",
-  },
-  {
-    question: "Is the site a substitute for professional care?",
-    answer:
-      "No. Videos and articles can encourage you, but they do not replace therapists, doctors, or emergency services.",
-  },
-];
+export const faqs: FaqItem[] = FAQ_COPY.map((faq) => ({
+  id: faq.id,
+  question: faq.questions.en ?? "",
+  answer: faq.answers.en ?? "",
+  questions: faq.questions,
+  answers: faq.answers,
+}));
 
 export const team: TeamMember[] = [
   {
@@ -573,6 +681,8 @@ export const team: TeamMember[] = [
     name: "Dr. Aisha Rahman",
     role: "Clinical advisor",
     bio: "Psychiatrist focused on community mental health and compassionate public education.",
+    roles: TEAM_COPY.tm1.roles,
+    bios: TEAM_COPY.tm1.bios,
     imageUrl:
       "https://images.unsplash.com/photo-1559839734-166b3806ba4c?auto=format&fit=crop&w=800&q=80",
   },
@@ -581,6 +691,8 @@ export const team: TeamMember[] = [
     name: "Vikram Shah",
     role: "Founder & editor",
     bio: "Builds hopeful media that helps people stay, connect, and ask for help sooner.",
+    roles: TEAM_COPY.tm2.roles,
+    bios: TEAM_COPY.tm2.bios,
     imageUrl:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80",
   },
@@ -589,6 +701,8 @@ export const team: TeamMember[] = [
     name: "Priya Nair",
     role: "Community lead",
     bio: "Coordinates volunteers, survivor-story ethics, and family education programmes.",
+    roles: TEAM_COPY.tm3.roles,
+    bios: TEAM_COPY.tm3.bios,
     imageUrl:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=800&q=80",
   },
