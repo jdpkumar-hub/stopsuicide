@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# stopsuicide.in
 
-## Getting Started
+A calm, hope-focused platform for resilience, recovery, and mental wellness.
 
-First, run the development server:
+This site is **not a crisis service**. Every page includes a visible **Get Help** section with India-first helplines and international resources. Content is written to emphasise connection and recovery, never graphic or sensational detail.
+
+## Stack
+
+- Next.js 15 (App Router) + React 19 + TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Supabase Auth + PostgreSQL
+- Cloudinary for video and thumbnail storage
+
+## Getting started
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Seed content is used until Supabase is connected, so the public site works immediately.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See `.env.example`:
 
-## Learn More
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- Cloudinary cloud name, API key, and API secret
 
-To learn more about Next.js, take a look at the following resources:
+## Supabase
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Create a project.
+2. Run `supabase/schema.sql` in the SQL editor.
+3. Create an Auth user and set `profiles.role` to `admin`.
+4. Add the keys to `.env.local`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Admin routes at `/admin` require a signed-in staff user once Supabase is configured.
 
-## Deploy on Vercel
+## Cloudinary
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Admin video upload accepts:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Thumbnail image
+- MP4 file (stored on Cloudinary)
+- YouTube link
+- Vimeo link
+- Title, description, tags, category, featured toggle
+
+Metadata is saved in PostgreSQL.
+
+## Safety notes
+
+- Keep **Get Help** on every page.
+- Do not publish methods, graphic imagery, or sensational headlines.
+- Encourage people to contact trusted people and professional support.
+- India: Tele-MANAS 14416, KIRAN 1800-599-0019, iCall 9152987821, AASRA, Vandrevala.
+- Emergency: 112 in India.
+
+If you are in crisis, call a local helpline or emergency number. In the United States, call or text 988.
