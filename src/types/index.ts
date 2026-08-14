@@ -1,4 +1,6 @@
-export type Locale = "en" | "hi";
+export type Locale = "en" | "te" | "hi" | "ta" | "kn" | "ml";
+
+export type TranslationMap = Partial<Record<Locale, string>>;
 
 export type ContentStatus = "draft" | "published";
 
@@ -10,8 +12,9 @@ export interface Category {
   id: string;
   slug: string;
   name: string;
-  nameHi: string;
+  names: TranslationMap;
   description: string;
+  descriptions?: TranslationMap;
   type: CategoryType;
 }
 
@@ -34,6 +37,12 @@ export interface Video {
   views: number;
   status: ContentStatus;
   publishedAt: string;
+  titles?: TranslationMap;
+  descriptions?: TranslationMap;
+  tagsByLocale?: Partial<Record<Locale, string[]>>;
+  seoTitle?: TranslationMap;
+  seoDescription?: TranslationMap;
+  searchTerms?: string[];
 }
 
 export interface Story {
@@ -49,6 +58,10 @@ export interface Story {
   readingMinutes: number;
   featured: boolean;
   publishedAt: string;
+  titles?: TranslationMap;
+  excerpts?: TranslationMap;
+  bodies?: TranslationMap;
+  searchTerms?: string[];
 }
 
 export interface Article {
@@ -63,12 +76,18 @@ export interface Article {
   aiGenerated: boolean;
   readingMinutes: number;
   publishedAt: string;
+  titles?: TranslationMap;
+  excerpts?: TranslationMap;
+  bodies?: TranslationMap;
+  seoTitle?: TranslationMap;
+  seoDescription?: TranslationMap;
+  searchTerms?: string[];
 }
 
 export interface Quote {
   id: string;
   text: string;
-  textHi: string;
+  translations: TranslationMap;
   author: string;
   active: boolean;
 }
@@ -78,7 +97,10 @@ export interface Testimonial {
   name: string;
   role: string;
   quote: string;
+  quotes?: TranslationMap;
+  roles?: TranslationMap;
   avatarUrl: string;
+  locale?: Locale;
 }
 
 export interface ResourceItem {
@@ -93,6 +115,9 @@ export interface ResourceItem {
     | "family"
     | "faq";
   icon: "sun" | "heart" | "users" | "help";
+  titles?: TranslationMap;
+  summaries?: TranslationMap;
+  bodies?: TranslationMap;
 }
 
 export interface TeamMember {
@@ -101,6 +126,8 @@ export interface TeamMember {
   role: string;
   bio: string;
   imageUrl: string;
+  roles?: TranslationMap;
+  bios?: TranslationMap;
 }
 
 export interface CrisisResource {
