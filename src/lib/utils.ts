@@ -53,6 +53,10 @@ export function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || "https://stopsuicide.in";
 }
 
+export function absoluteUrl(path: string) {
+  return new URL(path, siteUrl()).toString();
+}
+
 export function telHref(phone: string) {
   return `tel:${phone.replace(/\s/g, "")}`;
 }
