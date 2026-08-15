@@ -16,6 +16,7 @@ export function Hero() {
   return (
     <section className="relative isolate min-h-[100svh] overflow-hidden">
       <SunriseScene />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-slate-950/35 via-slate-950/10 to-transparent" />
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-4 pb-24 pt-28 sm:px-6">
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div>

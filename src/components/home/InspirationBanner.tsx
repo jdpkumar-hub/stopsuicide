@@ -1,21 +1,26 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BANNER_MESSAGES } from "@/lib/i18n/content";
 import { useI18n } from "@/lib/i18n/context";
 
 export function InspirationBanner() {
+  const pathname = usePathname();
   const { locale } = useI18n();
   const messages = BANNER_MESSAGES[locale];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    if (pathname === "/") return;
     const id = window.setInterval(() => {
       setIndex((value) => (value + 1) % messages.length);
     }, 5000);
     return () => window.clearInterval(id);
-  }, [messages.length]);
+  }, [messages.length, pathname]);
+
+  if (pathname === "/") return null;
 
   return (
     <div className="border-b border-border bg-gradient-to-r from-blue-600/12 via-emerald-500/14 to-amber-300/10">
