@@ -1,66 +1,87 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { QuoteReel } from "@/components/home/QuoteReel";
+import { SunriseScene } from "@/components/home/SunriseScene";
 import { Button } from "@/components/ui/primitives";
-import { HERO_VIDEO } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n/context";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   const { t } = useI18n();
+  const reduce = useReducedMotion();
 
   return (
-    <section className="relative isolate min-h-[88vh] overflow-hidden rounded-b-[2.5rem]">
-      <video
-        className="absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80"
-        aria-hidden="true"
-      >
-        <source src={HERO_VIDEO} type="video/mp4" />
-      </video>
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/45 to-background" />
-      <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-4 pb-20 pt-32 sm:px-6">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-200"
-        >
-          {t("hero.kicker")}
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="max-w-4xl font-serif text-5xl leading-tight text-white sm:text-7xl whitespace-pre-line"
-        >
-          {t("hero.headline")}
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mt-5 max-w-2xl text-lg text-slate-100 whitespace-pre-line"
-        >
-          {t("hero.sub")}
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-8 flex flex-wrap gap-3"
-        >
-          <Button href="/videos">{t("hero.watch")}</Button>
-          <Button href="#get-help" variant="green">
-            {t("hero.support")}
-          </Button>
-          <Button href="/contact" variant="ghost">
-            {t("hero.share")}
-          </Button>
-        </motion.div>
+    <section className="relative isolate min-h-[100svh] overflow-hidden">
+      <SunriseScene />
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-4 pb-24 pt-28 sm:px-6">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+          <div>
+            <motion.p
+              initial={reduce ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease }}
+              className="mb-5 text-xs font-semibold uppercase tracking-[0.32em] text-white/80"
+            >
+              {t("hero.kicker")}
+            </motion.p>
+            <motion.h1
+              initial={reduce ? false : { opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: reduce ? 0 : 0.08, ease }}
+              className="max-w-3xl whitespace-pre-line font-serif text-5xl leading-[1.08] text-white drop-shadow-sm sm:text-7xl lg:text-8xl"
+            >
+              {t("hero.headline")}
+            </motion.h1>
+            <motion.p
+              initial={reduce ? false : { opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: reduce ? 0 : 0.18, ease }}
+              className="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-white/90 sm:text-xl"
+            >
+              {t("hero.sub")}
+            </motion.p>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: reduce ? 0 : 0.28, ease }}
+              className="mt-9 flex flex-wrap gap-3"
+            >
+              <Button href="/videos" className="h-12 px-6 text-base shadow-xl shadow-blue-900/20">
+                {t("hero.watch")}
+              </Button>
+              <Button href="#get-help" variant="green" className="h-12 px-6 text-base">
+                {t("hero.support")}
+              </Button>
+              <Button href="/contact" variant="ghost" className="h-12 px-6 text-base">
+                {t("hero.share")}
+              </Button>
+            </motion.div>
+          </div>
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 32, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.85, delay: reduce ? 0 : 0.22, ease }}
+          >
+            <QuoteReel />
+          </motion.div>
+        </div>
       </div>
+      <motion.a
+        href="#todays-inspiration"
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-white/80"
+        aria-label={t("hero.scroll")}
+      >
+        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.22em]">
+          {t("hero.scroll")}
+        </span>
+        <ChevronDown className="sunrise-scroll-icon h-5 w-5" />
+      </motion.a>
     </section>
   );
 }

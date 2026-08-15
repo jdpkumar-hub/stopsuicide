@@ -35,6 +35,13 @@ const te: Messages = {
   "home.explore": "చూడండి",
   "home.testimonials": "మా సముదాయం మాటలు",
   "home.newsletterBadge": "వార్తాలేఖ",
+  "home.affirmations": "రోజువారీ ధృవీకరణలు",
+  "home.affirmationsSub": "ఈ రోజు మీతో తీసుకెళ్లే మృదువైన వాక్యాలు. వినండి, లేదా ఒకదానితో కూర్చోండి.",
+  "home.videosKicker": "చూడండి",
+  "home.storiesKicker": "కథలు",
+  "home.resourcesKicker": "నేర్చుకోండి",
+  "hero.scroll": "కొనసాగండి",
+  "hero.quoteLive": "ప్రేరణాత్మక సందేశం",
   "videos.title": "వీడియోలు",
   "videos.sub":
     "వెతకండి, వర్గాలు ఎంచుకోండి, ఆశనిచ్చే చిత్రాలు చూడండి. ఇష్టపడండి, పంచుకోండి, భద్రపరచండి.",

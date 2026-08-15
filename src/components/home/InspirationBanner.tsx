@@ -18,8 +18,8 @@ export function InspirationBanner() {
   }, [messages.length]);
 
   return (
-    <div className="border-b border-border bg-gradient-to-r from-blue-600/15 via-emerald-500/15 to-blue-600/15">
-      <div className="mx-auto flex min-h-[3rem] max-w-6xl items-center justify-center px-4 py-2 text-center text-sm font-medium sm:text-base">
+    <div className="border-b border-border bg-gradient-to-r from-blue-600/12 via-emerald-500/14 to-amber-300/10">
+      <div className="mx-auto flex min-h-[3.25rem] max-w-6xl items-center justify-center px-4 py-2 text-center text-sm font-medium sm:text-base">
         <AnimatePresence mode="wait">
           <motion.p
             key={`${locale}-${index}`}

@@ -33,6 +33,13 @@ export const en = {
   "home.explore": "Explore",
   "home.testimonials": "Testimonials",
   "home.newsletterBadge": "Newsletter",
+  "home.affirmations": "Daily affirmations",
+  "home.affirmationsSub": "Gentle sentences to carry with you. Listen, or simply sit with one.",
+  "home.videosKicker": "Watch",
+  "home.storiesKicker": "Stories",
+  "home.resourcesKicker": "Learn",
+  "hero.scroll": "Continue",
+  "hero.quoteLive": "Inspirational message",
   "videos.title": "Videos",
   "videos.sub":
     "Search, filter, and watch hopeful films. Like, share, or save the ones that help you stay.",
