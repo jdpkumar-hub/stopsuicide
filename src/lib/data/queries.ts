@@ -9,6 +9,8 @@ import {
 } from "@/lib/data/seed";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { expandSearchQuery, videoCopy } from "@/lib/i18n/content";
+import { getApprovedMotivation } from "@/lib/motivation/store";
+import { toQuoteShape } from "@/lib/motivation/generate";
 import { unicodeNormalize } from "@/lib/i18n/locales";
 import type {
   Article,
@@ -248,6 +250,9 @@ export async function getQuotes(): Promise<Quote[]> {
 }
 
 export async function getDailyQuote() {
+  const approved = await getApprovedMotivation();
+  if (approved) return toQuoteShape(approved);
+
   const quotes = (await getQuotes()).filter((quote) => quote.active);
   if (!quotes.length) return seedQuotes[0];
   const index = Math.floor(Date.now() / 86_400_000) % quotes.length;

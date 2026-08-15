@@ -21,6 +21,8 @@ export const en = {
   "hero.support": "Get Help",
   "hero.share": "Share Your Story",
   "quote.title": "Today’s inspiration",
+  "quote.aiBadge": "AI Daily Motivation",
+  "quote.aiNote": "A new hopeful line for today, reviewed before it appears here.",
   "home.featuredVideos": "Featured motivational videos",
   "home.featuredVideosSub": "Calm films to remind you that staying is possible.",
   "home.allVideos": "All videos",

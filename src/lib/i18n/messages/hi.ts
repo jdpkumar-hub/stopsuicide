@@ -23,6 +23,8 @@ const hi: Messages = {
   "hero.support": "मदद लें",
   "hero.share": "अपनी कहानी साझा करें",
   "quote.title": "आज की प्रेरणा",
+  "quote.aiBadge": "एआई दैनिक प्रेरणा",
+  "quote.aiNote": "आज की नई आशा भरी पंक्ति, दिखाने से पहले जाँची जाती है।",
   "home.featuredVideos": "विशेष प्रेरणादायक वीडियो",
   "home.featuredVideosSub": "शांत फिल्में जो याद दिलाती हैं कि रुकना संभव है।",
   "home.allVideos": "सभी वीडियो",

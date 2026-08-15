@@ -90,6 +90,22 @@ export interface Quote {
   translations: TranslationMap;
   author: string;
   active: boolean;
+  aiGenerated?: boolean;
+  forDate?: string;
+}
+
+export type MotivationStatus = "pending" | "approved" | "rejected";
+
+export interface DailyMotivation {
+  id: string;
+  forDate: string;
+  text: string;
+  translations: TranslationMap;
+  author: string;
+  status: MotivationStatus;
+  source: "ai" | "catalog";
+  createdAt: string;
+  approvedAt?: string;
 }
 
 export interface Testimonial {

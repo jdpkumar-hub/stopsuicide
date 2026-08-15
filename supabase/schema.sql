@@ -96,6 +96,18 @@ create table if not exists public.quotes (
   active boolean not null default true
 );
 
+create table if not exists public.daily_motivations (
+  id uuid primary key default gen_random_uuid(),
+  for_date date unique not null,
+  text text not null,
+  translations jsonb not null default '{}'::jsonb,
+  author text not null default 'AI Daily Motivation',
+  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  source text not null default 'ai' check (source in ('ai', 'catalog')),
+  created_at timestamptz not null default now(),
+  approved_at timestamptz
+);
+
 create table if not exists public.testimonials (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -146,6 +158,7 @@ alter table public.videos enable row level security;
 alter table public.stories enable row level security;
 alter table public.articles enable row level security;
 alter table public.quotes enable row level security;
+alter table public.daily_motivations enable row level security;
 alter table public.testimonials enable row level security;
 alter table public.newsletter_subscribers enable row level security;
 alter table public.contact_messages enable row level security;
@@ -157,6 +170,7 @@ create policy "public read videos" on public.videos for select using (status = '
 create policy "public read stories" on public.stories for select using (true);
 create policy "public read articles" on public.articles for select using (true);
 create policy "public read quotes" on public.quotes for select using (active = true);
+create policy "public read approved daily motivations" on public.daily_motivations for select using (status = 'approved');
 create policy "public read testimonials" on public.testimonials for select using (true);
 create policy "public read settings" on public.site_settings for select using (true);
 
@@ -177,6 +191,7 @@ create policy "staff write videos" on public.videos for all using (public.is_sta
 create policy "staff write stories" on public.stories for all using (public.is_staff());
 create policy "staff write articles" on public.articles for all using (public.is_staff());
 create policy "staff write quotes" on public.quotes for all using (public.is_staff());
+create policy "staff write daily motivations" on public.daily_motivations for all using (public.is_staff());
 create policy "staff write categories" on public.categories for all using (public.is_staff());
 create policy "staff write testimonials" on public.testimonials for all using (public.is_staff());
 create policy "staff read contacts" on public.contact_messages for select using (public.is_staff());

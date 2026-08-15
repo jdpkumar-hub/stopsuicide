@@ -23,6 +23,8 @@ const ta: Messages = {
   "hero.support": "உதவி பெறுக",
   "hero.share": "உங்கள் கதையை பகிர்க",
   "quote.title": "இன்றைய ஊக்கம்",
+  "quote.aiBadge": "ஏஐ தினசரி ஊக்கம்",
+  "quote.aiNote": "இன்றைய புதிய நம்பிக்கை வரி, வெளியிடும் முன் பார்வையிடப்படுகிறது.",
   "home.featuredVideos": "சிறப்பு ஊக்க வீடியோக்கள்",
   "home.featuredVideosSub": "நிற்பது சாத்தியம் என நினைவூட்டும் அமைதியான படங்கள்.",
   "home.allVideos": "அனைத்து வீடியோக்கள்",

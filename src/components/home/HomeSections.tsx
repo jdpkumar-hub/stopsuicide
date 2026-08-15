@@ -42,8 +42,11 @@ export function HomeSections({
         <FadeIn>
           <Card className="glass-premium relative overflow-hidden bg-gradient-to-br from-blue-500/15 via-amber-200/10 to-emerald-500/15 p-8 text-center sm:p-14">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-hope-blue">
-              {t("quote.title")}
+              {quote.aiGenerated ? t("quote.aiBadge") : t("quote.title")}
             </p>
+            {quote.aiGenerated ? (
+              <p className="mt-2 text-sm text-muted">{t("quote.aiNote")}</p>
+            ) : null}
             <blockquote className="mx-auto mt-5 max-w-3xl whitespace-pre-line font-serif text-3xl leading-snug sm:text-5xl">
               “{quoteText}”
             </blockquote>

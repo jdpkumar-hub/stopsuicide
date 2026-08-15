@@ -23,6 +23,8 @@ const kn: Messages = {
   "hero.support": "ಸಹಾಯ ಪಡೆಯಿರಿ",
   "hero.share": "ನಿಮ್ಮ ಕಥೆ ಹಂಚಿಕೊಳ್ಳಿ",
   "quote.title": "ಇಂದಿನ ಪ್ರೇರಣೆ",
+  "quote.aiBadge": "ಎಐ ದೈನಂದಿನ ಪ್ರೇರಣೆ",
+  "quote.aiNote": "ಇಂದಿನ ಹೊಸ ಆಶೆಯ ಸಾಲು, ತೋರಿಸುವ ಮೊದಲು ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ.",
   "home.featuredVideos": "ವಿಶೇಷ ಪ್ರೇರಣಾ ವೀಡಿಯೊಗಳು",
   "home.featuredVideosSub": "ನಿಲ್ಲುವುದು ಸಾಧ್ಯ ಎಂದು ನೆನಪಿಸುವ ಶಾಂತ ಚಿತ್ರಗಳು.",
   "home.allVideos": "ಎಲ್ಲಾ ವೀಡಿಯೊಗಳು",

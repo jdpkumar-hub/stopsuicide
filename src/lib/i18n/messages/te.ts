@@ -23,6 +23,8 @@ const te: Messages = {
   "hero.support": "సహాయం పొందండి",
   "hero.share": "మీ కథను పంచుకోండి",
   "quote.title": "ఈ రోజు ప్రేరణ",
+  "quote.aiBadge": "ఏఐ రోజువారీ ప్రేరణ",
+  "quote.aiNote": "ఈ రోజు కోసం కొత్త ఆశావాహ వాక్యం — ప్రచురణకు ముందు సమీక్షించబడుతుంది.",
   "home.featuredVideos": "ప్రత్యేక ప్రేరణాత్మక వీడియోలు",
   "home.featuredVideosSub": "నిలబడటం సాధ్యమే అని గుర్తు చేసే ప్రశాంతమైన చిత్రాలు.",
   "home.allVideos": "అన్ని వీడియోలు",
