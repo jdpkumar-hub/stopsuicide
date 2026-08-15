@@ -90,6 +90,61 @@ body {
   top: 1rem;
 }
 
+html[data-locale="te"],
+html[data-locale="hi"],
+html[data-locale="ta"],
+html[data-locale="kn"],
+html[data-locale="ml"] {
+  font-size: 106.25%;
+}
+
+html[data-locale="te"] body,
+html[data-locale="te"] .font-serif {
+  font-family: "Noto Sans Telugu", "Noto Sans", var(--font-plus-jakarta), sans-serif;
+  line-height: 1.85;
+  word-break: break-word;
+}
+
+html[data-locale="hi"] body,
+html[data-locale="hi"] .font-serif {
+  font-family: "Noto Sans Devanagari", "Noto Sans", var(--font-plus-jakarta), sans-serif;
+  line-height: 1.8;
+}
+
+html[data-locale="ta"] body,
+html[data-locale="ta"] .font-serif {
+  font-family: "Noto Sans Tamil", "Noto Sans", var(--font-plus-jakarta), sans-serif;
+  line-height: 1.85;
+}
+
+html[data-locale="kn"] body,
+html[data-locale="kn"] .font-serif {
+  font-family: "Noto Sans Kannada", "Noto Sans", var(--font-plus-jakarta), sans-serif;
+  line-height: 1.85;
+}
+
+html[data-locale="ml"] body,
+html[data-locale="ml"] .font-serif {
+  font-family: "Noto Sans Malayalam", "Noto Sans", var(--font-plus-jakarta), sans-serif;
+  line-height: 1.85;
+}
+
+html[data-contrast="high"] {
+  --background: #ffffff;
+  --foreground: #000000;
+  --muted: #1f2937;
+  --card: #ffffff;
+  --border: #111827;
+}
+
+html.dark[data-contrast="high"] {
+  --background: #000000;
+  --foreground: #ffffff;
+  --muted: #e5e7eb;
+  --card: #0a0a0a;
+  --border: #f9fafb;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

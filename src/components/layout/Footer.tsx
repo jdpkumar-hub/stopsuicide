@@ -19,7 +19,7 @@ export function Footer() {
           </p>
         </div>
         <div>
-          <p className="text-sm font-semibold">Explore</p>
+          <p className="text-sm font-semibold">{t("footer.explore")}</p>
           <ul className="mt-3 space-y-2 text-sm">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
@@ -28,10 +28,20 @@ export function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/privacy" className="text-muted hover:text-foreground">
+                {t("nav.privacy")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="text-muted hover:text-foreground">
+                {t("nav.terms")}
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
-          <p className="text-sm font-semibold">Connect</p>
+          <p className="text-sm font-semibold">{t("footer.connect")}</p>
           <ul className="mt-3 space-y-2 text-sm text-muted">
             <li>
               <a href={`mailto:${DEFAULT_SETTINGS.contactEmail}`}>
@@ -49,7 +59,7 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <Link href="/login">Admin</Link>
+              <Link href="/login">{t("footer.admin")}</Link>
             </li>
           </ul>
         </div>

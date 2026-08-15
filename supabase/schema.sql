@@ -16,6 +16,7 @@ create table if not exists public.categories (
   slug text unique not null,
   name text not null,
   name_hi text,
+  names jsonb not null default '{}'::jsonb,
   description text,
   type text not null check (type in ('video', 'story', 'blog', 'resource'))
 );
@@ -26,6 +27,12 @@ create table if not exists public.videos (
   title text not null,
   description text not null,
   tags text[] not null default '{}',
+  titles jsonb not null default '{}'::jsonb,
+  descriptions jsonb not null default '{}'::jsonb,
+  seo_title jsonb not null default '{}'::jsonb,
+  seo_description jsonb not null default '{}'::jsonb,
+  tags_te text[] not null default '{}',
+  search_terms text[] not null default '{}',
   category_id uuid references public.categories(id),
   featured boolean not null default false,
   thumbnail_url text,
@@ -47,6 +54,10 @@ create table if not exists public.stories (
   title text not null,
   excerpt text not null,
   body text not null,
+  titles jsonb not null default '{}'::jsonb,
+  excerpts jsonb not null default '{}'::jsonb,
+  bodies jsonb not null default '{}'::jsonb,
+  search_terms text[] not null default '{}',
   author_name text,
   author_role text,
   category_id uuid references public.categories(id),
@@ -62,6 +73,12 @@ create table if not exists public.articles (
   title text not null,
   excerpt text not null,
   body text not null,
+  titles jsonb not null default '{}'::jsonb,
+  excerpts jsonb not null default '{}'::jsonb,
+  bodies jsonb not null default '{}'::jsonb,
+  seo_title jsonb not null default '{}'::jsonb,
+  seo_description jsonb not null default '{}'::jsonb,
+  search_terms text[] not null default '{}',
   category_id uuid references public.categories(id),
   thumbnail_url text,
   tags text[] not null default '{}',
@@ -74,6 +91,7 @@ create table if not exists public.quotes (
   id uuid primary key default gen_random_uuid(),
   text text not null,
   text_hi text,
+  translations jsonb not null default '{}'::jsonb,
   author text,
   active boolean not null default true
 );
@@ -83,6 +101,9 @@ create table if not exists public.testimonials (
   name text not null,
   role text,
   quote text not null,
+  quotes jsonb not null default '{}'::jsonb,
+  roles jsonb not null default '{}'::jsonb,
+  locale text default 'en',
   avatar_url text
 );
 
@@ -142,6 +163,7 @@ create policy "public read settings" on public.site_settings for select using (t
 create policy "anyone can subscribe" on public.newsletter_subscribers for insert with check (true);
 create policy "anyone can contact" on public.contact_messages for insert with check (true);
 create policy "anyone can volunteer" on public.volunteer_applications for insert with check (true);
+create policy "anyone can submit testimonial" on public.testimonials for insert with check (true);
 
 create or replace function public.is_staff()
 returns boolean language sql stable as $$

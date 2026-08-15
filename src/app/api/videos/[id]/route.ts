@@ -6,8 +6,27 @@ import {
   requireAdmin,
 } from "@/lib/admin";
 import { slugify } from "@/lib/utils";
+import { videoSchema } from "@/lib/validations";
 
 type Params = { params: Promise<{ id: string }> };
+
+function parseVideoForm(form: FormData) {
+  return videoSchema.safeParse({
+    title: form.get("title"),
+    description: form.get("description"),
+    tags: form.get("tags") || "",
+    titleTe: String(form.get("titleTe") || ""),
+    descriptionTe: String(form.get("descriptionTe") || ""),
+    tagsTe: String(form.get("tagsTe") || ""),
+    slug: String(form.get("slug") || ""),
+    seoTitle: String(form.get("seoTitle") || ""),
+    seoDescription: String(form.get("seoDescription") || ""),
+    categoryId: form.get("categoryId"),
+    featured: form.get("featured"),
+    youtubeLink: String(form.get("youtubeLink") || ""),
+    vimeoLink: String(form.get("vimeoLink") || ""),
+  });
+}
 
 export async function PUT(request: Request, { params }: Params) {
   const { id } = await params;
@@ -15,21 +34,36 @@ export async function PUT(request: Request, { params }: Params) {
   if (auth.error) return jsonError(auth.error, auth.status);
 
   const form = await request.formData();
-  const title = String(form.get("title") || "");
-  const description = String(form.get("description") || "");
-  const tags = String(form.get("tags") || "")
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter(Boolean);
+  const parsed = parseVideoForm(form);
+  if (!parsed.success) return jsonError("Please check the video details.");
+
+  const tags = parsed.data.tags
+    ? parsed.data.tags.split(",").map((tag) => tag.trim()).filter(Boolean)
+    : [];
+  const tagsTe = parsed.data.tagsTe
+    ? parsed.data.tagsTe.split(",").map((tag) => tag.trim()).filter(Boolean)
+    : [];
+
   const updates: Record<string, unknown> = {
-    title,
-    description,
+    title: parsed.data.title,
+    description: parsed.data.description,
     tags,
-    slug: slugify(title),
-    category_id: String(form.get("categoryId") || ""),
-    featured: form.get("featured") === "on",
-    youtube_id: extractYouTubeId(String(form.get("youtubeLink") || "")),
-    vimeo_id: extractVimeoId(String(form.get("vimeoLink") || "")),
+    slug: parsed.data.slug || slugify(parsed.data.title),
+    titles: { te: parsed.data.titleTe || undefined },
+    descriptions: { te: parsed.data.descriptionTe || undefined },
+    seo_title: {
+      te: parsed.data.seoTitle || parsed.data.titleTe,
+      en: parsed.data.title,
+    },
+    seo_description: {
+      te: parsed.data.seoDescription || parsed.data.descriptionTe,
+      en: parsed.data.description,
+    },
+    tags_te: tagsTe,
+    category_id: parsed.data.categoryId,
+    featured: parsed.data.featured === true || parsed.data.featured === "on",
+    youtube_id: extractYouTubeId(parsed.data.youtubeLink),
+    vimeo_id: extractVimeoId(parsed.data.vimeoLink),
   };
 
   try {

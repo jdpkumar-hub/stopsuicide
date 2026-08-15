@@ -1,5 +1,6 @@
-import { Section } from "@/components/ui/primitives";
+import { PageHeader } from "@/components/i18n/PageHeader";
 import { StoryExplorer } from "@/components/stories/StoryExplorer";
+import { Section } from "@/components/ui/primitives";
 import { getCategories, getStories } from "@/lib/data/queries";
 import { createMetadata } from "@/lib/seo";
 
@@ -8,6 +9,7 @@ export const metadata = createMetadata({
   description:
     "Inspirational journeys of people who asked for help, stayed connected, and rebuilt hope.",
   path: "/stories",
+  localeAware: true,
 });
 
 export default async function StoriesPage() {
@@ -18,10 +20,7 @@ export default async function StoriesPage() {
 
   return (
     <Section className="pt-10">
-      <h1 className="font-serif text-5xl">Stories</h1>
-      <p className="mt-3 max-w-2xl text-muted">
-        Recovery stories and inspirational journeys, shared with dignity. Filter by theme and read at your own pace.
-      </p>
+      <PageHeader titleKey="stories.title" subKey="stories.sub" />
       <div className="mt-10">
         <StoryExplorer stories={stories} categories={storyCategories} />
       </div>

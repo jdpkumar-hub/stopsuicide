@@ -103,6 +103,14 @@ export interface Testimonial {
   locale?: Locale;
 }
 
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+  questions: TranslationMap;
+  answers: TranslationMap;
+}
+
 export interface ResourceItem {
   id: string;
   slug: string;

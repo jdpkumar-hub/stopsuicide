@@ -9,7 +9,7 @@ export function ManagerForm({
   submitLabel,
 }: {
   endpoint: string;
-  fields: { name: string; label: string; textarea?: boolean }[];
+  fields: { name: string; label: string; textarea?: boolean; required?: boolean; lang?: string }[];
   submitLabel: string;
 }) {
   const [status, setStatus] = useState("");
@@ -36,14 +36,16 @@ export function ManagerForm({
             {field.textarea ? (
               <textarea
                 name={field.name}
-                required
+                required={field.required !== false}
+                lang={field.lang}
                 rows={4}
                 className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
               />
             ) : (
               <input
                 name={field.name}
-                required
+                required={field.required !== false}
+                lang={field.lang}
                 className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
               />
             )}

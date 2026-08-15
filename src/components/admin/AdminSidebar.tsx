@@ -16,6 +16,7 @@ import {
   Video,
 } from "lucide-react";
 import { createBrowserSupabase } from "@/lib/supabase/client";
+import { useI18n } from "@/lib/i18n/context";
 
 const links = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -33,6 +34,7 @@ const links = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { t } = useI18n();
 
   async function signOut() {
     const supabase = createBrowserSupabase();
@@ -44,7 +46,7 @@ export function AdminSidebar() {
   return (
     <aside className="glass h-fit rounded-3xl p-4 lg:sticky lg:top-24">
       <p className="px-3 pb-3 text-xs font-semibold uppercase tracking-wide text-muted">
-        Admin
+        {t("footer.admin")}
       </p>
       <nav className="space-y-1" aria-label="Admin">
         {links.map((link) => {
@@ -76,7 +78,7 @@ export function AdminSidebar() {
         className="mt-4 flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-muted hover:bg-white/50"
       >
         <LogOut className="h-4 w-4" />
-        Sign out
+        {t("admin.signout")}
       </button>
     </aside>
   );

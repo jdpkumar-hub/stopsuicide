@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ShareButtons } from "@/components/video/VideoActions";
-import { Section } from "@/components/ui/primitives";
+import { StoryArticle } from "@/components/content/ArticleView";
 import { articleSchema, JsonLd } from "@/lib/schema-org";
 import { createMetadata } from "@/lib/seo";
-import { formatDate } from "@/lib/utils";
+import { pickLocalized } from "@/lib/i18n/locales";
+import { getRequestLocale } from "@/lib/i18n/request-locale";
 import { getStories, getStory } from "@/lib/data/queries";
 
 export async function generateStaticParams() {
@@ -18,12 +18,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const story = await getStory(slug);
   if (!story) return createMetadata({ title: "Story", description: "Story not found." });
+  const locale = await getRequestLocale();
   return createMetadata({
-    title: story.title,
-    description: story.excerpt,
+    title: pickLocalized(locale, story.titles, story.title),
+    description: pickLocalized(locale, story.excerpts, story.excerpt),
     path: `/stories/${story.slug}`,
     image: story.thumbnailUrl,
     type: "article",
+    localeAware: true,
+    locale,
   });
 }
 
@@ -33,21 +36,9 @@ export default async function StoryPage({ params }: Props) {
   if (!story) notFound();
 
   return (
-    <Section className="max-w-3xl pt-10">
+    <>
       <JsonLd data={articleSchema(story)} />
-      <p className="text-sm text-muted">
-        {story.authorName} · {formatDate(story.publishedAt)} · {story.readingMinutes} min read
-      </p>
-      <h1 className="mt-3 font-serif text-5xl">{story.title}</h1>
-      <p className="mt-4 text-lg text-muted">{story.excerpt}</p>
-      <div className="mt-6">
-        <ShareButtons title={story.title} />
-      </div>
-      <article className="prose-hope mt-10 space-y-5 text-lg leading-8">
-        {story.body.split("\n\n").map((paragraph) => (
-          <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-        ))}
-      </article>
-    </Section>
+      <StoryArticle story={story} />
+    </>
   );
 }

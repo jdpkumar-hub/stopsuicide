@@ -1,28 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Card } from "@/components/ui/primitives";
+import { useI18n } from "@/lib/i18n/context";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 
 export function LoginForm() {
+  const { t } = useI18n();
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") || "/admin";
   const setup = params.get("mode") === "setup";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState(
-    setup
-      ? "Add Supabase keys in .env.local to enable secure admin login."
-      : "",
-  );
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (setup) setMessage(t("login.setup"));
+  }, [setup, t]);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     const supabase = createBrowserSupabase();
     if (!supabase) {
-      setMessage("Supabase is not configured. Copy .env.example to .env.local.");
+      setMessage(t("login.noconfig"));
       return;
     }
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -36,13 +38,11 @@ export function LoginForm() {
 
   return (
     <Card className="mx-auto max-w-md p-8">
-      <h1 className="font-serif text-4xl">Admin login</h1>
-      <p className="mt-2 text-sm text-muted">
-        Secure access for editors and administrators.
-      </p>
+      <h1 className="font-serif text-4xl">{t("login.title")}</h1>
+      <p className="mt-2 text-sm text-muted">{t("login.sub")}</p>
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
         <label className="block text-sm font-medium">
-          Email
+          {t("form.email")}
           <input
             type="email"
             required
@@ -52,7 +52,7 @@ export function LoginForm() {
           />
         </label>
         <label className="block text-sm font-medium">
-          Password
+          {t("form.password")}
           <input
             type="password"
             required
@@ -62,7 +62,7 @@ export function LoginForm() {
           />
         </label>
         <Button type="submit" className="w-full">
-          Sign in
+          {t("login.submit")}
         </Button>
         {message ? <p className="text-sm text-muted">{message}</p> : null}
       </form>

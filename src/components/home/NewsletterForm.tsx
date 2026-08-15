@@ -35,10 +35,10 @@ export function NewsletterForm() {
       />
       <Button type="submit">{t("newsletter.cta")}</Button>
       {status === "ok" ? (
-        <p className="self-center text-sm text-hope-green">Welcome. We will write gently.</p>
+        <p className="self-center text-sm text-hope-green">{t("newsletter.ok")}</p>
       ) : null}
       {status === "error" ? (
-        <p className="self-center text-sm text-rose-500">Please try a valid email.</p>
+        <p className="self-center text-sm text-rose-500">{t("newsletter.error")}</p>
       ) : null}
     </form>
   );

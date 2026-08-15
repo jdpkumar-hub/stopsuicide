@@ -3,6 +3,7 @@
 import { Menu, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { ContrastToggle } from "@/components/a11y/ContrastToggle";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/primitives";
@@ -44,6 +45,7 @@ export function Header() {
             <Search className="h-4 w-4" />
           </Link>
           <LanguageSwitcher />
+          <ContrastToggle />
           <ThemeToggle />
           <Button href="#get-help" variant="help">
             {t("nav.getHelp")}
@@ -55,7 +57,7 @@ export function Header() {
           className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border lg:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
-          aria-label="Open menu"
+            aria-label={t("nav.menu")}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -77,6 +79,7 @@ export function Header() {
           </nav>
           <div className="mt-4 flex items-center justify-between gap-2">
             <LanguageSwitcher />
+            <ContrastToggle />
             <ThemeToggle />
             <Button href="#get-help" variant="help" className="ml-auto">
               {t("nav.getHelp")}

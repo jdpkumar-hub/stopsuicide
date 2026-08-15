@@ -1,4 +1,5 @@
 import { BlogExplorer } from "@/components/blog/BlogExplorer";
+import { PageHeader } from "@/components/i18n/PageHeader";
 import { Section } from "@/components/ui/primitives";
 import { getArticles, getCategories } from "@/lib/data/queries";
 import { createMetadata } from "@/lib/seo";
@@ -8,6 +9,7 @@ export const metadata = createMetadata({
   description:
     "Articles on mental wellness, coping, family support, and AI-assisted inspirational writing.",
   path: "/blog",
+  localeAware: true,
 });
 
 export default async function BlogPage() {
@@ -18,10 +20,7 @@ export default async function BlogPage() {
 
   return (
     <Section className="pt-10">
-      <h1 className="font-serif text-5xl">Blog</h1>
-      <p className="mt-3 max-w-2xl text-muted">
-        Mental wellness articles and carefully reviewed AI-assisted inspirational pieces. Search by topic or mood.
-      </p>
+      <PageHeader titleKey="blog.title" subKey="blog.sub" />
       <div className="mt-10">
         <BlogExplorer articles={articles} categories={blogCategories} />
       </div>

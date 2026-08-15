@@ -8,6 +8,8 @@ import {
   videos as seedVideos,
 } from "@/lib/data/seed";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { expandSearchQuery, videoCopy } from "@/lib/i18n/content";
+import { unicodeNormalize } from "@/lib/i18n/locales";
 import type {
   Article,
   Category,
@@ -64,6 +66,31 @@ function mapVideo(row: Row): Video {
     views: num(row, "views"),
     status: str(row, "status") === "draft" ? "draft" : "published",
     publishedAt: str(row, "publishedAt", "published_at") || new Date().toISOString(),
+    titles: parseMap(row.titles || row.title_i18n),
+    descriptions: parseMap(row.descriptions || row.description_i18n),
+    tagsByLocale: Array.isArray(row.tags_te) ? { te: row.tags_te as string[] } : undefined,
+    seoTitle: parseMap(row.seo_title),
+    seoDescription: parseMap(row.seo_description),
+    searchTerms: Array.isArray(row.search_terms) ? (row.search_terms as string[]) : undefined,
+  };
+}
+
+function parseMap(value: unknown): Video["titles"] {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return value as Video["titles"];
+  }
+  return undefined;
+}
+
+function hydrateVideo(video: Video): Video {
+  const copy = videoCopy[video.id];
+  if (!copy) return video;
+  return {
+    ...video,
+    titles: copy.titles,
+    descriptions: copy.descriptions,
+    tagsByLocale: { te: copy.tagsTe },
+    searchTerms: copy.searchTerms,
   };
 }
 
@@ -81,6 +108,10 @@ function mapStory(row: Row): Story {
     readingMinutes: num(row, "readingMinutes", "reading_minutes") || 4,
     featured: bool(row, "featured"),
     publishedAt: str(row, "publishedAt", "published_at"),
+    titles: parseMap(row.titles),
+    excerpts: parseMap(row.excerpts),
+    bodies: parseMap(row.bodies),
+    searchTerms: Array.isArray(row.search_terms) ? (row.search_terms as string[]) : undefined,
   };
 }
 
@@ -97,6 +128,12 @@ function mapArticle(row: Row): Article {
     aiGenerated: bool(row, "aiGenerated", "ai_generated"),
     readingMinutes: num(row, "readingMinutes", "reading_minutes") || 3,
     publishedAt: str(row, "publishedAt", "published_at"),
+    titles: parseMap(row.titles),
+    excerpts: parseMap(row.excerpts),
+    bodies: parseMap(row.bodies),
+    seoTitle: parseMap(row.seo_title),
+    seoDescription: parseMap(row.seo_description),
+    searchTerms: Array.isArray(row.search_terms) ? (row.search_terms as string[]) : undefined,
   };
 }
 
@@ -105,7 +142,7 @@ function mapCategory(row: Row): Category {
     id: str(row, "id"),
     slug: str(row, "slug"),
     name: str(row, "name"),
-    nameHi: str(row, "nameHi", "name_hi"),
+    names: parseMap(row.names) ?? { en: str(row, "name"), te: str(row, "name_te"), hi: str(row, "nameHi", "name_hi") },
     description: str(row, "description"),
     type: (str(row, "type") as Category["type"]) || "video",
   };
@@ -115,7 +152,7 @@ function mapQuote(row: Row): Quote {
   return {
     id: str(row, "id"),
     text: str(row, "text"),
-    textHi: str(row, "textHi", "text_hi"),
+    translations: parseMap(row.translations) ?? { hi: str(row, "textHi", "text_hi"), te: str(row, "text_te") },
     author: str(row, "author"),
     active: row.active === undefined ? true : bool(row, "active"),
   };
@@ -127,7 +164,10 @@ function mapTestimonial(row: Row): Testimonial {
     name: str(row, "name"),
     role: str(row, "role"),
     quote: str(row, "quote"),
+    quotes: parseMap(row.quotes),
+    roles: parseMap(row.roles),
     avatarUrl: str(row, "avatarUrl", "avatar_url"),
+    locale: (str(row, "locale") as Testimonial["locale"]) || undefined,
   };
 }
 
@@ -146,7 +186,7 @@ export async function getCategories(): Promise<Category[]> {
 
 export async function getVideos(): Promise<Video[]> {
   const rows = await fromTable("videos");
-  const list = rows ? rows.map(mapVideo) : seedVideos;
+  const list = (rows ? rows.map(mapVideo) : seedVideos).map(hydrateVideo);
   return list
     .filter((video) => video.status !== "draft")
     .sort(
@@ -157,7 +197,7 @@ export async function getVideos(): Promise<Video[]> {
 
 export async function getAllVideosAdmin(): Promise<Video[]> {
   const rows = await fromTable("videos");
-  return rows ? rows.map(mapVideo) : seedVideos;
+  return (rows ? rows.map(mapVideo) : seedVideos).map(hydrateVideo);
 }
 
 export async function getVideo(slug: string) {
@@ -224,7 +264,9 @@ export function getResources() {
 }
 
 export async function searchAll(query: string) {
-  const q = query.trim().toLowerCase();
+  const q = unicodeNormalize(query.trim());
+  const expanded = expandSearchQuery(query);
+
   const [videos, stories, articles] = await Promise.all([
     getVideos(),
     getStories(),
@@ -235,23 +277,45 @@ export async function searchAll(query: string) {
     return { videos, stories, articles };
   }
 
-  const match = (text: string) => text.toLowerCase().includes(q);
+  const match = (...parts: Array<string | string[] | undefined>) => {
+    const blob = unicodeNormalize(parts.flat().filter(Boolean).join(" "));
+    return expanded.some((term) => term && blob.includes(term));
+  };
 
   return {
-    videos: videos.filter(
-      (item) =>
-        match(item.title) ||
-        match(item.description) ||
-        item.tags.some(match),
+    videos: videos.filter((item) =>
+      match(
+        item.title,
+        item.description,
+        item.tags,
+        item.searchTerms,
+        Object.values(item.titles ?? {}),
+        Object.values(item.descriptions ?? {}),
+        Object.values(item.tagsByLocale ?? {}).flat(),
+      ),
     ),
-    stories: stories.filter(
-      (item) => match(item.title) || match(item.excerpt) || match(item.body),
+    stories: stories.filter((item) =>
+      match(
+        item.title,
+        item.excerpt,
+        item.body,
+        item.searchTerms,
+        Object.values(item.titles ?? {}),
+        Object.values(item.excerpts ?? {}),
+        Object.values(item.bodies ?? {}),
+      ),
     ),
-    articles: articles.filter(
-      (item) =>
-        match(item.title) ||
-        match(item.excerpt) ||
-        item.tags.some(match),
+    articles: articles.filter((item) =>
+      match(
+        item.title,
+        item.excerpt,
+        item.body,
+        item.tags,
+        item.searchTerms,
+        Object.values(item.titles ?? {}),
+        Object.values(item.excerpts ?? {}),
+        Object.values(item.bodies ?? {}),
+      ),
     ),
   };
 }

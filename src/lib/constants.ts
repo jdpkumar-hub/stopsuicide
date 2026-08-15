@@ -90,8 +90,3 @@ export const CRISIS_RESOURCES: CrisisResource[] = [
 
 export const HERO_VIDEO =
   "https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4";
-
-export const LOCALES = [
-  { code: "en" as const, label: "English" },
-  { code: "hi" as const, label: "हिन्दी" },
-];

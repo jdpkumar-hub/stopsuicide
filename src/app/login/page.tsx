@@ -7,6 +7,7 @@ export const metadata = createMetadata({
   title: "Admin login",
   description: "Secure login for stopsuicide.in editors.",
   path: "/login",
+  localeAware: true,
 });
 
 export default function LoginPage() {

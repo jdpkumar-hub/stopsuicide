@@ -23,6 +23,12 @@ export async function POST(request: Request) {
     title: form.get("title"),
     description: form.get("description"),
     tags: form.get("tags") || "",
+    titleTe: String(form.get("titleTe") || ""),
+    descriptionTe: String(form.get("descriptionTe") || ""),
+    tagsTe: String(form.get("tagsTe") || ""),
+    slug: String(form.get("slug") || ""),
+    seoTitle: String(form.get("seoTitle") || ""),
+    seoDescription: String(form.get("seoDescription") || ""),
     categoryId: form.get("categoryId"),
     featured: form.get("featured"),
     youtubeLink: String(form.get("youtubeLink") || ""),
@@ -65,11 +71,21 @@ export async function POST(request: Request) {
   if (vimeoId) source = "vimeo";
 
   const record = {
-    slug: slugify(parsed.data.title),
+    slug: parsed.data.slug || slugify(parsed.data.title),
     title: parsed.data.title,
     description: parsed.data.description,
     tags: parsed.data.tags
       ? parsed.data.tags.split(",").map((tag) => tag.trim()).filter(Boolean)
+      : [],
+    titles: { te: parsed.data.titleTe || undefined },
+    descriptions: { te: parsed.data.descriptionTe || undefined },
+    seo_title: { te: parsed.data.seoTitle || parsed.data.titleTe, en: parsed.data.title },
+    seo_description: {
+      te: parsed.data.seoDescription || parsed.data.descriptionTe,
+      en: parsed.data.description,
+    },
+    tags_te: parsed.data.tagsTe
+      ? parsed.data.tagsTe.split(",").map((tag) => tag.trim()).filter(Boolean)
       : [],
     category_id: parsed.data.categoryId,
     featured: parsed.data.featured === true || parsed.data.featured === "on",

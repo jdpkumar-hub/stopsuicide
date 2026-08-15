@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { StoryCard } from "@/components/content/Cards";
+import { useI18n } from "@/lib/i18n/context";
+import { useLocalized } from "@/lib/i18n/use-localized";
+import { useMemo, useState } from "react";
 import type { Category, Story } from "@/types";
 
 export function StoryExplorer({
@@ -11,6 +13,8 @@ export function StoryExplorer({
   stories: Story[];
   categories: Category[];
 }) {
+  const { t } = useI18n();
+  const loc = useLocalized();
   const [category, setCategory] = useState("all");
   const filtered = useMemo(
     () =>
@@ -30,7 +34,7 @@ export function StoryExplorer({
             category === "all" ? "bg-hope-blue text-white" : "border border-border"
           }`}
         >
-          All journeys
+          {t("stories.all")}
         </button>
         {categories.map((item) => (
           <button
@@ -41,7 +45,7 @@ export function StoryExplorer({
               category === item.id ? "bg-hope-blue text-white" : "border border-border"
             }`}
           >
-            {item.name}
+            {loc.category(item)}
           </button>
         ))}
       </div>

@@ -20,8 +20,9 @@ export default async function QuotesPage() {
           endpoint="/api/quotes"
           submitLabel="Add quote"
           fields={[
-            { name: "text", label: "Quote", textarea: true },
-            { name: "textHi", label: "Quote (Hindi)", textarea: true },
+            { name: "text", label: "Quote (English)", textarea: true },
+            { name: "textTe", label: "Quote (Telugu)", textarea: true, required: false, lang: "te" },
+            { name: "textHi", label: "Quote (Hindi)", textarea: true, required: false, lang: "hi" },
             { name: "author", label: "Author" },
           ]}
         />

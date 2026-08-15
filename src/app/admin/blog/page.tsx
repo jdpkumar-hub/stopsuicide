@@ -22,10 +22,17 @@ export default async function AdminBlogPage() {
           endpoint="/api/blog"
           submitLabel="Publish article"
           fields={[
-            { name: "title", label: "Title" },
-            { name: "excerpt", label: "Excerpt", textarea: true },
-            { name: "body", label: "Body", textarea: true },
+            { name: "title", label: "Title (English)" },
+            { name: "titleTe", label: "Title (Telugu)", required: false, lang: "te" },
+            { name: "excerpt", label: "Excerpt (English)", textarea: true },
+            { name: "excerptTe", label: "Excerpt (Telugu)", textarea: true, required: false, lang: "te" },
+            { name: "body", label: "Body (English)", textarea: true },
+            { name: "bodyTe", label: "Body (Telugu)", textarea: true, required: false, lang: "te" },
             { name: "tags", label: "Tags" },
+            { name: "slug", label: "Slug", required: false },
+            { name: "thumbnailUrl", label: "Featured image URL", required: false },
+            { name: "seoTitle", label: "SEO title (Telugu)", required: false, lang: "te" },
+            { name: "seoDescription", label: "SEO description (Telugu)", textarea: true, required: false, lang: "te" },
           ]}
         />
       </div>

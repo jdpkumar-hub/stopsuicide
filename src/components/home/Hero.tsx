@@ -28,13 +28,13 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-200"
         >
-          Hope · Recovery · Connection
+          {t("hero.kicker")}
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="max-w-4xl font-serif text-5xl leading-tight text-white sm:text-7xl"
+          className="max-w-4xl font-serif text-5xl leading-tight text-white sm:text-7xl whitespace-pre-line"
         >
           {t("hero.headline")}
         </motion.h1>
@@ -42,7 +42,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-5 max-w-2xl text-lg text-slate-100"
+          className="mt-5 max-w-2xl text-lg text-slate-100 whitespace-pre-line"
         >
           {t("hero.sub")}
         </motion.p>

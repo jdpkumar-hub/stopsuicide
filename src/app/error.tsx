@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Section } from "@/components/ui/primitives";
+import { useI18n } from "@/lib/i18n/context";
 
 export default function ErrorPage({
   reset,
@@ -8,16 +9,15 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useI18n();
   return (
     <Section className="py-24 text-center">
-      <h1 className="font-serif text-5xl">Something went quiet</h1>
-      <p className="mx-auto mt-4 max-w-lg text-muted">
-        We could not load this page. You can try again, or use Get Help if you need support right now.
-      </p>
+      <h1 className="font-serif text-5xl">{t("error.title")}</h1>
+      <p className="mx-auto mt-4 max-w-lg text-muted">{t("error.body")}</p>
       <div className="mt-8 flex justify-center gap-3">
-        <Button onClick={reset}>Try again</Button>
+        <Button onClick={reset}>{t("error.retry")}</Button>
         <Button href="#get-help" variant="green">
-          Get Help
+          {t("nav.getHelp")}
         </Button>
       </div>
     </Section>

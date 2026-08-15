@@ -23,9 +23,9 @@ export default async function CategoriesPage() {
           submitLabel="Add category"
           fields={[
             { name: "name", label: "Name" },
-            { name: "nameHi", label: "Name (Hindi)" },
+            { name: "nameTe", label: "Name (Telugu)", required: false, lang: "te" },
             { name: "type", label: "Type (video, story, blog, resource)" },
-            { name: "description", label: "Description", textarea: true },
+            { name: "description", label: "Description", textarea: true, required: false },
           ]}
         />
       </div>

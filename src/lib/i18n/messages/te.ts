@@ -1,7 +1,7 @@
 import type { Messages } from "@/lib/i18n/messages/en";
 
 const te: Messages = {
-  "nav.home": "ముంగిలి",
+  "nav.home": "హోమ్",
   "nav.videos": "వీడియోలు",
   "nav.stories": "కథలు",
   "nav.blog": "బ్లాగ్",

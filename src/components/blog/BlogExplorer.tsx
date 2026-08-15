@@ -2,6 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { ArticleCard } from "@/components/content/Cards";
+import { useI18n } from "@/lib/i18n/context";
+import { expandSearchQuery } from "@/lib/i18n/content";
+import { unicodeNormalize } from "@/lib/i18n/locales";
+import { useLocalized } from "@/lib/i18n/use-localized";
 import type { Article, Category } from "@/types";
 
 export function BlogExplorer({
@@ -11,16 +15,22 @@ export function BlogExplorer({
   articles: Article[];
   categories: Category[];
 }) {
+  const { t, locale } = useI18n();
+  const loc = useLocalized();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
 
   const filtered = useMemo(() => {
+    const terms = expandSearchQuery(query);
     return articles.filter((article) => {
       const matchesCategory = category === "all" || article.categoryId === category;
-      const haystack = `${article.title} ${article.excerpt} ${article.tags.join(" ")}`.toLowerCase();
-      return matchesCategory && haystack.includes(query.toLowerCase());
+      const copy = loc.article(article);
+      const haystack = unicodeNormalize(
+        `${copy.title} ${copy.excerpt} ${copy.body} ${article.tags.join(" ")} ${article.searchTerms?.join(" ") ?? ""} ${Object.values(article.titles ?? {}).join(" ")}`,
+      );
+      return matchesCategory && (!query.trim() || terms.some((term) => haystack.includes(term)));
     });
-  }, [articles, category, query]);
+  }, [articles, category, query, loc]);
 
   return (
     <div>
@@ -28,7 +38,8 @@ export function BlogExplorer({
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search articles"
+          placeholder={t("blog.search")}
+          lang={locale}
           className="h-12 rounded-2xl border border-border bg-transparent px-4 outline-none focus:ring-2 focus:ring-hope-blue"
         />
         <div className="flex flex-wrap gap-2">
@@ -39,7 +50,7 @@ export function BlogExplorer({
               category === "all" ? "bg-hope-blue text-white" : "border border-border"
             }`}
           >
-            All
+            {t("common.all")}
           </button>
           {categories.map((item) => (
             <button
@@ -50,7 +61,7 @@ export function BlogExplorer({
                 category === item.id ? "bg-hope-blue text-white" : "border border-border"
               }`}
             >
-              {item.name}
+              {loc.category(item)}
             </button>
           ))}
         </div>

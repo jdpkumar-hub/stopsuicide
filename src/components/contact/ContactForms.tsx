@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Button, Card } from "@/components/ui/primitives";
+import { useI18n } from "@/lib/i18n/context";
 
 export function ContactForms() {
+  const { t } = useI18n();
   const [contactStatus, setContactStatus] = useState("");
   const [volunteerStatus, setVolunteerStatus] = useState("");
 
@@ -20,46 +22,42 @@ export function ContactForms() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    setStatus(response.ok ? "Thank you. We will reply with care." : "Please check the form and try again.");
+    setStatus(response.ok ? t("form.success") : t("form.error"));
     if (response.ok) form.reset();
   }
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <Card className="p-6 sm:p-8">
-        <h2 className="font-serif text-3xl">Contact us</h2>
-        <p className="mt-2 text-sm text-muted">
-          Questions, partnerships, or a story you would like us to consider.
-        </p>
+        <h2 className="font-serif text-3xl">{t("contact.formTitle")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("contact.formLead")}</p>
         <form
           className="mt-6 space-y-4"
           onSubmit={(event) => submit(event, "/api/contact", setContactStatus)}
         >
-          <Field name="name" label="Name" required />
-          <Field name="email" label="Email" type="email" required />
-          <Field name="subject" label="Subject" required />
-          <Field name="message" label="Message" textarea required />
-          <Button type="submit">Send message</Button>
+          <Field name="name" label={t("form.name")} required />
+          <Field name="email" label={t("form.email")} type="email" required />
+          <Field name="subject" label={t("form.subject")} required />
+          <Field name="message" label={t("form.message")} textarea required />
+          <Button type="submit">{t("contact.send")}</Button>
           {contactStatus ? <p className="text-sm text-hope-green">{contactStatus}</p> : null}
         </form>
       </Card>
 
       <Card className="p-6 sm:p-8">
-        <h2 className="font-serif text-3xl">Volunteer</h2>
-        <p className="mt-2 text-sm text-muted">
-          Help moderate hope-focused content, translate, or support community programmes.
-        </p>
+        <h2 className="font-serif text-3xl">{t("contact.volunteerTitle")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("contact.volunteerLead")}</p>
         <form
           className="mt-6 space-y-4"
           onSubmit={(event) => submit(event, "/api/volunteer", setVolunteerStatus)}
         >
-          <Field name="name" label="Name" required />
-          <Field name="email" label="Email" type="email" required />
-          <Field name="city" label="City" required />
-          <Field name="interest" label="How would you like to help?" required />
-          <Field name="message" label="Tell us a little more" textarea required />
+          <Field name="name" label={t("form.name")} required />
+          <Field name="email" label={t("form.email")} type="email" required />
+          <Field name="city" label={t("form.city")} required />
+          <Field name="interest" label={t("form.interest")} required />
+          <Field name="message" label={t("form.more")} textarea required />
           <Button type="submit" variant="green">
-            Offer to help
+            {t("contact.offer")}
           </Button>
           {volunteerStatus ? <p className="text-sm text-hope-green">{volunteerStatus}</p> : null}
         </form>

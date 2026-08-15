@@ -4,6 +4,17 @@ import { HeartHandshake, Phone } from "lucide-react";
 import { CRISIS_RESOURCES } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n/context";
 import { Section } from "@/components/ui/primitives";
+import type { MessageKey } from "@/lib/i18n/messages/en";
+
+const HELP_DESC: Record<string, MessageKey> = {
+  "tele-manas": "help.telemanas",
+  kiran: "help.kiran",
+  icall: "help.icall",
+  aasra: "help.aasra",
+  vandrevala: "help.vandrevala",
+  iasp: "help.iasp",
+  "988": "help.988",
+};
 
 export function GetHelp() {
   const { t } = useI18n();
@@ -39,7 +50,9 @@ export function GetHelp() {
                 {india.map((item) => (
                   <li key={item.id} className="rounded-2xl bg-white/50 p-4 dark:bg-white/5">
                     <p className="font-semibold">{item.name}</p>
-                    <p className="text-sm text-muted">{item.description}</p>
+                    <p className="text-sm text-muted">
+                      {HELP_DESC[item.id] ? t(HELP_DESC[item.id]) : item.description}
+                    </p>
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                       {item.phone ? (
                         <a
@@ -58,7 +71,7 @@ export function GetHelp() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Website
+                          {t("help.website")}
                         </a>
                       ) : null}
                     </div>
@@ -74,7 +87,9 @@ export function GetHelp() {
                 {world.map((item) => (
                   <li key={item.id} className="rounded-2xl bg-white/50 p-4 dark:bg-white/5">
                     <p className="font-semibold">{item.name}</p>
-                    <p className="text-sm text-muted">{item.description}</p>
+                    <p className="text-sm text-muted">
+                      {HELP_DESC[item.id] ? t(HELP_DESC[item.id]) : item.description}
+                    </p>
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                       {item.phone ? (
                         <a
@@ -92,16 +107,14 @@ export function GetHelp() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Website
+                          {t("help.website")}
                         </a>
                       ) : null}
                     </div>
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 text-sm text-muted">
-                If you are in immediate danger, contact local emergency services. In India, dial 112.
-              </p>
+              <p className="mt-4 text-sm text-muted">{t("help.emergency")}</p>
             </div>
           </div>
         </div>

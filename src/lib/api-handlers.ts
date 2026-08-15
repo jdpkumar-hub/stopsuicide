@@ -50,7 +50,12 @@ export async function handleQuote(request: Request) {
   if (!parsed.success) return jsonError("Please check the quote.");
   return insert(
     "quotes",
-    { ...parsed.data, active: true },
+    {
+      text: parsed.data.text,
+      translations: { te: parsed.data.textTe, hi: parsed.data.textHi },
+      author: parsed.data.author,
+      active: true,
+    },
     true,
   );
 }
@@ -62,7 +67,7 @@ export async function handleCategory(request: Request) {
     {
       slug: slugify(String(body.name || "")),
       name: body.name,
-      name_hi: body.nameHi,
+      names: { te: body.nameTe, en: body.name },
       description: body.description,
       type: body.type,
     },
@@ -79,6 +84,14 @@ export async function handleBlog(request: Request) {
       title: body.title,
       excerpt: body.excerpt,
       body: body.body,
+      titles: { te: body.titleTe },
+      excerpts: { te: body.excerptTe },
+      bodies: { te: body.bodyTe },
+      seo_title: { te: body.seoTitle || body.titleTe, en: body.title },
+      seo_description: { te: body.seoDescription || body.excerptTe, en: body.excerpt },
+      thumbnail_url:
+        body.thumbnailUrl ||
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
       tags: String(body.tags || "")
         .split(",")
         .map((tag: string) => tag.trim())
@@ -86,8 +99,6 @@ export async function handleBlog(request: Request) {
       ai_generated: true,
       reading_minutes: 3,
       published_at: new Date().toISOString(),
-      thumbnail_url:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
     },
     true,
   );
@@ -101,9 +112,11 @@ export async function handleTestimonial(request: Request) {
       name: body.name,
       role: body.role,
       quote: body.quote,
+      quotes: { [(body.locale as string) || "en"]: body.quote },
+      locale: body.locale || "en",
       avatar_url:
         "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
     },
-    true,
+    false,
   );
 }

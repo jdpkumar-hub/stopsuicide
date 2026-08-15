@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS, SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
+import { LOCALES } from "@/lib/i18n/locales";
 import { siteUrl } from "@/lib/utils";
 import type { Article, Story, Video } from "@/types";
 
@@ -10,6 +11,7 @@ export function organizationSchema() {
     url: siteUrl(),
     email: DEFAULT_SETTINGS.contactEmail,
     slogan: SITE_TAGLINE,
+    inLanguage: [...LOCALES],
     description:
       "Hope, resilience, recovery, and mental wellness through stories, videos, and education.",
   };
@@ -21,6 +23,7 @@ export function websiteSchema() {
     "@type": "WebSite",
     name: SITE_NAME,
     url: siteUrl(),
+    inLanguage: [...LOCALES],
     potentialAction: {
       "@type": "SearchAction",
       target: `${siteUrl()}/search?q={search_term_string}`,

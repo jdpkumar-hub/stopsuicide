@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { VideoCard } from "@/components/video/VideoCard";
 import { useI18n } from "@/lib/i18n/context";
+import { expandSearchQuery } from "@/lib/i18n/content";
+import { unicodeNormalize } from "@/lib/i18n/locales";
+import { useLocalized } from "@/lib/i18n/use-localized";
 import type { Category, Video } from "@/types";
 
 export function VideoExplorer({
@@ -12,18 +15,25 @@ export function VideoExplorer({
   videos: Video[];
   categories: Category[];
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const loc = useLocalized();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [visible, setVisible] = useState(6);
 
   const filtered = useMemo(() => {
+    const terms = expandSearchQuery(query);
     return videos.filter((video) => {
       const matchesCategory = category === "all" || video.categoryId === category;
-      const haystack = `${video.title} ${video.description} ${video.tags.join(" ")}`.toLowerCase();
-      return matchesCategory && haystack.includes(query.toLowerCase());
+      const copy = loc.video(video);
+      const haystack = unicodeNormalize(
+        `${copy.title} ${copy.description} ${copy.tags.join(" ")} ${video.searchTerms?.join(" ") ?? ""} ${Object.values(video.titles ?? {}).join(" ")} ${Object.values(video.descriptions ?? {}).join(" ")}`,
+      );
+      const matchesQuery =
+        !query.trim() || terms.some((term) => term && haystack.includes(term));
+      return matchesCategory && matchesQuery;
     });
-  }, [videos, category, query]);
+  }, [videos, category, query, loc]);
 
   const shown = filtered.slice(0, visible);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -53,7 +63,8 @@ export function VideoExplorer({
             setQuery(event.target.value);
             setVisible(6);
           }}
-          placeholder={t("common.search")}
+          placeholder={t("search.placeholder")}
+          lang={locale}
           className="h-12 rounded-2xl border border-border bg-transparent px-4 outline-none focus:ring-2 focus:ring-hope-blue"
         />
         <div className="flex flex-wrap gap-2">
@@ -64,7 +75,7 @@ export function VideoExplorer({
               category === "all" ? "bg-hope-blue text-white" : "border border-border"
             }`}
           >
-            All
+            {t("videos.all")}
           </button>
           {categories.map((item) => (
             <button
@@ -78,7 +89,7 @@ export function VideoExplorer({
                 category === item.id ? "bg-hope-blue text-white" : "border border-border"
               }`}
             >
-              {item.name}
+              {loc.category(item)}
             </button>
           ))}
         </div>
@@ -96,12 +107,12 @@ export function VideoExplorer({
 
       {visible < filtered.length ? (
         <div ref={sentinelRef} className="mt-10 text-center text-sm text-muted">
-          Loading more videos…
+          {t("videos.more")}
         </div>
       ) : null}
 
       {!filtered.length ? (
-        <p className="py-16 text-center text-muted">No videos match that search yet.</p>
+        <p className="py-16 text-center text-muted">{t("videos.empty")}</p>
       ) : null}
     </div>
   );
