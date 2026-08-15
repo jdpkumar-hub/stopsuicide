@@ -14,7 +14,7 @@ export function PageHeader({
   const { t } = useI18n();
   return (
     <>
-      <h1 className="font-serif text-5xl">{t(titleKey)}</h1>
+      <h1 className="page-title font-serif">{t(titleKey)}</h1>
       <p className="mt-3 max-w-2xl whitespace-pre-line text-muted">{t(subKey)}</p>
     </>
   );

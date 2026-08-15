@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Providers } from "@/components/providers";
 import { JsonLd, organizationSchema, websiteSchema } from "@/lib/schema-org";
@@ -8,14 +8,16 @@ import { LOCALE_META } from "@/lib/i18n/locales";
 import { getRequestLocale } from "@/lib/i18n/request-locale";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta",
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const fraunces = Fraunces({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-playfair",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -51,8 +53,11 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {meta.fontHref ? (
+          <link id="indic-font" rel="stylesheet" href={meta.fontHref} />
+        ) : null}
       </head>
-      <body className={`${plusJakarta.variable} ${fraunces.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
         <Providers>

@@ -1,62 +1,20 @@
-import type { ComponentProps } from "react";
-import Link from "next/link";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/Button";
 
-const variants = {
-  primary:
-    "bg-hope-blue text-white hover:bg-blue-600 shadow-lg shadow-blue-600/20",
-  green:
-    "bg-hope-green text-white hover:bg-emerald-600 shadow-lg shadow-emerald-600/20",
-  ghost:
-    "bg-white/10 text-white ring-1 ring-white/30 hover:bg-white/20 backdrop-blur",
-  outline:
-    "border border-border bg-transparent text-foreground hover:bg-white/50 dark:hover:bg-white/5",
-  help: "bg-emerald-600 text-white hover:bg-emerald-500",
-};
-
-export function Button({
-  href,
-  children,
-  className,
-  variant = "primary",
-  type = "button",
-  ...props
-}: ComponentProps<"button"> & {
-  href?: string;
-  variant?: keyof typeof variants;
-}) {
-  const classes = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hope-blue focus-visible:ring-offset-2 disabled:opacity-60",
-    variants[variant],
-    className,
-  );
-
-  if (href) {
-    return (
-      <Link href={href} className={classes}>
-        {children}
-      </Link>
-    );
-  }
-
-  return (
-    <button type={type} className={classes} {...props}>
-      {children}
-    </button>
-  );
-}
+export { Button };
 
 export function Section({
   children,
   className,
   id,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   id?: string;
 }) {
   return (
-    <section id={id} className={cn("mx-auto w-full max-w-6xl px-4 py-16 sm:px-6", className)}>
+    <section id={id} className={cn("section-pad mx-auto w-full max-w-6xl px-4 sm:px-6", className)}>
       {children}
     </section>
   );
@@ -66,7 +24,7 @@ export function Badge({
   children,
   className,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) {
   return (
@@ -86,7 +44,7 @@ export function Card({
   className,
   id,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   id?: string;
 }) {

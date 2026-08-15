@@ -2,6 +2,7 @@ import { Hero } from "@/components/home/Hero";
 import { HomeSections } from "@/components/home/HomeSections";
 import { resources as resourceItems } from "@/lib/data/seed";
 import {
+  getArticles,
   getCategories,
   getDailyQuote,
   getFeaturedVideos,
@@ -23,9 +24,10 @@ export const metadata = createMetadata({
 });
 
 export default async function HomePage() {
-  const [videos, stories, quote, quotes, testimonials, categories] = await Promise.all([
+  const [videos, stories, articles, quote, quotes, testimonials, categories] = await Promise.all([
     getFeaturedVideos(),
     getStories(),
+    getArticles(),
     getDailyQuote(),
     getQuotes(),
     getTestimonials(),
@@ -53,6 +55,7 @@ export default async function HomePage() {
       <HomeSections
         videos={videos}
         stories={stories}
+        articles={articles}
         quote={quote}
         quotes={quotes.filter((item) => item.active)}
         testimonials={testimonials}

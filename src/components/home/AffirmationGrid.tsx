@@ -12,7 +12,7 @@ export function AffirmationGrid({ quotes }: { quotes: Quote[] }) {
   const reduce = useReducedMotion();
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6" aria-labelledby="affirmations-heading">
+    <section className="section-pad mx-auto w-full max-w-6xl px-4 sm:px-6" aria-labelledby="affirmations-heading">
       <motion.div
         initial={reduce ? false : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -20,7 +20,7 @@ export function AffirmationGrid({ quotes }: { quotes: Quote[] }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="mb-10 max-w-2xl"
       >
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-hope-blue">
+        <p className="kicker text-hope-blue">
           {t("quote.title")}
         </p>
         <h2 id="affirmations-heading" className="mt-3 font-serif text-4xl sm:text-5xl">

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge, Card } from "@/components/ui/primitives";
@@ -43,9 +43,15 @@ export function ArticleCard({ article }: { article: Article }) {
   const copy = loc.article(article);
   return (
     <Link href={`/blog/${article.slug}`} className="group block h-full">
-      <Card className="h-full transition duration-300 group-hover:-translate-y-1">
+      <Card className="glass-premium h-full transition duration-300 group-hover:-translate-y-1">
         <div className="relative h-48">
-          <Image src={article.thumbnailUrl} alt={copy.title} fill className="object-cover" />
+          <Image
+            src={article.thumbnailUrl}
+            alt={copy.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
         </div>
         <div className="space-y-3 p-6">
           {article.aiGenerated ? <Badge>{t("common.ai")}</Badge> : null}
@@ -66,13 +72,14 @@ export function FadeIn({
   delay?: number;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 22 }}
+      initial={reduce ? false : { opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduce ? 0 : 0.6, delay: reduce ? 0 : delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

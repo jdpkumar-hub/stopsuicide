@@ -8,14 +8,17 @@ export function NewsletterForm() {
   const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
+    setLoading(true);
     const response = await fetch("/api/newsletter", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
+    setLoading(false);
     setStatus(response.ok ? "ok" : "error");
   }
 
@@ -33,7 +36,9 @@ export function NewsletterForm() {
         placeholder={t("newsletter.placeholder")}
         className="h-12 flex-1 rounded-full border border-border bg-white/70 px-5 outline-none focus:ring-2 focus:ring-hope-blue dark:bg-white/5"
       />
-      <Button type="submit">{t("newsletter.cta")}</Button>
+      <Button type="submit" loading={loading}>
+        {t("newsletter.cta")}
+      </Button>
       {status === "ok" ? (
         <p className="self-center text-sm text-hope-green">{t("newsletter.ok")}</p>
       ) : null}

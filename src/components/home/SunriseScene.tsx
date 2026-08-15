@@ -27,7 +27,11 @@ export function SunriseScene() {
   return (
     <div className="sunrise" aria-hidden="true">
       <div className="sunrise-sky" />
+      <div className="sunrise-blur" />
       <div className="sunrise-rays" />
+      <div className="sunrise-orb sunrise-orb-a" />
+      <div className="sunrise-orb sunrise-orb-b" />
+      <div className="sunrise-orb sunrise-orb-c" />
       <div className="sunrise-sun" />
       <div className="sunrise-glow" />
       <div className="sunrise-haze" />

@@ -1,20 +1,37 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ListenButton } from "@/components/a11y/ListenButton";
+import { DailyInspiration } from "@/components/home/DailyInspiration";
 import { AffirmationGrid } from "@/components/home/AffirmationGrid";
-import { FadeIn, StoryCard } from "@/components/content/Cards";
+import { ArticleCard, FadeIn, StoryCard } from "@/components/content/Cards";
 import { NewsletterForm } from "@/components/home/NewsletterForm";
 import { Badge, Button, Card, Section } from "@/components/ui/primitives";
 import { VideoCard } from "@/components/video/VideoCard";
+import { CRISIS_RESOURCES } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n/context";
 import { useLocalized } from "@/lib/i18n/use-localized";
-import type { Category, Quote, ResourceItem, Story, Testimonial, Video } from "@/types";
+import type { MessageKey } from "@/lib/i18n/messages/en";
+import type { Article, Category, Quote, ResourceItem, Story, Testimonial, Video } from "@/types";
+
+const HELP_COPY: Record<string, MessageKey> = {
+  "tele-manas": "help.telemanas",
+  kiran: "help.kiran",
+  icall: "help.icall",
+  aasra: "help.aasra",
+  vandrevala: "help.vandrevala",
+};
+
+const MEDITATION_IMAGE =
+  "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1400&q=75";
+const VOLUNTEER_IMAGE =
+  "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1400&q=75";
 
 export function HomeSections({
   videos,
   stories,
+  articles,
   quote,
   quotes,
   testimonials,
@@ -23,6 +40,7 @@ export function HomeSections({
 }: {
   videos: Video[];
   stories: Story[];
+  articles: Article[];
   quote: Quote;
   quotes: Quote[];
   testimonials: Testimonial[];
@@ -32,30 +50,20 @@ export function HomeSections({
   const { t } = useI18n();
   const loc = useLocalized();
   const reduce = useReducedMotion();
-  const quoteText = loc.quote(quote);
   const featured = videos[0];
   const rest = videos.slice(1, 6);
+  const topics = categories.filter((item) => item.type === "video").slice(0, 8);
+  const meditationVideos = videos.filter((item) => item.categoryId === "cat-meditation");
+  const successStories = stories.filter((item) => item.categoryId === "cat-success");
+  const successVideos = videos.filter((item) => item.categoryId === "cat-success");
+  const successFallback = successStories.length ? successStories : stories.slice(0, 3);
+  const extraSuccessVideos = successVideos.slice(0, Math.max(0, 3 - successFallback.length));
+  const orgs = CRISIS_RESOURCES.filter((item) => item.region === "india").slice(0, 4);
 
   return (
     <>
-      <Section id="todays-inspiration" className="pt-20">
-        <FadeIn>
-          <Card className="glass-premium relative overflow-hidden bg-gradient-to-br from-blue-500/15 via-amber-200/10 to-emerald-500/15 p-8 text-center sm:p-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-hope-blue">
-              {quote.aiGenerated ? t("quote.aiBadge") : t("quote.title")}
-            </p>
-            {quote.aiGenerated ? (
-              <p className="mt-2 text-sm text-muted">{t("quote.aiNote")}</p>
-            ) : null}
-            <blockquote className="mx-auto mt-5 max-w-3xl whitespace-pre-line font-serif text-3xl leading-snug sm:text-5xl">
-              “{quoteText}”
-            </blockquote>
-            <p className="mt-5 text-muted">— {quote.author}</p>
-            <div className="mt-7 flex justify-center">
-              <ListenButton text={quoteText} />
-            </div>
-          </Card>
-        </FadeIn>
+      <Section id="todays-inspiration">
+        <DailyInspiration quote={quote} quotes={quotes} />
       </Section>
 
       <AffirmationGrid quotes={quotes} />
@@ -63,9 +71,7 @@ export function HomeSections({
       <Section>
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-hope-blue">
-              {t("home.videosKicker")}
-            </p>
+            <p className="kicker text-hope-blue">{t("home.videosKicker")}</p>
             <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.featuredVideos")}</h2>
             <p className="mt-2 max-w-xl text-muted">{t("home.featuredVideosSub")}</p>
           </div>
@@ -112,9 +118,27 @@ export function HomeSections({
       <Section>
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-hope-blue">
-              {t("home.storiesKicker")}
-            </p>
+            <p className="kicker text-hope-blue">{t("home.articlesKicker")}</p>
+            <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.articles")}</h2>
+            <p className="mt-2 max-w-xl text-muted">{t("home.articlesSub")}</p>
+          </div>
+          <Button href="/blog" variant="outline">
+            {t("home.allArticles")}
+          </Button>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {articles.slice(0, 3).map((article, index) => (
+            <FadeIn key={article.id} delay={index * 0.07}>
+              <ArticleCard article={article} />
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="kicker text-hope-blue">{t("home.storiesKicker")}</p>
             <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.stories")}</h2>
             <p className="mt-2 max-w-xl text-muted">{t("home.storiesSub")}</p>
           </div>
@@ -132,11 +156,78 @@ export function HomeSections({
       </Section>
 
       <Section>
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-hope-blue">
-          {t("home.resourcesKicker")}
-        </p>
-        <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.resources")}</h2>
-        <p className="mt-2 max-w-2xl text-muted">{t("home.resourcesSub")}</p>
+        <p className="kicker text-hope-blue">{t("home.explore")}</p>
+        <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.topics")}</h2>
+        <p className="mt-2 max-w-2xl text-muted">{t("home.topicsSub")}</p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          {topics.map((topic) => (
+            <Link
+              key={topic.id}
+              href={`/videos?topic=${topic.slug}`}
+              className="glass-premium rounded-full px-5 py-2.5 text-sm font-medium transition hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              {loc.category(topic)}
+            </Link>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <div className="grid items-center gap-8 lg:grid-cols-2">
+          <FadeIn>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem]">
+              <Image
+                src={meditationVideos[0]?.thumbnailUrl ?? MEDITATION_IMAGE}
+                alt={t("home.meditation")}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.08}>
+            <p className="kicker text-hope-blue">{t("home.meditation")}</p>
+            <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.meditation")}</h2>
+            <p className="mt-3 max-w-xl text-muted">{t("home.meditationSub")}</p>
+            <Button href="/videos?topic=meditation" className="mt-6">
+              {t("home.meditationCta")}
+            </Button>
+          </FadeIn>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="kicker text-hope-blue">{t("home.success")}</p>
+            <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.success")}</h2>
+            <p className="mt-2 max-w-xl text-muted">{t("home.successSub")}</p>
+          </div>
+          <Button href="/stories" variant="outline">
+            {t("home.allStories")}
+          </Button>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {successFallback.slice(0, 3).map((story, index) => (
+            <FadeIn key={story.id} delay={index * 0.07}>
+              <StoryCard story={story} />
+            </FadeIn>
+          ))}
+          {extraSuccessVideos.map((video, index) => (
+            <FadeIn key={video.id} delay={(successFallback.length + index) * 0.07}>
+              <VideoCard
+                video={video}
+                category={categories.find((item) => item.id === video.categoryId)}
+              />
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <p className="kicker text-hope-blue">{t("home.resourcesKicker")}</p>
+        <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.tips")}</h2>
+        <p className="mt-2 max-w-2xl text-muted">{t("home.tipsSub")}</p>
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {resources.map((item, index) => {
             const copy = loc.resource(item);
@@ -154,6 +245,58 @@ export function HomeSections({
               </FadeIn>
             );
           })}
+        </div>
+      </Section>
+
+      <Section>
+        <Card className="glass-premium grid overflow-hidden lg:grid-cols-2">
+          <div className="relative min-h-[16rem]">
+            <Image
+              src={VOLUNTEER_IMAGE}
+              alt={t("home.volunteer")}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
+          <div className="flex flex-col justify-center p-8 sm:p-12">
+            <Badge>{t("contact.volunteerTitle")}</Badge>
+            <h2 className="mt-4 font-serif text-4xl sm:text-5xl">{t("home.volunteer")}</h2>
+            <p className="mt-3 max-w-xl text-muted">{t("home.volunteerSub")}</p>
+            <Button href="/contact" className="mt-6 w-fit">
+              {t("home.volunteerCta")}
+            </Button>
+          </div>
+        </Card>
+      </Section>
+
+      <Section>
+        <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="kicker text-hope-blue">{t("help.india")}</p>
+            <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.orgs")}</h2>
+            <p className="mt-2 max-w-xl text-muted">{t("home.orgsSub")}</p>
+          </div>
+          <Button href="#get-help" variant="outline">
+            {t("home.orgsCta")}
+          </Button>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {orgs.map((org, index) => (
+            <FadeIn key={org.id} delay={index * 0.05}>
+              <Card className="glass-premium h-full p-5">
+                <h3 className="font-serif text-xl">{org.name}</h3>
+                <p className="mt-2 text-sm text-muted">
+                  {HELP_COPY[org.id] ? t(HELP_COPY[org.id]) : org.description}
+                </p>
+                {org.phone ? (
+                  <a className="mt-4 inline-block text-sm font-semibold text-hope-blue" href={`tel:${org.phone}`}>
+                    {org.phone}
+                  </a>
+                ) : null}
+              </Card>
+            </FadeIn>
+          ))}
         </div>
       </Section>
 

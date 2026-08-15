@@ -31,7 +31,7 @@ export const LOCALE_META: Record<
     hreflang: "en",
     ogLocale: "en_IN",
     tts: "en-IN",
-    fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif',
+    fontFamily: 'var(--font-inter), Inter, ui-sans-serif, sans-serif',
     fontHref: "",
     dir: "ltr",
   },
@@ -44,7 +44,7 @@ export const LOCALE_META: Record<
     tts: "te-IN",
     fontFamily: '"Noto Sans Telugu", "Noto Sans", sans-serif',
     fontHref:
-      "https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans:wght@400;600;700&display=swap",
+      "https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap",
     dir: "ltr",
   },
   hi: {
@@ -56,7 +56,7 @@ export const LOCALE_META: Record<
     tts: "hi-IN",
     fontFamily: '"Noto Sans Devanagari", "Noto Sans", sans-serif',
     fontHref:
-      "https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;600;700&display=swap",
+      "https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap",
     dir: "ltr",
   },
   ta: {
@@ -68,7 +68,7 @@ export const LOCALE_META: Record<
     tts: "ta-IN",
     fontFamily: '"Noto Sans Tamil", "Noto Sans", sans-serif',
     fontHref:
-      "https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans:wght@400;600;700&display=swap",
+      "https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@500;600;700&display=swap",
     dir: "ltr",
   },
   kn: {
@@ -80,7 +80,7 @@ export const LOCALE_META: Record<
     tts: "kn-IN",
     fontFamily: '"Noto Sans Kannada", "Noto Sans", sans-serif',
     fontHref:
-      "https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Sans:wght@400;600;700&display=swap",
+      "https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Serif+Kannada:wght@500;600;700&display=swap",
     dir: "ltr",
   },
   ml: {
@@ -92,7 +92,7 @@ export const LOCALE_META: Record<
     tts: "ml-IN",
     fontFamily: '"Noto Sans Malayalam", "Noto Sans", sans-serif',
     fontHref:
-      "https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Noto+Sans:wght@400;600;700&display=swap",
+      "https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Noto+Serif+Malayalam:wght@500;600;700&display=swap",
     dir: "ltr",
   },
 };

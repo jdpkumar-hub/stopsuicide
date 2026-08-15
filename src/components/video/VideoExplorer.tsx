@@ -21,6 +21,14 @@ export function VideoExplorer({
   const [category, setCategory] = useState("all");
   const [visible, setVisible] = useState(6);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const topic = params.get("topic");
+    if (!topic) return;
+    const match = categories.find((item) => item.slug === topic || item.id === topic);
+    if (match) setCategory(match.id);
+  }, [categories]);
+
   const filtered = useMemo(() => {
     const terms = expandSearchQuery(query);
     return videos.filter((video) => {
