@@ -5,10 +5,10 @@ import {
   getArticles,
   getCategories,
   getDailyQuote,
-  getFeaturedVideos,
   getQuotes,
   getStories,
   getTestimonials,
+  getVideos,
 } from "@/lib/data/queries";
 import { JsonLd } from "@/lib/schema-org";
 import { createMetadata } from "@/lib/seo";
@@ -25,7 +25,7 @@ export const metadata = createMetadata({
 
 export default async function HomePage() {
   const [videos, stories, articles, quote, quotes, testimonials, categories] = await Promise.all([
-    getFeaturedVideos(),
+    getVideos(),
     getStories(),
     getArticles(),
     getDailyQuote(),

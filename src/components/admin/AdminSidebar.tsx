@@ -16,6 +16,7 @@ import {
   Video,
 } from "lucide-react";
 import { createBrowserSupabase } from "@/lib/supabase/client";
+import { Logo } from "@/components/common/Logo";
 import { useI18n } from "@/lib/i18n/context";
 
 const links = [
@@ -45,6 +46,9 @@ export function AdminSidebar() {
 
   return (
     <aside className="glass h-fit rounded-3xl p-4 lg:sticky lg:top-24">
+      <div className="mb-4 px-2">
+        <Logo variant="mark" className="max-w-[4.5rem]" />
+      </div>
       <p className="px-3 pb-3 text-xs font-semibold uppercase tracking-wide text-muted">
         {t("footer.admin")}
       </p>

@@ -13,13 +13,18 @@ export function NewsletterForm() {
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setLoading(true);
-    const response = await fetch("/api/newsletter", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    setLoading(false);
-    setStatus(response.ok ? "ok" : "error");
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setStatus(response.ok ? "ok" : "error");
+    } catch {
+      setStatus("error");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

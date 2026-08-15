@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Card } from "@/components/ui/primitives";
+import { Logo } from "@/components/common/Logo";
 import { useI18n } from "@/lib/i18n/context";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 
@@ -38,6 +39,9 @@ export function LoginForm() {
 
   return (
     <Card className="mx-auto max-w-md p-8">
+      <div className="mb-6 flex justify-center">
+        <Logo variant="footer" />
+      </div>
       <h1 className="font-serif text-4xl">{t("login.title")}</h1>
       <p className="mt-2 text-sm text-muted">{t("login.sub")}</p>
       <form onSubmit={onSubmit} className="mt-6 space-y-4">

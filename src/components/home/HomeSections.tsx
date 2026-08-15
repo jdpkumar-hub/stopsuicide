@@ -13,6 +13,7 @@ import { CRISIS_RESOURCES } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n/context";
 import { useLocalized } from "@/lib/i18n/use-localized";
 import type { MessageKey } from "@/lib/i18n/messages/en";
+import { telHref } from "@/lib/utils";
 import type { Article, Category, Quote, ResourceItem, Story, Testimonial, Video } from "@/types";
 
 const HELP_COPY: Record<string, MessageKey> = {
@@ -50,14 +51,19 @@ export function HomeSections({
   const { t } = useI18n();
   const loc = useLocalized();
   const reduce = useReducedMotion();
-  const featured = videos[0];
-  const rest = videos.slice(1, 6);
+  const featuredVideos = videos.filter((item) => item.featured).slice(0, 6);
+  const featured = featuredVideos[0];
+  const rest = featuredVideos.slice(1);
+  const shownVideoIds = new Set(featuredVideos.map((item) => item.id));
   const topics = categories.filter((item) => item.type === "video").slice(0, 8);
   const meditationVideos = videos.filter((item) => item.categoryId === "cat-meditation");
   const successStories = stories.filter((item) => item.categoryId === "cat-success");
-  const successVideos = videos.filter((item) => item.categoryId === "cat-success");
-  const successFallback = successStories.length ? successStories : stories.slice(0, 3);
-  const extraSuccessVideos = successVideos.slice(0, Math.max(0, 3 - successFallback.length));
+  const recoveryStories = stories
+    .filter((item) => item.categoryId !== "cat-success")
+    .slice(0, 3);
+  const successVideos = videos
+    .filter((item) => item.categoryId === "cat-success" && !shownVideoIds.has(item.id))
+    .slice(0, Math.max(0, 3 - successStories.length));
   const orgs = CRISIS_RESOURCES.filter((item) => item.region === "india").slice(0, 4);
 
   return (
@@ -147,7 +153,7 @@ export function HomeSections({
           </Button>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {stories.slice(0, 3).map((story, index) => (
+          {recoveryStories.map((story, index) => (
             <FadeIn key={story.id} delay={index * 0.07}>
               <StoryCard story={story} />
             </FadeIn>
@@ -196,6 +202,7 @@ export function HomeSections({
         </div>
       </Section>
 
+      {successStories.length || successVideos.length ? (
       <Section>
         <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
@@ -208,13 +215,13 @@ export function HomeSections({
           </Button>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {successFallback.slice(0, 3).map((story, index) => (
+          {successStories.slice(0, 3).map((story, index) => (
             <FadeIn key={story.id} delay={index * 0.07}>
               <StoryCard story={story} />
             </FadeIn>
           ))}
-          {extraSuccessVideos.map((video, index) => (
-            <FadeIn key={video.id} delay={(successFallback.length + index) * 0.07}>
+          {successVideos.map((video, index) => (
+            <FadeIn key={video.id} delay={(successStories.length + index) * 0.07}>
               <VideoCard
                 video={video}
                 category={categories.find((item) => item.id === video.categoryId)}
@@ -223,6 +230,7 @@ export function HomeSections({
           ))}
         </div>
       </Section>
+      ) : null}
 
       <Section>
         <p className="kicker text-hope-blue">{t("home.resourcesKicker")}</p>
@@ -290,7 +298,7 @@ export function HomeSections({
                   {HELP_COPY[org.id] ? t(HELP_COPY[org.id]) : org.description}
                 </p>
                 {org.phone ? (
-                  <a className="mt-4 inline-block text-sm font-semibold text-hope-blue" href={`tel:${org.phone}`}>
+                  <a className="mt-4 inline-block text-sm font-semibold text-hope-blue" href={telHref(org.phone)}>
                     {org.phone}
                   </a>
                 ) : null}

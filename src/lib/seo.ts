@@ -73,7 +73,7 @@ export function createMetadata({
 }
 
 export const defaultMetadata = createMetadata({
-  title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+  title: `Stop Suicide — ${SITE_TAGLINE}`,
   description:
     "A calm space for hope, resilience, recovery, and mental wellness. Watch inspirational videos, read survivor stories, and find support.",
   localeAware: true,

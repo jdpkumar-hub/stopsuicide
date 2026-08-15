@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ContrastToggle } from "@/components/a11y/ContrastToggle";
+import { Logo } from "@/components/common/Logo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/primitives";
@@ -30,13 +31,8 @@ export function Header() {
 
   return (
     <header className="site-header" data-scrolled={scrolled}>
-      <div className="site-header-bar mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-2.5 sm:px-5">
-        <Link href="/" className="flex items-center gap-2.5 px-1">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-hope-blue to-hope-green text-sm font-bold text-white">
-            SS
-          </span>
-          <span className="font-serif text-lg">stopsuicide.in</span>
-        </Link>
+      <div className="site-header-bar mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-1.5 sm:px-5 sm:py-2">
+        <Logo animate priority className="shrink-0 px-1" />
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
           {NAV_LINKS.map((link) => (

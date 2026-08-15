@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "@/components/common/Logo";
 import { DEFAULT_SETTINGS, NAV_LINKS } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n/context";
 
@@ -12,11 +13,11 @@ export function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
-          <p className="font-serif text-2xl">stopsuicide.in</p>
+          <Logo variant="footer" />
+          <p className="mt-4 font-serif text-xl">stopsuicide.in</p>
+          <p className="mt-2 text-sm font-medium tracking-wide text-muted">{t("hero.kicker")}</p>
           <p className="mt-3 max-w-md text-sm text-muted">{t("footer.mission")}</p>
-          <p className="mt-4 text-sm text-muted">
-            {t("footer.rights")}
-          </p>
+          <p className="mt-4 text-sm text-muted">{t("footer.rights")}</p>
         </div>
         <div>
           <p className="text-sm font-semibold">{t("footer.explore")}</p>

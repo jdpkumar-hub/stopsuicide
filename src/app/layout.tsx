@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { Providers } from "@/components/providers";
@@ -23,8 +23,18 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   ...defaultMetadata,
   title: {
-    default: "stopsuicide.in — You Are Not Alone",
-    template: "%s | stopsuicide.in",
+    default: "Stop Suicide — You Are Not Alone",
+    template: "%s | Stop Suicide",
+  },
+  applicationName: "Stop Suicide",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    shortcut: ["/favicon.ico"],
   },
   keywords: [
     "mental wellness",
@@ -39,6 +49,10 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "stopsuicide.in" }],
   category: "health",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#E31E24",
 };
 
 export default async function RootLayout({

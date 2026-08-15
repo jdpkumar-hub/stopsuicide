@@ -4,6 +4,7 @@ import { HeartHandshake, Phone } from "lucide-react";
 import { CRISIS_RESOURCES } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n/context";
 import { Section } from "@/components/ui/primitives";
+import { telHref } from "@/lib/utils";
 import type { MessageKey } from "@/lib/i18n/messages/en";
 
 const HELP_DESC: Record<string, MessageKey> = {
@@ -56,7 +57,7 @@ export function GetHelp() {
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                       {item.phone ? (
                         <a
-                          href={`tel:${item.phone.replace(/\s/g, "")}`}
+                          href={telHref(item.phone)}
                           className="inline-flex items-center gap-1 font-semibold text-hope-blue"
                         >
                           <Phone className="h-4 w-4" />
@@ -93,7 +94,7 @@ export function GetHelp() {
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                       {item.phone ? (
                         <a
-                          href={`tel:${item.phone}`}
+                          href={telHref(item.phone)}
                           className="inline-flex items-center gap-1 font-semibold text-hope-green"
                         >
                           <Phone className="h-4 w-4" />

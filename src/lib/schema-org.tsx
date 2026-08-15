@@ -11,6 +11,8 @@ export function organizationSchema() {
     url: siteUrl(),
     email: DEFAULT_SETTINGS.contactEmail,
     slogan: SITE_TAGLINE,
+    logo: `${siteUrl()}/images/logo/logo.png`,
+    image: `${siteUrl()}/og.png`,
     inLanguage: [...LOCALES],
     description:
       "Hope, resilience, recovery, and mental wellness through stories, videos, and education.",
