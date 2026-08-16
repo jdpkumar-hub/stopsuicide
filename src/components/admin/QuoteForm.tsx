@@ -7,15 +7,18 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { LocaleFields } from "@/components/admin/LocaleFields";
 import { useToast } from "@/components/admin/Toast";
 import { CONTENT_LOCALES, QUOTE_MOODS } from "@/lib/cms/fields";
+import { getKolkataDateStamp, toKolkataDateStamp } from "@/lib/cms/time";
 import { LOCALE_META } from "@/lib/i18n/locales";
 import type { Quote } from "@/types";
 
 export function QuoteForm({
   quote,
   canDelete = true,
+  canPublish = false,
 }: {
   quote?: Quote;
   canDelete?: boolean;
+  canPublish?: boolean;
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -29,8 +32,13 @@ export function QuoteForm({
     const data = new FormData(form);
     const active = form.elements.namedItem("active");
     const featured = form.elements.namedItem("featured");
-    data.set("active", active instanceof HTMLInputElement && active.checked ? "on" : "");
-    data.set("featured", featured instanceof HTMLInputElement && featured.checked ? "on" : "");
+    if (canPublish) {
+      data.set("active", active instanceof HTMLInputElement && active.checked ? "on" : "");
+      data.set("featured", featured instanceof HTMLInputElement && featured.checked ? "on" : "");
+    } else {
+      data.set("active", quote?.active ? "on" : "");
+      data.set("featured", quote?.featured ? "on" : "");
+    }
     const response = await fetch(quote ? `/api/quotes/${quote.id}` : "/api/quotes", {
       method: quote ? "PUT" : "POST",
       body: data,
@@ -118,22 +126,34 @@ export function QuoteForm({
           </label>
         </div>
         <label className="block text-sm font-medium">
-          Schedule for date
+          Schedule for date (Asia/Kolkata)
           <input
             type="date"
             name="scheduledFor"
-            defaultValue={quote?.scheduledFor}
+            defaultValue={toKolkataDateStamp(quote?.scheduledFor) || ""}
             className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
           />
+          <span className="mt-1 block text-xs text-muted">
+            Homepage rotation uses the India calendar. Today in IST is {getKolkataDateStamp()}.
+          </span>
         </label>
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="featured" defaultChecked={quote?.featured} className="h-4 w-4" />
-          Featured homepage quote
-        </label>
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="active" defaultChecked={quote?.active ?? true} className="h-4 w-4" />
-          Active
-        </label>
+        {canPublish ? (
+          <>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" name="featured" defaultChecked={quote?.featured} className="h-4 w-4" />
+              Featured homepage quote
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" name="active" defaultChecked={quote?.active ?? true} className="h-4 w-4" />
+              Active
+            </label>
+          </>
+        ) : (
+          <p className="text-sm text-muted">
+            Homepage: {quote?.featured ? "featured" : "not featured"} · {quote?.active ? "active" : "inactive"}.
+            Editors approve quotes before they rotate on the site.
+          </p>
+        )}
         <div className="flex flex-wrap gap-3">
           <Button type="submit" disabled={saving}>
             {saving ? "Saving…" : quote ? "Save quote" : "Add quote"}

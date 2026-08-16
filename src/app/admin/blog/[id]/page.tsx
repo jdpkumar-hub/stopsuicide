@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { BlogForm } from "@/components/admin/BlogForm";
 import { requireAdmin } from "@/lib/admin";
-import { canDeleteContent } from "@/lib/cms/roles";
+import { canDeleteContent, canPublishContent } from "@/lib/cms/roles";
 import { getAllArticlesAdmin, getCategories } from "@/lib/data/queries";
 
 export default async function EditBlogPage({
@@ -21,7 +21,12 @@ export default async function EditBlogPage({
   return (
     <div>
       <h1 className="mb-6 font-serif text-4xl">Edit article</h1>
-      <BlogForm article={article} categories={categories} canDelete={canDeleteContent(auth.role)} />
+      <BlogForm
+        article={article}
+        categories={categories}
+        canDelete={canDeleteContent(auth.role)}
+        canPublish={canPublishContent(auth.role)}
+      />
     </div>
   );
 }

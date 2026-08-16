@@ -1,6 +1,6 @@
 "use client";
 
-import { LOCALES, LOCALE_META } from "@/lib/i18n/locales";
+import { LOCALES, LOCALE_META, type Locale } from "@/lib/i18n/locales";
 import type { TranslationMap } from "@/types";
 
 export function LocaleFields({
@@ -9,18 +9,20 @@ export function LocaleFields({
   values,
   textarea,
   rows = 4,
+  omitLocales = [],
 }: {
   prefix: string;
   label: string;
   values?: TranslationMap;
   textarea?: boolean;
   rows?: number;
+  omitLocales?: Locale[];
 }) {
   return (
     <fieldset className="rounded-3xl border border-dashed border-border p-4">
       <legend className="px-2 text-sm font-semibold">{label}</legend>
       <div className="grid gap-3 md:grid-cols-2">
-        {LOCALES.filter((locale) => locale !== "en").map((locale) => {
+        {LOCALES.filter((locale) => locale !== "en" && !omitLocales.includes(locale)).map((locale) => {
           const meta = LOCALE_META[locale];
           const shared = {
             name: `${prefix}.${locale}`,

@@ -11,7 +11,7 @@ import {
   readingMinutesFromHtml,
 } from "@/lib/cms/fields";
 import { extractVimeoId, extractYouTubeId } from "@/lib/admin";
-import { kolkataDateTimeToIso } from "@/lib/cms/time";
+import { kolkataDateTimeToIso, toKolkataDateStamp } from "@/lib/cms/time";
 import { slugify } from "@/lib/utils";
 import type { ContentStatus, TranslationMap } from "@/types";
 
@@ -29,11 +29,13 @@ export async function videoPayloadFromForm(form: FormData, existing?: Record<str
   const description = String(form.get("description") || "");
   const youtubeId = extractYouTubeId(String(form.get("youtubeLink") || ""));
   const vimeoId = extractVimeoId(String(form.get("vimeoLink") || ""));
-  const titles = mergeMaps(collectTranslations(form, "title"), {
-    te: String(form.get("titleTe") || form.get("title.te") || "") || undefined,
+  const localeTitles = collectTranslations(form, "title");
+  const localeDescriptions = collectTranslations(form, "description");
+  const titles = mergeMaps(localeTitles, {
+    te: localeTitles.te || String(form.get("titleTe") || "") || undefined,
   });
-  const descriptions = mergeMaps(collectTranslations(form, "description"), {
-    te: String(form.get("descriptionTe") || form.get("description.te") || "") || undefined,
+  const descriptions = mergeMaps(localeDescriptions, {
+    te: localeDescriptions.te || String(form.get("descriptionTe") || "") || undefined,
   });
 
   let thumbnailUrl = existing?.thumbnail_url as string | undefined;
@@ -203,7 +205,7 @@ export function quotePayloadFromForm(form: FormData) {
     active: isTruthyFlag(form.get("active")),
     mood: parseMood(form.get("mood")),
     featured: isTruthyFlag(form.get("featured")),
-    scheduled_for: String(form.get("scheduledFor") || "") || null,
+    scheduled_for: toKolkataDateStamp(String(form.get("scheduledFor") || "")),
     locale: parseLocale(form.get("locale")),
   };
 }

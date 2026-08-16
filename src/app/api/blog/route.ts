@@ -1,5 +1,7 @@
 import { jsonError, requireAdmin } from "@/lib/admin";
+import { parseContentStatus } from "@/lib/cms/fields";
 import { articlePayloadFromForm } from "@/lib/cms/payloads";
+import { canPublishContent } from "@/lib/cms/roles";
 import { getAllArticlesAdmin, getArticles } from "@/lib/data/queries";
 import { articleSchema } from "@/lib/validations";
 
@@ -38,6 +40,11 @@ export async function POST(request: Request) {
       ...(await articlePayloadFromForm(form)),
       created_by: auth.user?.id ?? null,
     };
+    if (!canPublishContent(auth.role)) {
+      record.status = "draft";
+    } else {
+      record.status = parseContentStatus(record.status);
+    }
     if (!auth.supabase) return Response.json({ ok: true, preview: record });
     const { data, error } = await auth.supabase.from("articles").insert(record).select("*").single();
     if (error) return jsonError(error.message, 500);

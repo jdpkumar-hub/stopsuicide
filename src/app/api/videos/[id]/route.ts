@@ -1,5 +1,7 @@
 import { denyIfCannotDelete, jsonError, requireAdmin } from "@/lib/admin";
+import { parseContentStatus } from "@/lib/cms/fields";
 import { videoPayloadFromForm } from "@/lib/cms/payloads";
+import { canPublishContent } from "@/lib/cms/roles";
 import { videoSchema } from "@/lib/validations";
 
 type Params = { params: Promise<{ id: string }> };
@@ -35,6 +37,9 @@ export async function PUT(request: Request, { params }: Params) {
       existing = (data as Record<string, unknown>) || undefined;
     }
     const updates = await videoPayloadFromForm(form, existing);
+    if (!canPublishContent(auth.role)) {
+      updates.status = existing?.status != null ? parseContentStatus(existing.status) : existing ? "published" : "draft";
+    }
     if (!auth.supabase) return Response.json({ ok: true, preview: updates, id });
     const { error } = await auth.supabase.from("videos").update(updates).eq("id", id);
     if (error) return jsonError(error.message, 500);

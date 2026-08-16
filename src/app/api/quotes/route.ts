@@ -1,5 +1,6 @@
 import { jsonError, requireAdmin } from "@/lib/admin";
 import { quotePayloadFromForm } from "@/lib/cms/payloads";
+import { canPublishContent } from "@/lib/cms/roles";
 import { getAllQuotesAdmin, getQuotes } from "@/lib/data/queries";
 import { quoteSchema } from "@/lib/validations";
 
@@ -32,6 +33,10 @@ export async function POST(request: Request) {
   if (!parsed.success) return jsonError("Please check the quote.");
 
   const record = { ...quotePayloadFromForm(form), created_by: auth.user?.id ?? null };
+  if (!canPublishContent(auth.role)) {
+    record.featured = false;
+    record.active = false;
+  }
   if (!auth.supabase) return Response.json({ ok: true, preview: record });
   const { data, error } = await auth.supabase.from("quotes").insert(record).select("*").single();
   if (error) return jsonError(error.message, 500);

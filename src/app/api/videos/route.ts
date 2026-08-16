@@ -1,5 +1,7 @@
 import { jsonError, requireAdmin } from "@/lib/admin";
+import { parseContentStatus } from "@/lib/cms/fields";
 import { videoPayloadFromForm } from "@/lib/cms/payloads";
+import { canPublishContent } from "@/lib/cms/roles";
 import { getAllVideosAdmin, getVideos } from "@/lib/data/queries";
 import { videoSchema } from "@/lib/validations";
 
@@ -45,6 +47,11 @@ export async function POST(request: Request) {
       published_at: new Date().toISOString(),
       created_by: auth.user?.id ?? null,
     };
+    if (!canPublishContent(auth.role)) {
+      record.status = "draft";
+    } else {
+      record.status = parseContentStatus(record.status);
+    }
 
     if (!auth.supabase) {
       return Response.json({

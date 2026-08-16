@@ -15,10 +15,12 @@ export function VideoForm({
   categories,
   video,
   canDelete = true,
+  canPublish = false,
 }: {
   categories: Category[];
   video?: Video;
   canDelete?: boolean;
+  canPublish?: boolean;
 }) {
   const { t } = useI18n();
   const loc = useLocalized();
@@ -57,9 +59,7 @@ export function VideoForm({
     data.set("description", description);
     data.set("titleTe", titleTe);
     data.set("descriptionTe", descriptionTe);
-    data.set("title.te", titleTe);
-    data.set("description.te", descriptionTe);
-    data.set("status", contentStatus);
+    data.set("status", canPublish ? contentStatus : video?.status ?? "draft");
     const endpoint = video ? `/api/videos/${video.id}` : "/api/videos";
     const response = await fetch(endpoint, {
       method: video ? "PUT" : "POST",
@@ -140,12 +140,13 @@ export function VideoForm({
             placeholder={t("admin.descTe")}
           />
         </div>
-        <LocaleFields prefix="title" label="Titles in other languages" values={video?.titles} />
+        <LocaleFields prefix="title" label="Titles in other languages" values={video?.titles} omitLocales={["te"]} />
         <LocaleFields
           prefix="description"
           label="Descriptions in other languages"
           values={video?.descriptions}
           textarea
+          omitLocales={["te"]}
         />
         <Field name="tags" label={t("admin.tags")} defaultValue={video?.tags.join(", ")} />
         <Field
@@ -175,21 +176,27 @@ export function VideoForm({
             ))}
           </select>
         </label>
-        <label className="block text-sm font-medium">
-          Status
-          <select
-            name="status"
-            value={contentStatus}
-            onChange={(event) => setContentStatus(event.target.value as ContentStatus)}
-            className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
-          >
-            {CONTENT_STATUSES.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
+        {canPublish ? (
+          <label className="block text-sm font-medium">
+            Status
+            <select
+              name="status"
+              value={contentStatus}
+              onChange={(event) => setContentStatus(event.target.value as ContentStatus)}
+              className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
+            >
+              {CONTENT_STATUSES.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <p className="text-sm text-muted">
+            Status: {video?.status ?? "draft"}. Editors publish videos to the public site.
+          </p>
+        )}
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="featured" defaultChecked={video?.featured} className="h-4 w-4" />
           {t("admin.featured")}

@@ -1,5 +1,6 @@
 import { denyIfCannotDelete, jsonError, requireAdmin } from "@/lib/admin";
 import { quotePayloadFromForm } from "@/lib/cms/payloads";
+import { canPublishContent } from "@/lib/cms/roles";
 import { quoteSchema } from "@/lib/validations";
 
 type Params = { params: Promise<{ id: string }> };
@@ -22,7 +23,16 @@ export async function PUT(request: Request, { params }: Params) {
   });
   if (!parsed.success) return jsonError("Please check the quote.");
 
+  let existing: Record<string, unknown> | undefined;
+  if (auth.supabase) {
+    const { data } = await auth.supabase.from("quotes").select("*").eq("id", id).maybeSingle();
+    existing = (data as Record<string, unknown>) || undefined;
+  }
   const updates = quotePayloadFromForm(form);
+  if (!canPublishContent(auth.role)) {
+    updates.featured = Boolean(existing?.featured);
+    updates.active = existing?.active == null ? false : Boolean(existing.active);
+  }
   if (!auth.supabase) return Response.json({ ok: true, preview: updates, id });
   const { error } = await auth.supabase.from("quotes").update(updates).eq("id", id);
   if (error) return jsonError(error.message, 500);

@@ -17,10 +17,12 @@ export function BlogForm({
   article,
   categories,
   canDelete = true,
+  canPublish = false,
 }: {
   article?: Article;
   categories: Category[];
   canDelete?: boolean;
+  canPublish?: boolean;
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -44,7 +46,7 @@ export function BlogForm({
     data.set("title", title);
     data.set("excerpt", excerpt);
     data.set("body", body);
-    data.set("status", status);
+    data.set("status", canPublish ? status : article?.status ?? "draft");
     const endpoint = article ? `/api/blog/${article.id}` : "/api/blog";
     const response = await fetch(endpoint, {
       method: article ? "PUT" : "POST",
@@ -165,20 +167,26 @@ export function BlogForm({
         <LocaleFields prefix="seoTitle" label="SEO titles" values={article?.seoTitle} />
         <LocaleFields prefix="seoDescription" label="SEO descriptions" values={article?.seoDescription} textarea rows={2} />
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block text-sm font-medium">
-            Status
-            <select
-              value={status}
-              onChange={(event) => setStatus(event.target.value as ContentStatus)}
-              className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
-            >
-              {CONTENT_STATUSES.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
+          {canPublish ? (
+            <label className="block text-sm font-medium">
+              Status
+              <select
+                value={status}
+                onChange={(event) => setStatus(event.target.value as ContentStatus)}
+                className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
+              >
+                {CONTENT_STATUSES.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <p className="text-sm text-muted">
+              Status: {article?.status ?? "draft"}. Editors publish articles to the public site.
+            </p>
+          )}
           <label className="block text-sm font-medium">
             Schedule publish
             <input

@@ -26,6 +26,31 @@ export function formatKolkataDateTime(iso?: string) {
   return local ? `${local.replace("T", " ")} IST` : "";
 }
 
+export function getKolkataDateStamp(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+export function toKolkataDateStamp(value?: string | null) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+  if (trimmed.includes("T") && !/[zZ]|[+-]\d{2}:\d{2}$/.test(trimmed)) {
+    const iso = kolkataDateTimeToIso(trimmed);
+    return iso ? getKolkataDateStamp(new Date(iso)) : null;
+  }
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return getKolkataDateStamp(parsed);
+}
+
 export function isoToKolkataDateTimeLocal(iso?: string) {
   if (!iso) return "";
   const date = new Date(iso);

@@ -2,7 +2,7 @@ import { DailyMotivationPanel } from "@/components/admin/DailyMotivationPanel";
 import { QuoteForm } from "@/components/admin/QuoteForm";
 import { QuoteManager } from "@/components/admin/QuoteManager";
 import { requireAdmin } from "@/lib/admin";
-import { canDeleteContent } from "@/lib/cms/roles";
+import { canDeleteContent, canPublishContent } from "@/lib/cms/roles";
 import { getAllQuotesAdmin } from "@/lib/data/queries";
 import { getTodayStamp, listMotivations } from "@/lib/motivation/store";
 
@@ -29,7 +29,7 @@ export default async function QuotesPage() {
       </div>
       <div className="mt-8">
         <h2 className="mb-4 font-serif text-2xl">Add quote</h2>
-        <QuoteForm canDelete={canDeleteContent(auth.role)} />
+        <QuoteForm canDelete={canDeleteContent(auth.role)} canPublish={canPublishContent(auth.role)} />
       </div>
     </div>
   );
