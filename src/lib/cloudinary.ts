@@ -12,7 +12,7 @@ function configure() {
 
 export async function uploadToCloudinary(
   file: File,
-  folder: "videos" | "thumbnails" | "images",
+  folder: "videos" | "thumbnails" | "images" | "media",
   resourceType: "image" | "video" | "auto" = "auto",
 ) {
   if (!isCloudinaryConfigured()) {

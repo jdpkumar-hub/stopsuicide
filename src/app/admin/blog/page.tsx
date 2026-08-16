@@ -1,40 +1,22 @@
-import { ManagerForm } from "@/components/admin/ManagerForm";
-import { Card } from "@/components/ui/primitives";
-import { getArticles } from "@/lib/data/queries";
+import { BlogManager } from "@/components/admin/BlogManager";
+import { Button } from "@/components/ui/primitives";
+import { getAllArticlesAdmin } from "@/lib/data/queries";
 
 export default async function AdminBlogPage() {
-  const articles = await getArticles();
+  const articles = await getAllArticlesAdmin();
   return (
     <div>
-      <h1 className="font-serif text-4xl">Blog manager</h1>
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <div className="space-y-3">
-          {articles.map((article) => (
-            <Card key={article.id} className="p-4">
-              <p className="font-semibold">{article.title}</p>
-              <p className="text-sm text-muted">
-                {article.aiGenerated ? "AI-assisted" : "Editorial"} · {article.readingMinutes} min
-              </p>
-            </Card>
-          ))}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="font-serif text-4xl">Blog</h1>
+          <p className="mt-2 text-sm text-muted">
+            Rich-text articles with SEO, scheduling, drafts, and multilingual fields.
+          </p>
         </div>
-        <ManagerForm
-          endpoint="/api/blog"
-          submitLabel="Publish article"
-          fields={[
-            { name: "title", label: "Title (English)" },
-            { name: "titleTe", label: "Title (Telugu)", required: false, lang: "te" },
-            { name: "excerpt", label: "Excerpt (English)", textarea: true },
-            { name: "excerptTe", label: "Excerpt (Telugu)", textarea: true, required: false, lang: "te" },
-            { name: "body", label: "Body (English)", textarea: true },
-            { name: "bodyTe", label: "Body (Telugu)", textarea: true, required: false, lang: "te" },
-            { name: "tags", label: "Tags" },
-            { name: "slug", label: "Slug", required: false },
-            { name: "thumbnailUrl", label: "Featured image URL", required: false },
-            { name: "seoTitle", label: "SEO title (Telugu)", required: false, lang: "te" },
-            { name: "seoDescription", label: "SEO description (Telugu)", textarea: true, required: false, lang: "te" },
-          ]}
-        />
+        <Button href="/admin/blog/new">New article</Button>
+      </div>
+      <div className="mt-6">
+        <BlogManager articles={articles} />
       </div>
     </div>
   );

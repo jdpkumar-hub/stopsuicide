@@ -740,4 +740,11 @@ export const adminUsers = [
     role: "editor" as const,
     createdAt: "2026-03-12T00:00:00.000Z",
   },
+  {
+    id: "u3",
+    email: "author@stopsuicide.in",
+    fullName: "Story Author",
+    role: "author" as const,
+    createdAt: "2026-05-01T00:00:00.000Z",
+  },
 ];

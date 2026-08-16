@@ -10,7 +10,8 @@ export async function POST(request: Request) {
   const folder = String(form.get("folder") || "images") as
     | "videos"
     | "thumbnails"
-    | "images";
+    | "images"
+    | "media";
   const resourceType = String(form.get("resourceType") || "auto") as
     | "image"
     | "video"

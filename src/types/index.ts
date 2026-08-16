@@ -2,7 +2,15 @@ export type Locale = "en" | "te" | "hi" | "ta" | "kn" | "ml";
 
 export type TranslationMap = Partial<Record<Locale, string>>;
 
-export type ContentStatus = "draft" | "published";
+export type ContentStatus = "draft" | "published" | "archived";
+
+export type StoryModeration = "pending" | "approved" | "rejected";
+
+export type AdminRole = "admin" | "editor" | "author" | "viewer";
+
+export type QuoteMood = "hope" | "calm" | "courage" | "gratitude" | "belonging";
+
+export type MediaKind = "image" | "video" | "file";
 
 export type VideoSource = "cloudinary" | "youtube" | "vimeo" | "mp4";
 
@@ -62,6 +70,10 @@ export interface Story {
   excerpts?: TranslationMap;
   bodies?: TranslationMap;
   searchTerms?: string[];
+  status?: StoryModeration;
+  anonymous?: boolean;
+  videoUrl?: string;
+  attachments?: { url: string; kind: MediaKind; alt?: string }[];
 }
 
 export interface Article {
@@ -76,6 +88,8 @@ export interface Article {
   aiGenerated: boolean;
   readingMinutes: number;
   publishedAt: string;
+  status?: ContentStatus;
+  scheduledAt?: string;
   titles?: TranslationMap;
   excerpts?: TranslationMap;
   bodies?: TranslationMap;
@@ -92,6 +106,10 @@ export interface Quote {
   active: boolean;
   aiGenerated?: boolean;
   forDate?: string;
+  mood?: QuoteMood;
+  featured?: boolean;
+  scheduledFor?: string;
+  locale?: Locale;
 }
 
 export type MotivationStatus = "pending" | "approved" | "rejected";
@@ -180,7 +198,17 @@ export interface AdminUser {
   id: string;
   email: string;
   fullName: string;
-  role: "admin" | "editor" | "viewer";
+  role: AdminRole;
+  createdAt: string;
+}
+
+export interface MediaAsset {
+  id: string;
+  url: string;
+  publicId?: string;
+  kind: MediaKind;
+  folder: string;
+  alt: string;
   createdAt: string;
 }
 

@@ -8,6 +8,7 @@ import {
   videos as seedVideos,
 } from "@/lib/data/seed";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/admin";
 import { expandSearchQuery, videoCopy } from "@/lib/i18n/content";
 import { getApprovedMotivation } from "@/lib/motivation/store";
 import { toQuoteShape } from "@/lib/motivation/generate";
@@ -15,8 +16,13 @@ import { unicodeNormalize } from "@/lib/i18n/locales";
 import type {
   Article,
   Category,
+  ContentStatus,
+  MediaAsset,
+  MediaKind,
   Quote,
+  QuoteMood,
   Story,
+  StoryModeration,
   Testimonial,
   Video,
   VideoSource,
@@ -66,7 +72,7 @@ function mapVideo(row: Row): Video {
     durationSeconds: num(row, "durationSeconds", "duration_seconds"),
     likes: num(row, "likes"),
     views: num(row, "views"),
-    status: str(row, "status") === "draft" ? "draft" : "published",
+    status: parseContentStatus(str(row, "status")),
     publishedAt: str(row, "publishedAt", "published_at") || new Date().toISOString(),
     titles: parseMap(row.titles || row.title_i18n),
     descriptions: parseMap(row.descriptions || row.description_i18n),
@@ -114,6 +120,12 @@ function mapStory(row: Row): Story {
     excerpts: parseMap(row.excerpts),
     bodies: parseMap(row.bodies),
     searchTerms: Array.isArray(row.search_terms) ? (row.search_terms as string[]) : undefined,
+    status: parseStoryStatus(str(row, "status")),
+    anonymous: bool(row, "anonymous"),
+    videoUrl: str(row, "videoUrl", "video_url") || undefined,
+    attachments: Array.isArray(row.attachments)
+      ? (row.attachments as Story["attachments"])
+      : undefined,
   };
 }
 
@@ -130,6 +142,8 @@ function mapArticle(row: Row): Article {
     aiGenerated: bool(row, "aiGenerated", "ai_generated"),
     readingMinutes: num(row, "readingMinutes", "reading_minutes") || 3,
     publishedAt: str(row, "publishedAt", "published_at"),
+    status: parseContentStatus(str(row, "status") || "published"),
+    scheduledAt: str(row, "scheduledAt", "scheduled_at") || undefined,
     titles: parseMap(row.titles),
     excerpts: parseMap(row.excerpts),
     bodies: parseMap(row.bodies),
@@ -157,7 +171,33 @@ function mapQuote(row: Row): Quote {
     translations: parseMap(row.translations) ?? { hi: str(row, "textHi", "text_hi"), te: str(row, "text_te") },
     author: str(row, "author"),
     active: row.active === undefined ? true : bool(row, "active"),
+    mood: (str(row, "mood") as QuoteMood) || "hope",
+    featured: bool(row, "featured"),
+    scheduledFor: str(row, "scheduledFor", "scheduled_for") || undefined,
+    locale: (str(row, "locale") as Quote["locale"]) || "en",
   };
+}
+
+function mapMedia(row: Row): MediaAsset {
+  return {
+    id: str(row, "id"),
+    url: str(row, "url"),
+    publicId: str(row, "publicId", "public_id") || undefined,
+    kind: (str(row, "kind") as MediaKind) || "image",
+    folder: str(row, "folder") || "images",
+    alt: str(row, "alt"),
+    createdAt: str(row, "createdAt", "created_at") || new Date().toISOString(),
+  };
+}
+
+function parseContentStatus(value: string): ContentStatus {
+  if (value === "draft" || value === "archived") return value;
+  return "published";
+}
+
+function parseStoryStatus(value: string): StoryModeration {
+  if (value === "pending" || value === "rejected") return value;
+  return "approved";
 }
 
 function mapTestimonial(row: Row): Testimonial {
@@ -181,6 +221,15 @@ async function fromTable(table: string): Promise<Row[] | null> {
   return data as Row[];
 }
 
+async function fromTableAdmin(table: string): Promise<Row[] | null> {
+  const service = createServiceClient();
+  if (service) {
+    const { data, error } = await service.from(table).select("*");
+    if (!error && data) return data as Row[];
+  }
+  return fromTable(table);
+}
+
 export async function getCategories(): Promise<Category[]> {
   const rows = await fromTable("categories");
   return rows ? rows.map(mapCategory) : seedCategories;
@@ -190,7 +239,7 @@ export async function getVideos(): Promise<Video[]> {
   const rows = await fromTable("videos");
   const list = (rows ? rows.map(mapVideo) : seedVideos).map(hydrateVideo);
   return list
-    .filter((video) => video.status !== "draft")
+    .filter((video) => video.status === "published")
     .sort(
       (a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
@@ -198,7 +247,7 @@ export async function getVideos(): Promise<Video[]> {
 }
 
 export async function getAllVideosAdmin(): Promise<Video[]> {
-  const rows = await fromTable("videos");
+  const rows = await fromTableAdmin("videos");
   return (rows ? rows.map(mapVideo) : seedVideos).map(hydrateVideo);
 }
 
@@ -226,6 +275,12 @@ export async function getRelatedVideos(video: Video, limit = 4) {
 
 export async function getStories(): Promise<Story[]> {
   const rows = await fromTable("stories");
+  const list = rows ? rows.map(mapStory) : seedStories;
+  return list.filter((story) => (story.status ?? "approved") === "approved");
+}
+
+export async function getAllStoriesAdmin(): Promise<Story[]> {
+  const rows = await fromTableAdmin("stories");
   return rows ? rows.map(mapStory) : seedStories;
 }
 
@@ -236,6 +291,17 @@ export async function getStory(slug: string) {
 
 export async function getArticles(): Promise<Article[]> {
   const rows = await fromTable("articles");
+  const list = rows ? rows.map(mapArticle) : seedArticles;
+  const now = Date.now();
+  return list.filter((article) => {
+    if ((article.status ?? "published") !== "published") return false;
+    if (article.scheduledAt && new Date(article.scheduledAt).getTime() > now) return false;
+    return true;
+  });
+}
+
+export async function getAllArticlesAdmin(): Promise<Article[]> {
+  const rows = await fromTableAdmin("articles");
   return rows ? rows.map(mapArticle) : seedArticles;
 }
 
@@ -246,6 +312,11 @@ export async function getArticle(slug: string) {
 
 export async function getQuotes(): Promise<Quote[]> {
   const rows = await fromTable("quotes");
+  return (rows ? rows.map(mapQuote) : seedQuotes).filter((quote) => quote.active);
+}
+
+export async function getAllQuotesAdmin(): Promise<Quote[]> {
+  const rows = await fromTableAdmin("quotes");
   return rows ? rows.map(mapQuote) : seedQuotes;
 }
 
@@ -253,10 +324,21 @@ export async function getDailyQuote() {
   const approved = await getApprovedMotivation();
   if (approved) return toQuoteShape(approved);
 
-  const quotes = (await getQuotes()).filter((quote) => quote.active);
-  if (!quotes.length) return seedQuotes[0];
-  const index = Math.floor(Date.now() / 86_400_000) % quotes.length;
-  return quotes[index];
+  const quotes = await getAllQuotesAdmin();
+  const active = quotes.filter((quote) => quote.active);
+  const today = new Date().toISOString().slice(0, 10);
+  const scheduled = active.find((quote) => quote.scheduledFor === today);
+  if (scheduled) return scheduled;
+  const featured = active.find((quote) => quote.featured);
+  if (featured) return featured;
+  if (!active.length) return seedQuotes[0];
+  const index = Math.floor(Date.now() / 86_400_000) % active.length;
+  return active[index];
+}
+
+export async function getMediaAssets(): Promise<MediaAsset[]> {
+  const rows = await fromTableAdmin("media_assets");
+  return rows ? rows.map(mapMedia) : [];
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {

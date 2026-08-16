@@ -1,27 +1,39 @@
-import { Card } from "@/components/ui/primitives";
+import { redirect } from "next/navigation";
+import { UsersManager } from "@/components/admin/UsersManager";
+import { requireAdmin } from "@/lib/admin";
+import { canManageUsers } from "@/lib/cms/roles";
 import { adminUsers } from "@/lib/data/seed";
-import { formatDate } from "@/lib/utils";
+import type { AdminRole, AdminUser } from "@/types";
 
-export default function UsersPage() {
+export default async function UsersPage() {
+  const auth = await requireAdmin({ minRole: "admin" });
+  if (auth.error || !canManageUsers(auth.role)) redirect("/admin");
+
+  let users: AdminUser[] = adminUsers;
+  if (auth.supabase) {
+    const { data } = await auth.supabase
+      .from("profiles")
+      .select("id, email, full_name, role, created_at")
+      .order("created_at", { ascending: false });
+    if (data?.length) {
+      users = data.map((row) => ({
+        id: row.id,
+        email: row.email || "",
+        fullName: row.full_name || "",
+        role: (row.role as AdminRole) || "viewer",
+        createdAt: row.created_at,
+      }));
+    }
+  }
+
   return (
     <div>
       <h1 className="font-serif text-4xl">User management</h1>
       <p className="mt-2 text-sm text-muted">
-        Roles are stored in the `profiles` table. Connect Supabase to manage live users.
+        Super Admin, Editor, and Author roles are stored on `profiles`. Viewers cannot open the CMS.
       </p>
-      <div className="mt-6 space-y-3">
-        {adminUsers.map((user) => (
-          <Card key={user.id} className="flex items-center justify-between p-4">
-            <div>
-              <p className="font-semibold">{user.fullName}</p>
-              <p className="text-sm text-muted">{user.email}</p>
-            </div>
-            <div className="text-right text-sm">
-              <p className="capitalize">{user.role}</p>
-              <p className="text-muted">{formatDate(user.createdAt)}</p>
-            </div>
-          </Card>
-        ))}
+      <div className="mt-6">
+        <UsersManager users={users} />
       </div>
     </div>
   );

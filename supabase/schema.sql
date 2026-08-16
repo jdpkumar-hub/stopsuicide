@@ -1,5 +1,6 @@
 -- stopsuicide.in PostgreSQL schema for Supabase
 -- Run this in the SQL editor after creating a project.
+-- Existing databases: run cms-migration.sql instead of re-running this file.
 
 create extension if not exists "pgcrypto";
 
@@ -7,7 +8,7 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   email text,
   full_name text,
-  role text not null default 'viewer' check (role in ('admin', 'editor', 'viewer')),
+  role text not null default 'viewer' check (role in ('admin', 'editor', 'author', 'viewer')),
   created_at timestamptz not null default now()
 );
 
@@ -44,8 +45,9 @@ create table if not exists public.videos (
   duration_seconds integer not null default 0,
   likes integer not null default 0,
   views integer not null default 0,
-  status text not null default 'published' check (status in ('draft', 'published')),
-  published_at timestamptz not null default now()
+  status text not null default 'published' check (status in ('draft', 'published', 'archived')),
+  published_at timestamptz not null default now(),
+  created_by uuid references public.profiles(id)
 );
 
 create table if not exists public.stories (
@@ -64,7 +66,12 @@ create table if not exists public.stories (
   thumbnail_url text,
   reading_minutes integer not null default 4,
   featured boolean not null default false,
-  published_at timestamptz not null default now()
+  published_at timestamptz not null default now(),
+  status text not null default 'approved' check (status in ('pending', 'approved', 'rejected')),
+  anonymous boolean not null default false,
+  video_url text,
+  attachments jsonb not null default '[]'::jsonb,
+  created_by uuid references public.profiles(id)
 );
 
 create table if not exists public.articles (
@@ -84,7 +91,10 @@ create table if not exists public.articles (
   tags text[] not null default '{}',
   ai_generated boolean not null default false,
   reading_minutes integer not null default 3,
-  published_at timestamptz not null default now()
+  published_at timestamptz not null default now(),
+  status text not null default 'published' check (status in ('draft', 'published', 'archived')),
+  scheduled_at timestamptz,
+  created_by uuid references public.profiles(id)
 );
 
 create table if not exists public.quotes (
@@ -93,7 +103,23 @@ create table if not exists public.quotes (
   text_hi text,
   translations jsonb not null default '{}'::jsonb,
   author text,
-  active boolean not null default true
+  active boolean not null default true,
+  mood text not null default 'hope',
+  featured boolean not null default false,
+  scheduled_for date,
+  locale text not null default 'en',
+  created_by uuid references public.profiles(id)
+);
+
+create table if not exists public.media_assets (
+  id uuid primary key default gen_random_uuid(),
+  url text not null,
+  public_id text,
+  kind text not null default 'image' check (kind in ('image', 'video', 'file')),
+  folder text not null default 'images',
+  alt text not null default '',
+  created_by uuid references public.profiles(id),
+  created_at timestamptz not null default now()
 );
 
 create table if not exists public.daily_motivations (
@@ -164,11 +190,14 @@ alter table public.newsletter_subscribers enable row level security;
 alter table public.contact_messages enable row level security;
 alter table public.volunteer_applications enable row level security;
 alter table public.site_settings enable row level security;
+alter table public.media_assets enable row level security;
 
 create policy "public read categories" on public.categories for select using (true);
 create policy "public read videos" on public.videos for select using (status = 'published');
-create policy "public read stories" on public.stories for select using (true);
-create policy "public read articles" on public.articles for select using (true);
+create policy "public read stories" on public.stories for select using (status = 'approved');
+create policy "public read articles" on public.articles for select using (
+  status = 'published' and (scheduled_at is null or scheduled_at <= now())
+);
 create policy "public read quotes" on public.quotes for select using (active = true);
 create policy "public read approved daily motivations" on public.daily_motivations for select using (status = 'approved');
 create policy "public read testimonials" on public.testimonials for select using (true);
@@ -183,7 +212,15 @@ create or replace function public.is_staff()
 returns boolean language sql stable as $$
   select exists (
     select 1 from public.profiles
-    where id = auth.uid() and role in ('admin', 'editor')
+    where id = auth.uid() and role in ('admin', 'editor', 'author')
+  );
+$$;
+
+create or replace function public.is_admin()
+returns boolean language sql stable as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
   );
 $$;
 
@@ -197,7 +234,9 @@ create policy "staff write testimonials" on public.testimonials for all using (p
 create policy "staff read contacts" on public.contact_messages for select using (public.is_staff());
 create policy "staff read volunteers" on public.volunteer_applications for select using (public.is_staff());
 create policy "staff read subscribers" on public.newsletter_subscribers for select using (public.is_staff());
-create policy "staff manage profiles" on public.profiles for all using (public.is_staff());
+create policy "staff write media" on public.media_assets for all using (public.is_staff());
+create policy "read own profile" on public.profiles for select using (auth.uid() = id);
+create policy "staff manage profiles" on public.profiles for all using (public.is_admin());
 
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer as $$
