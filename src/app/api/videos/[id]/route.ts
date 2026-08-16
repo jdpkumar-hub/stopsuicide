@@ -29,7 +29,12 @@ export async function PUT(request: Request, { params }: Params) {
   if (!parsed.success) return jsonError("Please check the video details.");
 
   try {
-    const updates = await videoPayloadFromForm(form);
+    let existing: Record<string, unknown> | undefined;
+    if (auth.supabase) {
+      const { data } = await auth.supabase.from("videos").select("*").eq("id", id).maybeSingle();
+      existing = (data as Record<string, unknown>) || undefined;
+    }
+    const updates = await videoPayloadFromForm(form, existing);
     if (!auth.supabase) return Response.json({ ok: true, preview: updates, id });
     const { error } = await auth.supabase.from("videos").update(updates).eq("id", id);
     if (error) return jsonError(error.message, 500);

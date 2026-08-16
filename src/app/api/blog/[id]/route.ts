@@ -25,7 +25,12 @@ export async function PUT(request: Request, { params }: Params) {
   if (!parsed.success) return jsonError("Please check the article details.");
 
   try {
-    const updates = await articlePayloadFromForm(form);
+    let existing: Record<string, unknown> | undefined;
+    if (auth.supabase) {
+      const { data } = await auth.supabase.from("articles").select("*").eq("id", id).maybeSingle();
+      existing = (data as Record<string, unknown>) || undefined;
+    }
+    const updates = await articlePayloadFromForm(form, existing);
     if (!auth.supabase) return Response.json({ ok: true, preview: updates, id });
     const { error } = await auth.supabase.from("articles").update(updates).eq("id", id);
     if (error) return jsonError(error.message, 500);

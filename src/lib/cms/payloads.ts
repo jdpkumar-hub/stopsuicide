@@ -80,11 +80,14 @@ export async function videoPayloadFromForm(form: FormData, existing?: Record<str
   };
 }
 
-export async function articlePayloadFromForm(form: FormData) {
+export async function articlePayloadFromForm(
+  form: FormData,
+  existing?: Record<string, unknown>,
+) {
   const title = String(form.get("title") || "");
   const excerpt = String(form.get("excerpt") || "");
   const body = String(form.get("body") || "");
-  let thumbnailUrl = String(form.get("thumbnailUrl") || "");
+  let thumbnailUrl = String(form.get("thumbnailUrl") || existing?.thumbnail_url || "");
   const cover = form.get("cover");
   if (cover instanceof File && cover.size > 0) {
     const uploaded = await uploadToCloudinary(cover, "images", "image");
@@ -110,11 +113,13 @@ export async function articlePayloadFromForm(form: FormData) {
       thumbnailUrl ||
       "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
     tags: parseTags(form.get("tags")),
-    ai_generated: false,
+    ai_generated: existing ? Boolean(existing.ai_generated) : false,
     reading_minutes: readingMinutesFromHtml(body),
     status: parseContentStatus(form.get("status")),
     scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
-    published_at: new Date().toISOString(),
+    published_at: existing?.published_at
+      ? String(existing.published_at)
+      : new Date().toISOString(),
   };
 }
 
@@ -158,7 +163,9 @@ export async function storyPayloadFromForm(form: FormData, existing?: Record<str
     featured: isTruthyFlag(form.get("featured")),
     status: parseStoryStatus(form.get("status")),
     anonymous,
-    published_at: new Date().toISOString(),
+    published_at: existing?.published_at
+      ? String(existing.published_at)
+      : new Date().toISOString(),
   };
 }
 
@@ -171,7 +178,7 @@ export function quotePayloadFromForm(form: FormData) {
     text: String(form.get("text") || ""),
     translations,
     author: String(form.get("author") || ""),
-    active: form.has("active") ? isTruthyFlag(form.get("active")) : true,
+    active: isTruthyFlag(form.get("active")),
     mood: parseMood(form.get("mood")),
     featured: isTruthyFlag(form.get("featured")),
     scheduled_for: String(form.get("scheduledFor") || "") || null,

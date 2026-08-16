@@ -9,14 +9,14 @@ export default async function UsersPage() {
   const auth = await requireAdmin({ minRole: "admin" });
   if (auth.error || !canManageUsers(auth.role)) redirect("/admin");
 
-  let users: AdminUser[] = adminUsers;
+  let users: AdminUser[] = [];
   if (auth.supabase) {
-    const { data } = await auth.supabase
+    const { data, error } = await auth.supabase
       .from("profiles")
       .select("id, email, full_name, role, created_at")
       .order("created_at", { ascending: false });
-    if (data?.length) {
-      users = data.map((row) => ({
+    if (!error) {
+      users = (data ?? []).map((row) => ({
         id: row.id,
         email: row.email || "",
         fullName: row.full_name || "",
@@ -24,6 +24,8 @@ export default async function UsersPage() {
         createdAt: row.created_at,
       }));
     }
+  } else {
+    users = adminUsers;
   }
 
   return (

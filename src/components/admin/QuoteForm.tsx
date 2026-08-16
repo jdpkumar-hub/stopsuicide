@@ -25,9 +25,15 @@ export function QuoteForm({
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const active = form.elements.namedItem("active");
+    const featured = form.elements.namedItem("featured");
+    data.set("active", active instanceof HTMLInputElement && active.checked ? "on" : "");
+    data.set("featured", featured instanceof HTMLInputElement && featured.checked ? "on" : "");
     const response = await fetch(quote ? `/api/quotes/${quote.id}` : "/api/quotes", {
       method: quote ? "PUT" : "POST",
-      body: new FormData(event.currentTarget),
+      body: data,
     });
     const json = await response.json();
     setSaving(false);

@@ -10,7 +10,7 @@ import {
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { expandSearchQuery, videoCopy } from "@/lib/i18n/content";
-import { getApprovedMotivation } from "@/lib/motivation/store";
+import { getApprovedMotivation, getTodayStamp } from "@/lib/motivation/store";
 import { toQuoteShape } from "@/lib/motivation/generate";
 import { unicodeNormalize } from "@/lib/i18n/locales";
 import type {
@@ -326,7 +326,7 @@ export async function getDailyQuote() {
 
   const quotes = await getAllQuotesAdmin();
   const active = quotes.filter((quote) => quote.active);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayStamp();
   const scheduled = active.find((quote) => quote.scheduledFor === today);
   if (scheduled) return scheduled;
   const featured = active.find((quote) => quote.featured);
