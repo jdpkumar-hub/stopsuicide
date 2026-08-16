@@ -15,10 +15,12 @@ export function StoryForm({
   story,
   categories,
   canDelete = true,
+  canModerate = false,
 }: {
   story?: Story;
   categories: Category[];
   canDelete?: boolean;
+  canModerate?: boolean;
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -37,7 +39,7 @@ export function StoryForm({
     setSaving(true);
     const data = new FormData(event.currentTarget);
     data.set("body", body);
-    data.set("status", status);
+    data.set("status", canModerate ? status : story?.status ?? "pending");
     const endpoint = story ? `/api/stories/${story.id}` : "/api/stories";
     const response = await fetch(endpoint, {
       method: story ? "PUT" : "POST",
@@ -164,20 +166,26 @@ export function StoryForm({
           Video upload
           <input type="file" name="video" accept="video/mp4,video/*" className="mt-1 w-full text-sm" />
         </label>
-        <label className="block text-sm font-medium">
-          Moderation
-          <select
-            value={status}
-            onChange={(event) => setStatus(event.target.value as StoryModeration)}
-            className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
-          >
-            {STORY_STATUSES.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
+        {canModerate ? (
+          <label className="block text-sm font-medium">
+            Moderation
+            <select
+              value={status}
+              onChange={(event) => setStatus(event.target.value as StoryModeration)}
+              className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
+            >
+              {STORY_STATUSES.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <p className="text-sm text-muted">
+            Moderation: {story?.status ?? "pending"}. Editors review before a story appears on the public site.
+          </p>
+        )}
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="anonymous" defaultChecked={story?.anonymous} className="h-4 w-4" />
           Publish anonymously

@@ -1,5 +1,7 @@
 import { denyIfCannotDelete, jsonError, requireAdmin } from "@/lib/admin";
+import { parseStoryStatus } from "@/lib/cms/fields";
 import { storyPayloadFromForm } from "@/lib/cms/payloads";
+import { canModerateStories } from "@/lib/cms/roles";
 import { storySchema } from "@/lib/validations";
 
 type Params = { params: Promise<{ id: string }> };
@@ -32,6 +34,9 @@ export async function PUT(request: Request, { params }: Params) {
       existing = (data as Record<string, unknown>) || undefined;
     }
     const updates = await storyPayloadFromForm(form, existing);
+    if (!canModerateStories(auth.role)) {
+      updates.status = existing?.status ? parseStoryStatus(existing.status) : "pending";
+    }
     if (!auth.supabase) return Response.json({ ok: true, preview: updates, id });
     const { error } = await auth.supabase.from("stories").update(updates).eq("id", id);
     if (error) return jsonError(error.message, 500);

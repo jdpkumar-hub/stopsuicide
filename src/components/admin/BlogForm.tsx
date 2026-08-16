@@ -9,6 +9,7 @@ import { LocaleFields } from "@/components/admin/LocaleFields";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { useToast } from "@/components/admin/Toast";
 import { CONTENT_STATUSES } from "@/lib/cms/fields";
+import { isoToKolkataDateTimeLocal } from "@/lib/cms/time";
 import { useLocalized } from "@/lib/i18n/use-localized";
 import type { Article, Category, ContentStatus } from "@/types";
 
@@ -183,7 +184,7 @@ export function BlogForm({
             <input
               type="datetime-local"
               name="scheduledAt"
-              defaultValue={article?.scheduledAt?.slice(0, 16)}
+              defaultValue={isoToKolkataDateTimeLocal(article?.scheduledAt)}
               className="mt-1 w-full rounded-2xl border border-border bg-transparent px-4 py-3"
             />
           </label>

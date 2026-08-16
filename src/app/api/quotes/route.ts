@@ -33,11 +33,21 @@ export async function POST(request: Request) {
 
   const record = { ...quotePayloadFromForm(form), created_by: auth.user?.id ?? null };
   if (!auth.supabase) return Response.json({ ok: true, preview: record });
-  if (record.featured) {
-    await auth.supabase.from("quotes").update({ featured: false }).neq("id", "00000000-0000-0000-0000-000000000000");
-  }
   const { data, error } = await auth.supabase.from("quotes").insert(record).select("*").single();
   if (error) return jsonError(error.message, 500);
+  if (record.featured && data?.id) {
+    const { error: featuredError } = await auth.supabase
+      .from("quotes")
+      .update({ featured: false })
+      .neq("id", data.id);
+    if (featuredError) {
+      return Response.json({
+        ok: true,
+        quote: data,
+        warning: "Saved, but other featured quotes could not be cleared.",
+      });
+    }
+  }
   return Response.json({ ok: true, quote: data });
 }
 

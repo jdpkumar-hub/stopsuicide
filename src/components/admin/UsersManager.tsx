@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/admin/DataTable";
 import { RoleBadge } from "@/components/admin/StatusBadge";
@@ -25,11 +25,13 @@ export function UsersManager({ users }: { users: AdminUser[] }) {
       body: JSON.stringify({ role }),
     });
     if (!response.ok) {
-      toast("Could not update role.", "error");
-      return;
+      const json = await response.json().catch(() => ({}));
+      toast(json.error || "Could not update role.", "error");
+      return false;
     }
     toast("Role updated.");
     router.refresh();
+    return true;
   }
 
   return (
@@ -46,21 +48,48 @@ export function UsersManager({ users }: { users: AdminUser[] }) {
         {
           key: "change",
           header: "Change role",
-          render: (row) => (
-            <select
-              defaultValue={row.role}
-              onChange={(event) => changeRole(row.id, event.target.value as AdminRole)}
-              className="rounded-xl border border-border bg-transparent px-2 py-1 text-sm"
-            >
-              {ROLES.map((role) => (
-                <option key={role} value={role}>
-                  {role === "admin" ? "Super Admin" : role}
-                </option>
-              ))}
-            </select>
-          ),
+          render: (row) => <RoleSelect user={row} onChange={changeRole} />,
         },
       ]}
     />
+  );
+}
+
+function RoleSelect({
+  user,
+  onChange,
+}: {
+  user: AdminUser;
+  onChange: (id: string, role: AdminRole) => Promise<boolean>;
+}) {
+  const [role, setRole] = useState(user.role);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setRole(user.role);
+  }, [user.role]);
+
+  async function handleChange(next: AdminRole) {
+    const previous = role;
+    setRole(next);
+    setBusy(true);
+    const ok = await onChange(user.id, next);
+    setBusy(false);
+    if (!ok) setRole(previous);
+  }
+
+  return (
+    <select
+      value={role}
+      disabled={busy}
+      onChange={(event) => handleChange(event.target.value as AdminRole)}
+      className="rounded-xl border border-border bg-transparent px-2 py-1 text-sm"
+    >
+      {ROLES.map((item) => (
+        <option key={item} value={item}>
+          {item === "admin" ? "Super Admin" : item}
+        </option>
+      ))}
+    </select>
   );
 }

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { DataTable } from "@/components/admin/DataTable";
 import { StatusBadge } from "@/components/admin/StatusBadge";
+import { formatKolkataDateTime } from "@/lib/cms/time";
 import type { Article } from "@/types";
 
 export function BlogManager({ articles }: { articles: Article[] }) {
@@ -41,7 +42,7 @@ export function BlogManager({ articles }: { articles: Article[] }) {
       columns={[
         { key: "title", header: "Title", render: (row) => <span className="font-medium">{row.title}</span> },
         { key: "status", header: "Status", render: (row) => <StatusBadge status={row.status ?? "published"} /> },
-        { key: "schedule", header: "Schedule", render: (row) => row.scheduledAt?.slice(0, 16) || "—" },
+        { key: "schedule", header: "Schedule", render: (row) => formatKolkataDateTime(row.scheduledAt) || "—" },
         { key: "minutes", header: "Read", render: (row) => `${row.readingMinutes} min` },
         {
           key: "actions",

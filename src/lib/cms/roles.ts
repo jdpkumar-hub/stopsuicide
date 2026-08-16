@@ -23,6 +23,10 @@ export function canDeleteContent(role: AdminRole | null | undefined) {
   return hasMinRole(role, "editor");
 }
 
+export function canModerateStories(role: AdminRole | null | undefined) {
+  return hasMinRole(role, "editor");
+}
+
 export function canManageUsers(role: AdminRole | null | undefined) {
   return role === "admin";
 }

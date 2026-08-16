@@ -1,5 +1,7 @@
 import { jsonError, requireAdmin } from "@/lib/admin";
+import { parseStoryStatus } from "@/lib/cms/fields";
 import { storyPayloadFromForm } from "@/lib/cms/payloads";
+import { canModerateStories } from "@/lib/cms/roles";
 import { getAllStoriesAdmin, getStories } from "@/lib/data/queries";
 import { storySchema } from "@/lib/validations";
 
@@ -38,6 +40,11 @@ export async function POST(request: Request) {
       ...(await storyPayloadFromForm(form)),
       created_by: auth.user?.id ?? null,
     };
+    if (!canModerateStories(auth.role)) {
+      record.status = "pending";
+    } else {
+      record.status = parseStoryStatus(record.status);
+    }
     if (!auth.supabase) return Response.json({ ok: true, preview: record });
     const { data, error } = await auth.supabase.from("stories").insert(record).select("*").single();
     if (error) return jsonError(error.message, 500);

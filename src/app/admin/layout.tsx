@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { requireAdmin } from "@/lib/admin";
 
@@ -8,7 +9,10 @@ export default async function AdminLayout({
 }) {
   const auth = await requireAdmin({ minRole: "author" });
 
-  if (auth.error && auth.status === 403) {
+  if (auth.error) {
+    if (auth.status === 401) {
+      redirect("/login?next=/admin");
+    }
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 className="font-serif text-3xl">Access limited</h1>
@@ -19,5 +23,9 @@ export default async function AdminLayout({
     );
   }
 
-  return <AdminShell role={auth.role ?? "admin"}>{children}</AdminShell>;
+  if (!auth.role) {
+    redirect("/login?next=/admin");
+  }
+
+  return <AdminShell role={auth.role}>{children}</AdminShell>;
 }

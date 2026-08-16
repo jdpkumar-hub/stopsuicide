@@ -11,11 +11,17 @@ import {
   readingMinutesFromHtml,
 } from "@/lib/cms/fields";
 import { extractVimeoId, extractYouTubeId } from "@/lib/admin";
+import { kolkataDateTimeToIso } from "@/lib/cms/time";
 import { slugify } from "@/lib/utils";
-import type { TranslationMap } from "@/types";
+import type { ContentStatus, TranslationMap } from "@/types";
 
 function mergeMaps(...maps: Array<TranslationMap | undefined>): TranslationMap {
   return Object.assign({}, ...maps.filter(Boolean));
+}
+
+function submittedText(form: FormData, key: string, fallback?: unknown) {
+  if (!form.has(key)) return fallback == null ? "" : String(fallback);
+  return String(form.get(key) || "").trim();
 }
 
 export async function videoPayloadFromForm(form: FormData, existing?: Record<string, unknown>) {
@@ -87,13 +93,15 @@ export async function articlePayloadFromForm(
   const title = String(form.get("title") || "");
   const excerpt = String(form.get("excerpt") || "");
   const body = String(form.get("body") || "");
-  let thumbnailUrl = String(form.get("thumbnailUrl") || existing?.thumbnail_url || "");
+  let thumbnailUrl = submittedText(form, "thumbnailUrl", existing?.thumbnail_url);
   const cover = form.get("cover");
   if (cover instanceof File && cover.size > 0) {
     const uploaded = await uploadToCloudinary(cover, "images", "image");
     thumbnailUrl = uploaded.secure_url;
   }
   const scheduledAt = String(form.get("scheduledAt") || "");
+  const scheduledIso = scheduledAt ? kolkataDateTimeToIso(scheduledAt) : null;
+  const status = parseContentStatus(form.get("status"));
   return {
     slug: String(form.get("slug") || "") || slugify(title),
     title,
@@ -111,16 +119,30 @@ export async function articlePayloadFromForm(
     category_id: String(form.get("categoryId") || "") || null,
     thumbnail_url:
       thumbnailUrl ||
-      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+      (existing
+        ? ""
+        : "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80"),
     tags: parseTags(form.get("tags")),
     ai_generated: existing ? Boolean(existing.ai_generated) : false,
     reading_minutes: readingMinutesFromHtml(body),
-    status: parseContentStatus(form.get("status")),
-    scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
-    published_at: existing?.published_at
-      ? String(existing.published_at)
-      : new Date().toISOString(),
+    status,
+    scheduled_at: scheduledIso,
+    published_at: resolvePublishedAt(status, existing, scheduledIso),
   };
+}
+
+function resolvePublishedAt(
+  status: ContentStatus,
+  existing?: Record<string, unknown>,
+  scheduledIso?: string | null,
+) {
+  const existingPublished = existing?.published_at ? String(existing.published_at) : "";
+  const wasPublished = existing?.status === "published";
+  if (status === "published" && !wasPublished) {
+    return scheduledIso || new Date().toISOString();
+  }
+  if (existingPublished) return existingPublished;
+  return new Date().toISOString();
 }
 
 export async function storyPayloadFromForm(form: FormData, existing?: Record<string, unknown>) {
@@ -128,8 +150,8 @@ export async function storyPayloadFromForm(form: FormData, existing?: Record<str
   const excerpt = String(form.get("excerpt") || "");
   const body = String(form.get("body") || "");
   const anonymous = isTruthyFlag(form.get("anonymous"));
-  let thumbnailUrl = String(form.get("thumbnailUrl") || existing?.thumbnail_url || "");
-  let videoUrl = String(form.get("videoUrl") || existing?.video_url || "");
+  let thumbnailUrl = submittedText(form, "thumbnailUrl", existing?.thumbnail_url);
+  let videoUrl = submittedText(form, "videoUrl", existing?.video_url);
   const attachments = Array.isArray(existing?.attachments) ? [...(existing.attachments as object[])] : [];
 
   const image = form.get("image");

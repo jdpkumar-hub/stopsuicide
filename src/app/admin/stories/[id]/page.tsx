@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { StoryForm } from "@/components/admin/StoryForm";
 import { requireAdmin } from "@/lib/admin";
-import { canDeleteContent } from "@/lib/cms/roles";
+import { canDeleteContent, canModerateStories } from "@/lib/cms/roles";
 import { getAllStoriesAdmin, getCategories } from "@/lib/data/queries";
 
 export default async function EditStoryPage({
@@ -21,7 +21,12 @@ export default async function EditStoryPage({
   return (
     <div>
       <h1 className="mb-6 font-serif text-4xl">Review story</h1>
-      <StoryForm story={story} categories={categories} canDelete={canDeleteContent(auth.role)} />
+      <StoryForm
+        story={story}
+        categories={categories}
+        canDelete={canDeleteContent(auth.role)}
+        canModerate={canModerateStories(auth.role)}
+      />
     </div>
   );
 }

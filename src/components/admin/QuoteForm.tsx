@@ -41,6 +41,11 @@ export function QuoteForm({
       toast(json.error || "Could not save the quote.", "error");
       return;
     }
+    if (json.warning) {
+      toast(json.warning, "error");
+      router.refresh();
+      return;
+    }
     toast("Quote saved. Featured and scheduled quotes can appear on the homepage.");
     router.push("/admin/quotes");
     router.refresh();

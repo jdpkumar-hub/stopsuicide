@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { formatKolkataDateTime } from "@/lib/cms/time";
 import { getAllArticlesAdmin } from "@/lib/data/queries";
 
 export default async function BlogPreviewPage({
@@ -17,7 +18,7 @@ export default async function BlogPreviewPage({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted">
           Preview · {article.status ?? "published"}
-          {article.scheduledAt ? ` · scheduled ${article.scheduledAt}` : ""}
+          {article.scheduledAt ? ` · scheduled ${formatKolkataDateTime(article.scheduledAt)}` : ""}
         </p>
         <Link href={`/admin/blog/${article.id}`} className="text-sm text-hope-blue">
           Back to editor

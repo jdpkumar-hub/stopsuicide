@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/primitives";
 
 export type DataColumn<T> = {
@@ -33,12 +33,17 @@ export function DataTable<T extends { id: string }>({
   const [page, setPage] = useState(1);
   const query = searchValue ?? internalSearch;
 
-  const paged = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return rows.slice(start, start + pageSize);
-  }, [rows, page, pageSize]);
-
   const pages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const currentPage = Math.min(page, pages);
+
+  useEffect(() => {
+    if (page > pages) setPage(pages);
+  }, [page, pages]);
+
+  const paged = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return rows.slice(start, start + pageSize);
+  }, [rows, currentPage, pageSize]);
 
   return (
     <div className="space-y-4">
@@ -95,18 +100,18 @@ export function DataTable<T extends { id: string }>({
           <Button
             type="button"
             variant="outline"
-            disabled={page <= 1}
+            disabled={currentPage <= 1}
             onClick={() => setPage((value) => Math.max(1, value - 1))}
           >
             Previous
           </Button>
           <span>
-            {page} / {pages}
+            {currentPage} / {pages}
           </span>
           <Button
             type="button"
             variant="outline"
-            disabled={page >= pages}
+            disabled={currentPage >= pages}
             onClick={() => setPage((value) => Math.min(pages, value + 1))}
           >
             Next

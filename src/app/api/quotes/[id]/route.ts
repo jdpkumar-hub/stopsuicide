@@ -24,11 +24,20 @@ export async function PUT(request: Request, { params }: Params) {
 
   const updates = quotePayloadFromForm(form);
   if (!auth.supabase) return Response.json({ ok: true, preview: updates, id });
-  if (updates.featured) {
-    await auth.supabase.from("quotes").update({ featured: false }).neq("id", id);
-  }
   const { error } = await auth.supabase.from("quotes").update(updates).eq("id", id);
   if (error) return jsonError(error.message, 500);
+  if (updates.featured) {
+    const { error: featuredError } = await auth.supabase
+      .from("quotes")
+      .update({ featured: false })
+      .neq("id", id);
+    if (featuredError) {
+      return Response.json({
+        ok: true,
+        warning: "Saved, but other featured quotes could not be cleared.",
+      });
+    }
+  }
   return Response.json({ ok: true });
 }
 

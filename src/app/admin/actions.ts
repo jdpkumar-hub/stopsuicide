@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { denyIfCannotDelete, requireAdmin } from "@/lib/admin";
 import { parseContentStatus, parseStoryStatus } from "@/lib/cms/fields";
+import { canModerateStories } from "@/lib/cms/roles";
 
 const TABLES = ["videos", "articles", "quotes", "stories", "media_assets"] as const;
 type CmsTable = (typeof TABLES)[number];
@@ -15,6 +16,9 @@ export async function updateContentStatus(table: string, id: string, status: str
   const auth = await requireAdmin();
   if (auth.error) return { error: auth.error };
   if (!isTable(table) || table === "media_assets") return { error: "Unsupported table." };
+  if (table === "stories" && !canModerateStories(auth.role)) {
+    return { error: "Editors review survivor stories before they go live." };
+  }
   if (!auth.supabase) return { ok: true, preview: true };
   const value = table === "stories" ? parseStoryStatus(status) : parseContentStatus(status);
   const { error } = await auth.supabase.from(table).update({ status: value }).eq("id", id);
