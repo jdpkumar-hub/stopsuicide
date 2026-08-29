@@ -1,15 +1,14 @@
 "use client";
 
-import { BookHeart, Heart, HeartHandshake, Sparkles, type LucideIcon } from "lucide-react";
+import { BookHeart, HeartHandshake, Sparkles, type LucideIcon } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useI18n } from "@/lib/i18n/context";
 import type { MessageKey } from "@/lib/i18n/messages/en";
 
 const ITEMS: { icon: LucideIcon; title: MessageKey; sub: MessageKey; tone: string }[] = [
-  { icon: HeartHandshake, title: "home.trustListen", sub: "home.trustListenSub", tone: "violet" },
-  { icon: BookHeart, title: "home.trustResources", sub: "home.trustResourcesSub", tone: "green" },
-  { icon: Sparkles, title: "home.trustStories", sub: "home.trustStoriesSub", tone: "rose" },
-  { icon: Heart, title: "home.trustMatter", sub: "home.trustMatterSub", tone: "amber" },
+  { icon: HeartHandshake, title: "home.trustListen", sub: "home.trustListenSub", tone: "green" },
+  { icon: BookHeart, title: "home.trustResources", sub: "home.trustResourcesSub", tone: "violet" },
+  { icon: Sparkles, title: "home.trustStories", sub: "home.trustStoriesSub", tone: "amber" },
 ];
 
 export function TrustStrip() {
@@ -18,7 +17,7 @@ export function TrustStrip() {
 
   return (
     <div className="trust-strip mx-auto max-w-6xl px-4 sm:px-6">
-      <div className="trust-panel">
+      <div className="grid gap-3 sm:grid-cols-3">
         {ITEMS.map((item, index) => {
           const Icon = item.icon;
           return (

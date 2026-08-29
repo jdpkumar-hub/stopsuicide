@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { DailyInspiration } from "@/components/home/DailyInspiration";
 import { AffirmationGrid } from "@/components/home/AffirmationGrid";
+import { HopeSteps } from "@/components/home/HopeSteps";
 import { ArticleCard, FadeIn, StoryCard } from "@/components/content/Cards";
 import { NewsletterForm } from "@/components/home/NewsletterForm";
 import { Badge, Button, Card, Section } from "@/components/ui/primitives";
@@ -68,6 +69,8 @@ export function HomeSections({
 
   return (
     <>
+      <HopeSteps />
+
       <Section id="todays-inspiration">
         <DailyInspiration quote={quote} quotes={quotes} />
       </Section>
