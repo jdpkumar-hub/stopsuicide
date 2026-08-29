@@ -1,7 +1,6 @@
 import { Hero } from "@/components/home/Hero";
 import { HomeSections } from "@/components/home/HomeSections";
 import { resources as resourceItems } from "@/lib/data/seed";
-import { selectHomepageStories } from "@/lib/home/stories";
 import {
   getArticles,
   getCategories,
@@ -19,7 +18,7 @@ import { siteUrl } from "@/lib/utils";
 export const metadata = createMetadata({
   title: "You Are Not Alone",
   description:
-    "Real stories. Real people. Real hope. A calm space for connection, recovery, and a better tomorrow.",
+    "A calm sunrise space for hope, resilience, recovery, and mental wellness. Watch inspirational videos, read survivor stories, and find support in India and beyond.",
   path: "/",
   localeAware: true,
 });
@@ -52,7 +51,7 @@ export default async function HomePage() {
           isPartOf: { "@type": "WebSite", name: SITE_NAME, url: siteUrl() },
         }}
       />
-      <Hero stories={selectHomepageStories(stories, 5)} categories={categories} />
+      <Hero />
       <HomeSections
         videos={videos}
         stories={stories}
