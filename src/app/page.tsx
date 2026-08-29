@@ -1,5 +1,6 @@
 import { Hero } from "@/components/home/Hero";
 import { HomeSections } from "@/components/home/HomeSections";
+import { resolveFeaturedHeroStories } from "@/lib/data/featured-stories";
 import { resources as resourceItems } from "@/lib/data/seed";
 import {
   getArticles,
@@ -51,7 +52,7 @@ export default async function HomePage() {
           isPartOf: { "@type": "WebSite", name: SITE_NAME, url: siteUrl() },
         }}
       />
-      <Hero />
+      <Hero stories={resolveFeaturedHeroStories(stories, categories)} />
       <HomeSections
         videos={videos}
         stories={stories}

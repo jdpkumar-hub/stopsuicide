@@ -17,6 +17,7 @@ const kn: Messages = {
   "nav.language": "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
   "hero.kicker": "ಆಶೆ · ಚೇತರಿಕೆ · ಸಂಪರ್ಕ",
   "hero.eyebrow": "ಆಶೆ • ಸಂಪರ್ಕ • ಚೇತರಿಕೆ",
+  "hero.featuredLabel": "ವಿಶೇಷ ಕಥೆ",
   "hero.headline": "ನೀವು ಒಂಟಿಯಲ್ಲ.",
   "hero.headlineLead": "ನೀವು",
   "hero.headlineAccent": "ಒಂಟಿಯಲ್ಲ.",

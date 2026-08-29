@@ -17,6 +17,7 @@ const ta: Messages = {
   "nav.language": "மொழியைத் தேர்ந்தெடு",
   "hero.kicker": "நம்பிக்கை · மீட்பு · இணைப்பு",
   "hero.eyebrow": "நம்பிக்கை • இணைப்பு • மீட்பு",
+  "hero.featuredLabel": "சிறப்புக் கதை",
   "hero.headline": "நீங்கள் தனியாக இல்லை.",
   "hero.headlineLead": "நீங்கள்",
   "hero.headlineAccent": "தனியாக இல்லை.",

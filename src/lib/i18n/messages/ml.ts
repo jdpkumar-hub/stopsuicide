@@ -17,6 +17,7 @@ const ml: Messages = {
   "nav.language": "ഭാഷ തിരഞ്ഞെടുക്കുക",
   "hero.kicker": "പ്രത്യാശ · കരകയറ്റം · ബന്ധം",
   "hero.eyebrow": "പ്രത്യാശ • ബന്ധം • കരകയറ്റം",
+  "hero.featuredLabel": "പ്രത്യേക കഥ",
   "hero.headline": "നിങ്ങൾ ഒറ്റയ്ക്കല്ല.",
   "hero.headlineLead": "നിങ്ങൾ",
   "hero.headlineAccent": "ഒറ്റയ്ക്കല്ല.",

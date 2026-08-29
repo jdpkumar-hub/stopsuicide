@@ -17,6 +17,7 @@ const hi: Messages = {
   "nav.language": "भाषा चुनें",
   "hero.kicker": "आशा · स्वस्थ होना · जुड़ाव",
   "hero.eyebrow": "आशा • जुड़ाव • स्वस्थ होना",
+  "hero.featuredLabel": "विशेष कहानी",
   "hero.headline": "आप अकेले नहीं हैं।",
   "hero.headlineLead": "आप",
   "hero.headlineAccent": "अकेले नहीं हैं।",

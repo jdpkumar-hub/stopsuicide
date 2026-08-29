@@ -15,6 +15,7 @@ export const en = {
   "nav.language": "Choose language",
   "hero.kicker": "Hope · Recovery · Connection",
   "hero.eyebrow": "Hope • Connection • Recovery",
+  "hero.featuredLabel": "Featured Story",
   "hero.headline": "You Are Not Alone.",
   "hero.headlineLead": "You Are",
   "hero.headlineAccent": "Not Alone.",

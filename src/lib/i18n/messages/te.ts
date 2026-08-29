@@ -17,6 +17,7 @@ const te: Messages = {
   "nav.language": "భాషను ఎంచుకోండి",
   "hero.kicker": "ఆశ · కోలుకోవడం · అనుబంధం",
   "hero.eyebrow": "ఆశ • అనుబంధం • కోలుకోవడం",
+  "hero.featuredLabel": "ప్రత్యేక కథ",
   "hero.headline": "మీరు ఒంటరివారు కాదు.",
   "hero.headlineLead": "మీరు",
   "hero.headlineAccent": "ఒంటరివారు కాదు.",
