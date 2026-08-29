@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const ALT = "Stop Suicide official logo";
@@ -46,9 +47,17 @@ export function Logo({
   className?: string;
   priority?: boolean;
 }) {
-  const reduce = useReducedMotion();
+  const [hydrated, setHydrated] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const asset = variant === "mark" ? ASSETS.mark : ASSETS.full;
   const eager = priority || variant === "header" || variant === "loading";
+
+  useEffect(() => {
+    if (!animate) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(media.matches);
+    setHydrated(true);
+  }, [animate]);
 
   const mark = (
     <span className={cn("relative inline-flex items-center", HEIGHTS[variant])}>
@@ -74,12 +83,20 @@ export function Logo({
     </span>
   );
 
-  const motionWrap = animate && !reduce ? (
+  const motionWrap = animate ? (
     <motion.span
       className="inline-flex origin-center"
-      initial={{ opacity: 0, scale: 1 }}
-      animate={{ opacity: 1, scale: [1, 1.05, 1] }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      initial={false}
+      animate={
+        hydrated && !reduceMotion
+          ? { opacity: 1, scale: [1, 1.05, 1] }
+          : { opacity: 1, scale: 1 }
+      }
+      transition={
+        hydrated && !reduceMotion
+          ? { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+          : { duration: 0 }
+      }
     >
       {mark}
     </motion.span>
