@@ -1,14 +1,28 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+const HIDDEN = { opacity: 0, y: 10 };
+const SHOWN = { opacity: 1, y: 0 };
+const ENTER = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
+const INSTANT = { duration: 0 };
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
-  const reduce = useReducedMotion();
+  const [hydrated, setHydrated] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(media.matches);
+    setHydrated(true);
+  }, []);
+
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      initial={false}
+      animate={hydrated ? SHOWN : HIDDEN}
+      transition={hydrated && !reduceMotion ? ENTER : INSTANT}
     >
       {children}
     </motion.div>

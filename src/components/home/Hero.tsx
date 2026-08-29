@@ -1,89 +1,82 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { Heart, Play } from "lucide-react";
 import { HeroVisual } from "@/components/home/HeroVisual";
-import { QuoteReel } from "@/components/home/QuoteReel";
-import { SunriseScene } from "@/components/home/SunriseScene";
+import { StoriesCarousel } from "@/components/home/StoriesCarousel";
+import { TrustStrip } from "@/components/home/TrustStrip";
 import { Button } from "@/components/ui/primitives";
 import { useI18n } from "@/lib/i18n/context";
+import type { Category, Story } from "@/types";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function Hero() {
+export function Hero({ stories, categories }: { stories: Story[]; categories: Category[] }) {
   const { t } = useI18n();
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative isolate min-h-[100svh] overflow-hidden">
-      <SunriseScene />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-slate-950/55 via-slate-950/18 to-transparent" />
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-4 pb-24 pt-28 sm:px-6">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
-          <div>
-            <motion.p
-              initial={reduce ? false : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease }}
-              className="kicker mb-5 text-white/85"
-            >
-              {t("hero.kicker")}
-            </motion.p>
-            <motion.h1
-              initial={reduce ? false : { opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: reduce ? 0 : 0.08, ease }}
-              className="hero-title max-w-3xl whitespace-pre-line font-serif text-white"
-            >
-              {t("hero.headline")}
-            </motion.h1>
-            <motion.p
-              initial={reduce ? false : { opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: reduce ? 0 : 0.18, ease }}
-              className="mt-6 max-w-xl whitespace-pre-line text-base leading-relaxed text-white/90 sm:text-lg"
-            >
-              {t("hero.sub")}
-            </motion.p>
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: reduce ? 0 : 0.28, ease }}
-              className="mt-8 flex flex-wrap gap-3"
-            >
-              <Button href="/videos" className="h-12 px-6 text-base">
-                {t("hero.watch")}
-              </Button>
-              <Button href="#get-help" variant="green" className="h-12 px-6 text-base">
-                {t("hero.support")}
-              </Button>
-              <Button href="/contact" variant="ghost" className="h-12 px-6 text-base">
-                {t("hero.share")}
-              </Button>
-            </motion.div>
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: reduce ? 0 : 0.38, ease }}
-              className="mt-8 max-w-xl"
-            >
-              <QuoteReel compact />
-            </motion.div>
-          </div>
-          <HeroVisual />
+    <section className="home-hero">
+      <div className="home-hero-glow" aria-hidden="true" />
+      <div className="home-hero-orb home-hero-orb-a" aria-hidden="true" />
+      <div className="home-hero-orb home-hero-orb-b" aria-hidden="true" />
+      <div className="home-hero-orb home-hero-orb-c" aria-hidden="true" />
+      <div className="home-hero-inner mx-auto grid max-w-6xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:gap-10 xl:gap-12">
+        <div className="hero-copy min-w-0">
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease }}
+            className="hero-eyebrow"
+          >
+            {t("hero.eyebrow")}
+          </motion.p>
+          <motion.h1
+            initial={reduce ? false : { opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: reduce ? 0 : 0.06, ease }}
+            className="hero-title mt-4 font-serif"
+          >
+            <span className="hero-title-lead">{t("hero.headlineLead")}</span>{" "}
+            <span className="hero-title-accent">{t("hero.headlineAccent")}</span>
+          </motion.h1>
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: reduce ? 0 : 0.12, ease }}
+            className="hero-sub mt-4"
+          >
+            {t("hero.sub")}
+          </motion.p>
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: reduce ? 0 : 0.2, ease }}
+            className="hero-actions mt-7"
+          >
+            <Button href="#get-help" variant="help" className="h-11 px-5 text-sm">
+              <Heart className="h-4 w-4" aria-hidden="true" />
+              {t("hero.support")}
+            </Button>
+            <Button href="/videos" variant="ghost" className="h-11 px-5 text-sm">
+              <Play className="h-4 w-4" aria-hidden="true" />
+              {t("hero.watch")}
+            </Button>
+            <Link href="/contact" className="hero-text-link">
+              {t("hero.share")} →
+            </Link>
+          </motion.div>
+        </div>
+        <div className="hero-visual min-w-0">
+          {stories.length ? (
+            <StoriesCarousel stories={stories} categories={categories} />
+          ) : (
+            <HeroVisual />
+          )}
         </div>
       </div>
-      <motion.a
-        href="#todays-inspiration"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-white/80"
-        aria-label={t("hero.scroll")}
-      >
-        <span className="kicker text-white/80">{t("hero.scroll")}</span>
-        <ChevronDown className="sunrise-scroll-icon h-5 w-5" />
-      </motion.a>
+      <TrustStrip />
     </section>
   );
 }

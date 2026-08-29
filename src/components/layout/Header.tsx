@@ -31,10 +31,10 @@ export function Header() {
 
   return (
     <header className="site-header" data-scrolled={scrolled}>
-      <div className="site-header-bar mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-1.5 sm:px-5 sm:py-2">
+      <div className="site-header-bar mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-1 sm:px-5 sm:py-1.5">
         <Logo animate priority className="shrink-0 px-1" />
 
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+        <nav className="site-nav hidden items-center gap-4 xl:gap-5 lg:flex" aria-label="Primary">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
