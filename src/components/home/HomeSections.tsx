@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { Play } from "lucide-react";
 import { DailyInspiration } from "@/components/home/DailyInspiration";
 import { AffirmationGrid } from "@/components/home/AffirmationGrid";
 import { HopeSteps } from "@/components/home/HopeSteps";
@@ -16,6 +17,8 @@ import { useLocalized } from "@/lib/i18n/use-localized";
 import type { MessageKey } from "@/lib/i18n/messages/en";
 import { telHref } from "@/lib/utils";
 import type { Article, Category, Quote, ResourceItem, Story, Testimonial, Video } from "@/types";
+
+const PLACEHOLDER_VIDEO_IMAGE = "/images/stories/a-new-beginning.jpg";
 
 const HELP_COPY: Record<string, MessageKey> = {
   "tele-manas": "help.telemanas",
@@ -62,6 +65,11 @@ export function HomeSections({
   const recoveryStories = stories
     .filter((item) => item.categoryId !== "cat-success")
     .slice(0, 3);
+  const hopeStories = (recoveryStories.length >= 3 ? recoveryStories : stories).slice(0, 3);
+  const featuredCopy = featured ? loc.video(featured) : null;
+  const featuredCategory = featured
+    ? categories.find((item) => item.id === featured.categoryId)
+    : undefined;
   const successVideos = videos
     .filter((item) => item.categoryId === "cat-success" && !shownVideoIds.has(item.id))
     .slice(0, Math.max(0, 3 - successStories.length));
@@ -69,6 +77,102 @@ export function HomeSections({
 
   return (
     <>
+      <Section className="home-after-hero" id="todays-video">
+        <div className="mb-8 max-w-2xl">
+          <h2 className="font-serif text-4xl sm:text-5xl">{t("home.todaysInspiration")}</h2>
+          <p className="mt-2 text-muted">{t("home.todaysInspirationSub")}</p>
+        </div>
+        {featured && featuredCopy ? (
+          <FadeIn>
+            <Link href={`/videos/${featured.slug}`} className="home-spotlight glass-premium group">
+              <div className="home-spotlight-media">
+                <Image
+                  src={featured.thumbnailUrl}
+                  alt={featuredCopy.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 767px) 100vw, 58vw"
+                />
+                <div className="home-spotlight-play">
+                  <span aria-hidden="true">
+                    <Play className="ml-0.5 h-6 w-6 fill-current" />
+                  </span>
+                </div>
+              </div>
+              <div className="home-spotlight-copy">
+                {featuredCategory ? <Badge>{loc.category(featuredCategory)}</Badge> : null}
+                <h3 className="home-spotlight-title">{featuredCopy.title}</h3>
+                <p className="home-spotlight-desc">{featuredCopy.description}</p>
+                <span className="home-hope-cta">{t("home.watchNow")}</span>
+              </div>
+            </Link>
+          </FadeIn>
+        ) : (
+          <FadeIn>
+            <div className="home-spotlight glass-premium">
+              <div className="home-spotlight-media">
+                <Image
+                  src={PLACEHOLDER_VIDEO_IMAGE}
+                  alt={t("home.videoPlaceholderAlt")}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 767px) 100vw, 58vw"
+                />
+              </div>
+              <div className="home-spotlight-copy">
+                <h3 className="home-spotlight-title">{t("home.todaysInspiration")}</h3>
+                <p className="home-spotlight-desc">{t("home.todaysInspirationSub")}</p>
+                <Button href="/videos" className="mt-2 w-fit">
+                  {t("home.watchInspirational")}
+                </Button>
+              </div>
+            </div>
+          </FadeIn>
+        )}
+      </Section>
+
+      {hopeStories.length ? (
+        <Section id="stories-of-hope">
+          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="kicker text-hope-blue">{t("home.storiesKicker")}</p>
+              <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.storiesOfHope")}</h2>
+              <p className="mt-2 max-w-xl text-muted">{t("home.storiesOfHopeSub")}</p>
+            </div>
+            <Button href="/stories" variant="outline">
+              {t("home.allStories")}
+            </Button>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {hopeStories.map((story, index) => {
+              const copy = loc.story(story);
+              const category = categories.find((item) => item.id === story.categoryId);
+              return (
+                <FadeIn key={story.id} delay={index * 0.07}>
+                  <Link href={`/stories/${story.slug}`} className="home-hope-card glass-premium">
+                    <div className="home-hope-media">
+                      <Image
+                        src={story.thumbnailUrl}
+                        alt={copy.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 767px) 100vw, 33vw"
+                      />
+                    </div>
+                    <div className="home-hope-body">
+                      {category ? <Badge>{loc.category(category)}</Badge> : null}
+                      <h3 className="home-hope-title">{copy.title}</h3>
+                      <p className="home-hope-excerpt">{copy.excerpt}</p>
+                      <span className="home-hope-cta">{t("home.readStory")}</span>
+                    </div>
+                  </Link>
+                </FadeIn>
+              );
+            })}
+          </div>
+        </Section>
+      ) : null}
+
       <HopeSteps />
 
       <Section id="todays-inspiration">

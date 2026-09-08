@@ -11,7 +11,19 @@ export type FeaturedHeroStory = {
   categories?: TranslationMap;
   image: string;
   href: string;
+  takeaways?: TranslationMap[];
 };
+
+function points(
+  en: readonly [string, string, string],
+  te: readonly [string, string, string],
+  hi: readonly [string, string, string],
+  ta: readonly [string, string, string],
+  kn: readonly [string, string, string],
+  ml: readonly [string, string, string],
+): TranslationMap[] {
+  return [0, 1, 2].map((index) => names(en[index], te[index], hi[index], ta[index], kn[index], ml[index]));
+}
 
 /**
  * Demo featured stories for the home hero.
@@ -24,26 +36,34 @@ export const FEATURED_HERO_PLACEHOLDERS: FeaturedHeroStory[] = [
     title: "A New Beginning",
     titles: names(
       "A New Beginning",
-      "కొత్త మొదలు",
+      "ఒక కొత్త ప్రారంభం",
       "एक नई शुरुआत",
       "ஒரு புதிய தொடக்கம்",
       "ಹೊಸ ಆರಂಭ",
       "ഒരു പുതിയ തുടക്കം",
     ),
     shortDescription:
-      "After the hardest season, ordinary days can return: morning light, a friend’s message, and the choice to stay.",
+      "After the hardest season, ordinary days can return. Sometimes hope begins with something very small — a conversation, a friend who listens, or simply choosing to take one more step.",
     shortDescriptions: names(
-      "After the hardest season, ordinary days can return: morning light, a friend’s message, and the choice to stay.",
-      "కష్టమైన కాలం తర్వాత సాధారణ రోజులు తిరిగి రావచ్చు: ఉదయపు వెలుగు, స్నేహితుని సందేశం, నిలబడే నిర్ణయం.",
-      "सबसे कठिन मौसम के बाद साधारण दिन लौट सकते हैं: सुबह की रोशनी, एक संदेश, और रुकने का निर्णय।",
-      "கடினமான காலத்திற்குப் பிறகு சாதாரண நாட்கள் திரும்பலாம்: காலை வெளிச்சம், ஒரு செய்தி, நிற்கும் முடிவு.",
-      "ಕಷ್ಟದ ಋತುವಿನ ನಂತರ ಸಾಮಾನ್ಯ ದಿನಗಳು ಹಿಂದಿರುಗಬಹುದು: ಬೆಳಗಿನ ಬೆಳಕು, ಸಂದೇಶ, ನಿಲ್ಲುವ ನಿರ್ಧಾರ.",
-      "കഠിനമായ കാലത്തിന് ശേഷം സാധാരണ ദിനങ്ങൾ മടങ്ങാം: പ്രഭാത വെളിച്ചം, ഒരു സന്ദേശം, നിൽക്കാനുള്ള തീരുമാനം.",
+      "After the hardest season, ordinary days can return. Sometimes hope begins with something very small — a conversation, a friend who listens, or simply choosing to take one more step.",
+      "ఎంత కష్టమైన సమయం అయినా శాశ్వతం కాదు. కొన్నిసార్లు ఆశ ఒక పెద్ద మార్పుతో కాదు — మనసులోని మాటను ఎవరికైనా చెప్పడం, ఒక చిన్న అడుగు ముందుకు వేయడం ద్వారా మొదలవుతుంది.",
+      "सबसे कठिन मौसम के बाद साधारण दिन लौट सकते हैं। कभी-कभी आशा बहुत छोटी चीज़ से शुरू होती है — एक बातचीत, सुनने वाला मित्र, या एक और कदम चुनना।",
+      "கடினமான காலத்திற்குப் பிறகு சாதாரண நாட்கள் திரும்பலாம். சில வேளை நம்பிக்கை மிகச் சிறியதில் தொடங்கும் — ஒரு உரையாடல், கேட்கும் நண்பர், இன்னொரு அடி.",
+      "ಕಷ್ಟದ ಋತುವಿನ ನಂತರ ಸಾಮಾನ್ಯ ದಿನಗಳು ಹಿಂದಿರುಗಬಹುದು. ಕೆಲವೊಮ್ಮೆ ಆಶೆ ತುಂಬಾ ಸಣ್ಣದರಿಂದ ಆರಂಭವಾಗುತ್ತದೆ — ಒಂದು ಮಾತು, ಕೇಳುವ ಸ್ನೇಹಿತ, ಇನ್ನೊಂದು ಹೆಜ್ಜೆ.",
+      "കഠിനമായ കാലത്തിന് ശേഷം സാധാരണ ദിനങ്ങൾ മടങ്ങാം. ചിലപ്പോൾ പ്രത്യാശ വളരെ ചെറിയതിൽ തുടങ്ങും — ഒരു സംഭാഷണം, കേൾക്കുന്ന സുഹൃത്ത്, ഒരു ചുവടുകൂടി.",
     ),
     category: "Recovery",
     categories: names("Recovery", "కోలుకోవడం", "रिकवरी", "மீட்பு", "ಚೇತರಿಕೆ", "കരകയറ്റം"),
     image: "/images/stories/a-new-beginning.jpg",
     href: "/stories/ananya-learning-to-stay",
+    takeaways: points(
+      ["Asking for support is a strength", "Small steps still move us forward", "Hope can return gradually"],
+      ["సహాయం అడగడం బలహీనత కాదు", "చిన్న అడుగు కూడా ముందడుగే", "ఆశకు తిరిగి రావడానికి సమయం ఇవ్వాలి"],
+      ["सहारा माँगना एक शक्ति है", "छोटे कदम भी हमें आगे ले जाते हैं", "आशा धीरे-धीरे लौट सकती है"],
+      ["உதவி கேட்பது ஒரு வலிமை", "சிறிய அடிகளும் முன்னேற்றம் தரும்", "நம்பிக்கை மெல்லத் திரும்பலாம்"],
+      ["ಸಹಾಯ ಕೇಳುವುದು ಒಂದು ಶಕ್ತಿ", "ಸಣ್ಣ ಹೆಜ್ಜೆಗಳೂ ಮುಂದಕ್ಕೆ ಕೊಂಡೊಯ್ಯುತ್ತವೆ", "ಆಶೆ ನಿಧಾನವಾಗಿ ಹಿಂದಿರುಗಬಹುದು"],
+      ["സഹായം ചോദിക്കുന്നത് ഒരു ശക്തിയാണ്", "ചെറിയ ചുവടുകളും മുന്നോട്ട് നയിക്കും", "പ്രത്യാശ ക്രമേണ മടങ്ങാം"],
+    ),
   },
   {
     id: "featured-2",
@@ -57,19 +77,27 @@ export const FEATURED_HERO_PLACEHOLDERS: FeaturedHeroStory[] = [
       "എന്റെ ശക്തി കണ്ടെത്തൽ",
     ),
     shortDescription:
-      "Strength did not arrive all at once. It grew in small acts of asking for help and taking the next step.",
+      "Strength did not arrive all at once. It grew in quiet choices — asking for help, staying with a friend, and taking the next small step even when the day felt heavy.",
     shortDescriptions: names(
-      "Strength did not arrive all at once. It grew in small acts of asking for help and taking the next step.",
-      "బలం ఒక్కసారిగా రాలేదు. సహాయం అడగడం, మరో అడుగు వేయడం — ఆ చిన్న పనుల్లో పెరిగింది.",
-      "शक्ति एक साथ नहीं आई। मदद माँगने और अगला कदम बढ़ाने से वह धीरे-धीरे बढ़ी।",
-      "வலிமை ஒரே நேரத்தில் வரவில்லை. உதவி கேட்பதும் அடுத்த அடியும் அதை வளர்த்தன.",
-      "ಶಕ್ತಿ ಒಮ್ಮೆಲೇ ಬರಲಿಲ್ಲ. ಸಹಾಯ ಕೇಳುವುದು ಮತ್ತು ಮುಂದಿನ ಹೆಜ್ಜೆ ಇಡುವುದರಿಂದ ಬೆಳೆಯಿತು.",
-      "ശക്തി ഒറ്റയടിക്ക് വന്നില്ല. സഹായം ചോദിക്കലും അടുത്ത അടിയും അത് വളർത്തി.",
+      "Strength did not arrive all at once. It grew in quiet choices — asking for help, staying with a friend, and taking the next small step even when the day felt heavy.",
+      "బలం ఒక్కసారిగా రాలేదు. సహాయం అడగడం, స్నేహితునితో ఉండటం, బరువైన రోజున కూడా మరో చిన్న అడుగు వేయడం — ఆ నిశ్శబ్ద ఎంపికల్లో పెరిగింది.",
+      "शक्ति एक साथ नहीं आई। मदद माँगने, किसी मित्र के साथ ठहरने, और भारी दिन में भी अगला छोटा कदम बढ़ाने से वह बढ़ी।",
+      "வலிமை ஒரே நேரத்தில் வரவில்லை. உதவி கேட்பது, ஒரு நண்பருடன் இருப்பது, கனமான நாளிலும் அடுத்த சிறிய அடி — இவற்றில்தான் அது வளர்ந்தது.",
+      "ಶಕ್ತಿ ಒಮ್ಮೆಲೇ ಬರಲಿಲ್ಲ. ಸಹಾಯ ಕೇಳುವುದು, ಸ್ನೇಹಿತನೊಂದಿಗೆ ಇರುವುದು, ಭಾರವಾದ ದಿನದಲ್ಲಿಯೂ ಮುಂದಿನ ಸಣ್ಣ ಹೆಜ್ಜೆ — ಇವುಗಳಲ್ಲಿ ಅದು ಬೆಳೆಯಿತು.",
+      "ശക്തി ഒറ്റയടിക്ക് വന്നില്ല. സഹായം ചോദിക്കൽ, ഒരു സുഹൃത്തിനൊപ്പം നിൽക്കൽ, ഭാരമുള്ള ദിവസത്തിലും അടുത്ത ചെറിയ ചുവട് — ഇവയിൽ അത് വളർന്നു.",
     ),
     category: "Resilience",
     categories: names("Resilience", "స్థిరత్వం", "लचीलापन", "மீள்திறன்", "ಸ್ಥಿತಿಸ್ಥಾಪಕತ್ವ", "സ്ഥിരത"),
     image: "/images/stories/finding-my-strength.jpg",
     href: "/stories/ravi-and-the-kitchen-light",
+    takeaways: points(
+      ["Asking for help is courage", "Strength grows in small acts", "You do not have to do this alone"],
+      ["సహాయం అడగడం ధైర్యమే", "బలం చిన్న పనుల్లో పెరుగుతుంది", "దీన్ని ఒంటరిగా మోయాల్సిన అవసరం లేదు"],
+      ["मदद माँगना साहस है", "शक्ति छोटे कामों में बढ़ती है", "इसे अकेले नहीं उठाना है"],
+      ["உதவி கேட்பது தைரியம்", "வலிமை சிறிய செயல்களில் வளரும்", "இதைத் தனியாகச் சுமக்க வேண்டாம்"],
+      ["ಸಹಾಯ ಕೇಳುವುದು ಧೈರ್ಯ", "ಶಕ್ತಿ ಸಣ್ಣ ಕೆಲಸಗಳಲ್ಲಿ ಬೆಳೆಯುತ್ತದೆ", "ಇದನ್ನು ಒಂಟಿಯಾಗಿ ಹೊರುವ ಅಗತ್ಯವಿಲ್ಲ"],
+      ["സഹായം ചോദിക്കുന്നത് ധൈര്യമാണ്", "ശക്തി ചെറിയ പ്രവൃത്തികളിൽ വളരും", "ഇത് ഒറ്റയ്ക്ക് ചുമക്കേണ്ടതില്ല"],
+    ),
   },
   {
     id: "featured-3",
@@ -83,19 +111,27 @@ export const FEATURED_HERO_PLACEHOLDERS: FeaturedHeroStory[] = [
       "ഒരു അടി മുന്നോട്ട്",
     ),
     shortDescription:
-      "Healing is not a straight line. One honest conversation can open a path that felt closed.",
+      "Healing is not a straight line. One honest conversation, one morning of light, one person who stays — these can open a path that felt closed.",
     shortDescriptions: names(
-      "Healing is not a straight line. One honest conversation can open a path that felt closed.",
-      "కోలుకోవడం సరళరేఖ కాదు. ఒక నిజాయితీ సంభాషణ మూసుకుపోయిన దారిని తెరవగలదు.",
-      "उपचार सीधी रेखा नहीं है। एक ईमानदार बातचीत बंद लगा रास्ता खोल सकती है।",
-      "குணமடைதல் நேர்க்கோடு அல்ல. ஒரு நேர்மையான உரையாடல் மூடிய பாதையைத் திறக்கும்.",
-      "ಗುಣಮುಖವಾಗುವುದು ನೇರ ರೇಖೆ ಅಲ್ಲ. ಒಂದು ಪ್ರಾಮಾಣಿಕ ಮಾತು ಮುಚ್ಚಿದ ದಾರಿ ತೆರೆಯಬಹುದು.",
-      "കോളുക്കൽ നേർരേഖയല്ല. ഒരു സത്യസന്ധ സംഭാഷണം അടഞ്ഞ വഴി തുറക്കാം.",
+      "Healing is not a straight line. One honest conversation, one morning of light, one person who stays — these can open a path that felt closed.",
+      "కోలుకోవడం సరళరేఖ కాదు. ఒక నిజాయితీ సంభాషణ, ఒక వెలుగు ఉదయం, నిలబడే ఒక వ్యక్తి — ఇవి మూసుకుపోయిన దారిని తెరవగలవు.",
+      "उपचार सीधी रेखा नहीं है। एक ईमानदार बातचीत, एक उजली सुबह, कोई जो ठहरता है — ये बंद लगा रास्ता खोल सकते हैं।",
+      "குணமடைதல் நேர்க்கோடு அல்ல. ஒரு நேர்மையான உரையாடல், ஒளி நிறைந்த காலை, நிற்கும் ஒருவர் — மூடிய பாதையைத் திறக்கும்.",
+      "ಗುಣಮುಖವಾಗುವುದು ನೇರ ರೇಖೆ ಅಲ್ಲ. ಒಂದು ಪ್ರಾಮಾಣಿಕ ಮಾತು, ಬೆಳಕಿನ ಬೆಳಿಗ್ಗೆ, ನಿಲ್ಲುವ ಒಬ್ಬರು — ಮುಚ್ಚಿದ ದಾರಿ ತೆರೆಯಬಹುದು.",
+      "കോളുക്കൽ നേർരേഖയല്ല. ഒരു സത്യസന്ധ സംഭാഷണം, വെളിച്ചമുള്ള പ്രഭാതം, നിൽക്കുന്ന ഒരാൾ — അടഞ്ഞ വഴി തുറക്കാം.",
     ),
     category: "Hope",
     categories: names("Hope", "ఆశ", "आशा", "நம்பிக்கை", "ಆಶೆ", "പ്രത്യാശ"),
     image: "/images/stories/one-step-forward.jpg",
     href: "/stories/meera-second-morning",
+    takeaways: points(
+      ["One conversation can change a day", "Healing can be uneven and still real", "Tomorrow can hold more light"],
+      ["ఒక సంభాషణ ఒక రోజును మార్చగలదు", "కోలుకోవడం అసమానంగా ఉన్నా నిజమే", "రేపు ఎక్కువ వెలుగు ఉంచవచ్చు"],
+      ["एक बातचीत एक दिन बदल सकती है", "उपचार असमान होकर भी सच्चा हो सकता है", "कल अधिक प्रकाश रख सकता है"],
+      ["ஒரு உரையாடல் ஒரு நாளை மாற்றும்", "குணமடைதல் சமமில்லாமல் இருந்தாலும் உண்மை", "நாளை அதிக ஒளி தரலாம்"],
+      ["ಒಂದು ಮಾತು ಒಂದು ದಿನವನ್ನು ಬದಲಾಯಿಸಬಹುದು", "ಗುಣಮುಖ ಅಸಮವಾಗಿದ್ದರೂ ನಿಜವಾಗಿರಬಹುದು", "ನಾಳೆ ಹೆಚ್ಚು ಬೆಳಕು ಇರಬಹುದು"],
+      ["ഒരു സംഭാഷണം ഒരു ദിവസം മാറ്റാം", "കോളുക്കൽ അസമമായാലും യഥാർത്ഥമാകാം", "നാളെ കൂടുതൽ വെളിച്ചം നൽകാം"],
+    ),
   },
   {
     id: "featured-4",
@@ -109,19 +145,27 @@ export const FEATURED_HERO_PLACEHOLDERS: FeaturedHeroStory[] = [
       "വീണ്ടും പ്രത്യാശിക്കാൻ പഠിക്കൽ",
     ),
     shortDescription:
-      "Hope can be borrowed until it belongs to you again. Care, time, and community can rebuild what felt lost.",
+      "Hope can be borrowed until it belongs to you again. Care, time, and a community that listens can slowly rebuild what felt lost.",
     shortDescriptions: names(
-      "Hope can be borrowed until it belongs to you again. Care, time, and community can rebuild what felt lost.",
-      "ఆశను అరువు తెచ్చుకోవచ్చు — అది మళ్లీ మీది అయ్యే వరకు. శ్రద్ధ, సమయం, సముదాయం కోల్పోయినదాన్ని నిర్మించగలవు.",
-      "आशा उधार ली जा सकती है जब तक वह फिर आपकी न हो जाए। देखभाल, समय और समुदाय खोए हुए को गढ़ सकते हैं।",
-      "நம்பிக்கையை இரவல் வாங்கலாம் — அது மீண்டும் உங்களுடையதாகும் வரை. அக்கறை, நேரம், சமூகம் மீட்கும்.",
-      "ಆಶೆಯನ್ನು ಎರವಲು ಪಡೆಯಬಹುದು — ಅದು ಮತ್ತೆ ನಿಮ್ಮದಾಗುವವರೆಗೆ. ಕಾಳಜಿ, ಸಮಯ, ಸಮುದಾಯ ಮರುನಿರ್ಮಿಸಬಹುದು.",
-      "പ്രത്യാശ കടം വാങ്ങാം — അത് വീണ്ടും നിങ്ങളുടേതാകും വരെ. ശ്രദ്ധ, സമയം, സമൂഹം പുനർനിർമിക്കാം.",
+      "Hope can be borrowed until it belongs to you again. Care, time, and a community that listens can slowly rebuild what felt lost.",
+      "ఆశను అరువు తెచ్చుకోవచ్చు — అది మళ్లీ మీది అయ్యే వరకు. శ్రద్ధ, సమయం, వినే సముదాయం కోల్పోయినదాన్ని నెమ్మదిగా నిర్మించగలవు.",
+      "आशा उधार ली जा सकती है जब तक वह फिर आपकी न हो जाए। देखभाल, समय और सुनने वाला समुदाय खोए हुए को धीरे गढ़ सकते हैं।",
+      "நம்பிக்கையை இரவல் வாங்கலாம் — அது மீண்டும் உங்களுடையதாகும் வரை. அக்கறை, நேரம், கேட்கும் சமூகம் இழந்ததை மெல்ல மீட்கும்.",
+      "ಆಶೆಯನ್ನು ಎರವಲು ಪಡೆಯಬಹುದು — ಅದು ಮತ್ತೆ ನಿಮ್ಮದಾಗುವವರೆಗೆ. ಕಾಳಜಿ, ಸಮಯ, ಕೇಳುವ ಸಮುದಾಯ ಕಳೆದುಕೊಂಡದ್ದನ್ನು ನಿಧಾನವಾಗಿ ಮರುನಿರ್ಮಿಸಬಹುದು.",
+      "പ്രത്യാശ കടം വാങ്ങാം — അത് വീണ്ടും നിങ്ങളുടേതാകും വരെ. ശ്രദ്ധ, സമയം, കേൾക്കുന്ന സമൂഹം നഷ്ടപ്പെട്ടത് ക്രമേണ പുനർനിർമിക്കാം.",
     ),
-    category: "Belonging",
-    categories: names("Belonging", "చెందిక", "जुड़ाव", "சேர்ந்திருத்தல்", "ಸೇರಿರುವುದು", "ചേർന്നിരിക്കൽ"),
+    category: "Hope",
+    categories: names("Hope", "ఆశ", "आशा", "நம்பிக்கை", "ಆಶೆ", "പ്രത്യാശ"),
     image: "/images/stories/learning-to-hope-again.jpg",
     href: "/stories/arjun-team-captain",
+    takeaways: points(
+      ["Hope can be shared until it returns", "Care and time still matter", "Belonging helps us stay"],
+      ["ఆశను పంచుకోవచ్చు — అది తిరిగి వచ్చే వరకు", "శ్రద్ధ, సమయం ఇంకా ముఖ్యమే", "చెందిక మనల్ని నిలబెడుతుంది"],
+      ["आशा बाँटी जा सकती है जब तक वह लौटे", "देखभाल और समय अब भी मायने रखते हैं", "जुड़ाव हमें ठहराता है"],
+      ["நம்பிக்கையைப் பகிரலாம் — அது திரும்பும் வரை", "அக்கறையும் நேரமும் இன்னும் முக்கியம்", "சேர்ந்திருத்தல் நம்மை நிறுத்தும்"],
+      ["ಆಶೆಯನ್ನು ಹಂಚಿಕೊಳ್ಳಬಹುದು — ಅದು ಹಿಂದಿರುಗುವವರೆಗೆ", "ಕಾಳಜಿ ಮತ್ತು ಸಮಯ ಇನ್ನೂ ಮುಖ್ಯ", "ಸೇರಿರುವುದು ನಮ್ಮನ್ನು ನಿಲ್ಲಿಸುತ್ತದೆ"],
+      ["പ്രത്യാശ പങ്കിടാം — അത് മടങ്ങും വരെ", "ശ്രദ്ധയും സമയവും ഇപ്പോഴും പ്രധാനം", "ചേർന്നിരിക്കൽ നമ്മെ നിർത്തുന്നു"],
+    ),
   },
   {
     id: "featured-5",
@@ -135,19 +179,27 @@ export const FEATURED_HERO_PLACEHOLDERS: FeaturedHeroStory[] = [
       "നാളെയിലേക്ക് ഒരു യാത്ര",
     ),
     shortDescription:
-      "The story is not over. Tomorrow can hold more light than today can see — one hour, one morning at a time.",
+      "The story is not over. Tomorrow can hold more light than today can see — one hour, one morning, one kind step at a time.",
     shortDescriptions: names(
-      "The story is not over. Tomorrow can hold more light than today can see — one hour, one morning at a time.",
-      "కథ ఇంకా ముగియలేదు. రేపు ఈ రోజు కంటే ఎక్కువ వెలుగు ఉంచవచ్చు — ఒక గంట, ఒక ఉదయం చొప్పున.",
-      "कहानी अभी खत्म नहीं हुई। कल आज से अधिक प्रकाश रख सकता है — एक घंटा, एक सुबह।",
-      "கதை இன்னும் முடியவில்லை. நாளை இன்றைவிட அதிக ஒளி தரலாம் — ஒரு மணி, ஒரு காலை.",
-      "ಕಥೆ ಇನ್ನೂ ಮುಗಿದಿಲ್ಲ. ನಾಳೆ ಇಂದಿಗಿಂತ ಹೆಚ್ಚು ಬೆಳಕು ಇರಬಹುದು — ಒಂದು ಗಂಟೆ, ಒಂದು ಬೆಳಿಗ್ಗೆ.",
-      "കഥ ഇതുവരെ അവസാനിച്ചിട്ടില്ല. നാളെ ഇന്നത്തേക്കാൾ വെളിച്ചം നൽകാം — ഒരു മണിക്കൂർ, ഒരു പ്രഭാതം.",
+      "The story is not over. Tomorrow can hold more light than today can see — one hour, one morning, one kind step at a time.",
+      "కథ ఇంకా ముగియలేదు. రేపు ఈ రోజు కంటే ఎక్కువ వెలుగు ఉంచవచ్చు — ఒక గంట, ఒక ఉదయం, ఒక దయగల అడుగు చొప్పున.",
+      "कहानी अभी खत्म नहीं हुई। कल आज से अधिक प्रकाश रख सकता है — एक घंटा, एक सुबह, एक कोमल कदम।",
+      "கதை இன்னும் முடியவில்லை. நாளை இன்றைவிட அதிக ஒளி தரலாம் — ஒரு மணி, ஒரு காலை, ஒரு கனிவான அடி.",
+      "ಕಥೆ ಇನ್ನೂ ಮುಗಿದಿಲ್ಲ. ನಾಳೆ ಇಂದಿಗಿಂತ ಹೆಚ್ಚು ಬೆಳಕು ಇರಬಹುದು — ಒಂದು ಗಂಟೆ, ಒಂದು ಬೆಳಿಗ್ಗೆ, ಒಂದು ದಯೆಯ ಹೆಜ್ಜೆ.",
+      "കഥ ഇതുവരെ അവസാനിച്ചിട്ടില്ല. നാളെ ഇന്നത്തേക്കാൾ വെളിച്ചം നൽകാം — ഒരു മണിക്കൂർ, ഒരു പ്രഭാതം, ഒരു ദയയുള്ള ചുവട്.",
     ),
-    category: "Tomorrow",
-    categories: names("Tomorrow", "రేపు", "कल", "நாளை", "ನಾಳೆ", "നാളെ"),
+    category: "Hope",
+    categories: names("Hope", "ఆశ", "आशा", "நம்பிக்கை", "ಆಶೆ", "പ്രത്യാശ"),
     image: "/images/stories/a-journey-toward-tomorrow.jpg",
     href: "/stories",
+    takeaways: points(
+      ["Your story is still being written", "One hour at a time is enough", "Light can return gradually"],
+      ["మీ కథ ఇంకా రాయబడుతోంది", "ఒక గంట చొప్పున సరిపోతుంది", "వెలుగు నెమ్మదిగా తిరిగి రాగలదు"],
+      ["आपकी कहानी अभी लिखी जा रही है", "एक घंटा एक साथ काफी है", "प्रकाश धीरे-धीरे लौट सकता है"],
+      ["உங்கள் கதை இன்னும் எழுதப்படுகிறது", "ஒரு மணி நேரம் போதும்", "ஒளி மெல்லத் திரும்பலாம்"],
+      ["ನಿಮ್ಮ ಕಥೆ ಇನ್ನೂ ಬರೆಯಲಾಗುತ್ತಿದೆ", "ಒಂದು ಗಂಟೆ ಸಾಕು", "ಬೆಳಕು ನಿಧಾನವಾಗಿ ಹಿಂದಿರುಗಬಹುದು"],
+      ["നിങ്ങളുടെ കഥ ഇപ്പോഴും എഴുതപ്പെടുന്നു", "ഒരു മണിക്കൂർ മതി", "വെളിച്ചം ക്രമേണ മടങ്ങാം"],
+    ),
   },
 ];
 

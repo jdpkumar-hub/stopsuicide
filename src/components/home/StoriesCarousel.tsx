@@ -11,14 +11,16 @@ import {
   type PointerEvent,
 } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/primitives";
 import { useI18n } from "@/lib/i18n/context";
 import { useLocalized } from "@/lib/i18n/use-localized";
 import type { FeaturedHeroStory } from "@/lib/data/featured-stories";
+import type { MessageKey } from "@/lib/i18n/messages/en";
 
 const AUTO_MS = 6000;
 const ease = [0.22, 1, 0.36, 1] as const;
+const FALLBACK_TAKEAWAYS: MessageKey[] = ["hero.takeaway1", "hero.takeaway2", "hero.takeaway3"];
 
 export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
   const { t } = useI18n();
@@ -86,6 +88,12 @@ export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
   const title = loc.text(story.titles, story.title);
   const intro = loc.text(story.shortDescriptions, story.shortDescription);
   const category = loc.text(story.categories, story.category);
+  const takeaways =
+    story.takeaways
+      ?.map((item) => loc.text(item, ""))
+      .filter(Boolean)
+      .slice(0, 3) ?? [];
+  const points = takeaways.length ? takeaways : FALLBACK_TAKEAWAYS.map((key) => t(key));
 
   return (
     <div
@@ -110,26 +118,6 @@ export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
         {t("hero.carouselLabel")}
       </p>
 
-      <div className="featured-hero-copy">
-        <p className="featured-hero-kicker">{t("hero.featuredLabel")}</p>
-        <motion.div
-          key={story.id}
-          initial={reduce ? false : { opacity: 0.35 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.35, ease }}
-          aria-live="polite"
-        >
-          {category ? <p className="featured-hero-tag">{category}</p> : null}
-          <h1 className="featured-hero-title">{title}</h1>
-          <p className="featured-hero-intro">{intro}</p>
-          <div className="featured-hero-cta">
-            <Button href={story.href} variant="green" className="featured-hero-button">
-              {t("hero.readStory")}
-            </Button>
-          </div>
-        </motion.div>
-      </div>
-
       <div
         className="featured-hero-media"
         onPointerDown={onPointerDown}
@@ -138,16 +126,22 @@ export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
           pointerX.current = null;
         }}
       >
-        <div className="featured-hero-photo" aria-hidden="true">
+        <div className="featured-hero-photo">
           {stories.map((item, itemIndex) => {
             const active = itemIndex === index;
+            const slideTitle = loc.text(item.titles, item.title);
             return (
-              <div key={item.id} className="featured-hero-slide" data-active={active}>
+              <div
+                key={item.id}
+                className="featured-hero-slide"
+                data-active={active}
+                aria-hidden={!active}
+              >
                 <Image
                   src={item.image}
-                  alt=""
+                  alt={active ? slideTitle : ""}
                   fill
-                  sizes="(max-width: 767px) 92vw, (max-width: 1280px) 46vw, 800px"
+                  sizes="(max-width: 767px) 92vw, (max-width: 1280px) 48vw, 800px"
                   priority={itemIndex === 0}
                   className="object-cover"
                   draggable={false}
@@ -158,38 +152,71 @@ export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
         </div>
       </div>
 
-      {count > 1 ? (
-        <div className="featured-hero-controls">
-          <button
-            type="button"
-            className="featured-nav"
-            onClick={() => go(-1, true)}
-            aria-label={t("hero.prevStory")}
+      <div className="featured-hero-main">
+        <div className="featured-hero-copy">
+          <p className="featured-hero-kicker">{t("hero.featuredLabel")}</p>
+          <motion.div
+            key={story.id}
+            initial={reduce ? false : { opacity: 0.35 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, ease }}
+            aria-live="polite"
           >
-            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          </button>
-          <div className="featured-dots">
-            {stories.map((item, itemIndex) => (
-              <button
-                key={item.id}
-                type="button"
-                className="featured-dot"
-                aria-current={itemIndex === index ? "true" : undefined}
-                aria-label={`${t("hero.carouselLabel")} ${itemIndex + 1}`}
-                onClick={() => goTo(itemIndex)}
-              />
-            ))}
-          </div>
-          <button
-            type="button"
-            className="featured-nav"
-            onClick={() => go(1, true)}
-            aria-label={t("hero.nextStory")}
-          >
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          </button>
+            {category ? <p className="featured-hero-tag">{category}</p> : null}
+            <h1 className="featured-hero-title">{title}</h1>
+            <p className="featured-hero-intro">{intro}</p>
+            <div className="featured-hero-remind">
+              <p className="featured-hero-remind-label">{t("hero.reminderHeading")}</p>
+              <ul className="featured-hero-points">
+                {points.map((point) => (
+                  <li key={point}>
+                    <Check className="featured-hero-check" aria-hidden="true" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="featured-hero-cta">
+              <Button href={story.href} variant="green" className="featured-hero-button">
+                {t("hero.readStory")}
+              </Button>
+            </div>
+          </motion.div>
         </div>
-      ) : null}
+
+        {count > 1 ? (
+          <div className="featured-hero-controls">
+            <button
+              type="button"
+              className="featured-nav"
+              onClick={() => go(-1, true)}
+              aria-label={t("hero.prevStory")}
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <div className="featured-dots">
+              {stories.map((item, itemIndex) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="featured-dot"
+                  aria-current={itemIndex === index ? "true" : undefined}
+                  aria-label={`${t("hero.carouselLabel")} ${itemIndex + 1}`}
+                  onClick={() => goTo(itemIndex)}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              className="featured-nav"
+              onClick={() => go(1, true)}
+              aria-label={t("hero.nextStory")}
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
