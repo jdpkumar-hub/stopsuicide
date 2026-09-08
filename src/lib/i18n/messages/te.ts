@@ -28,6 +28,8 @@ const te: Messages = {
   "hero.share": "మీ కథను పంచుకోండి",
   "hero.readStory": "వారి కథను చదవండి",
   "hero.reminderHeading": "ఈ కథ మనకు గుర్తు చేసేది",
+  "hero.storyQuote": "చిన్న అడుగు ముందుకు వేసినా అది ముందడుగే.",
+  "hero.storyArtAlt": "ఈ కథ కోసం రూపొందించిన చిత్రం",
   "hero.takeaway1": "సహాయం అడగడం బలహీనత కాదు",
   "hero.takeaway2": "చిన్న అడుగు కూడా ముందడుగే",
   "hero.takeaway3": "ఆశకు తిరిగి రావడానికి సమయం ఇవ్వాలి",

@@ -139,9 +139,9 @@ export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
               >
                 <Image
                   src={item.image}
-                  alt={active ? slideTitle : ""}
+                  alt={active ? `${t("hero.storyArtAlt")}: ${slideTitle}` : ""}
                   fill
-                  sizes="(max-width: 767px) 92vw, (max-width: 1280px) 48vw, 800px"
+                  sizes="(max-width: 767px) 92vw, (max-width: 1280px) 45vw, 720px"
                   priority={itemIndex === 0}
                   className="object-cover"
                   draggable={false}
@@ -165,6 +165,9 @@ export function StoriesCarousel({ stories }: { stories: FeaturedHeroStory[] }) {
             {category ? <p className="featured-hero-tag">{category}</p> : null}
             <h1 className="featured-hero-title">{title}</h1>
             <p className="featured-hero-intro">{intro}</p>
+            <blockquote className="featured-hero-quote">
+              {loc.text(story.reminder, t("hero.storyQuote"))}
+            </blockquote>
             <div className="featured-hero-remind">
               <p className="featured-hero-remind-label">{t("hero.reminderHeading")}</p>
               <ul className="featured-hero-points">

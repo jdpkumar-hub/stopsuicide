@@ -28,6 +28,8 @@ const hi: Messages = {
   "hero.share": "अपनी कहानी साझा करें",
   "hero.readStory": "उनकी कहानी पढ़ें",
   "hero.reminderHeading": "यह कहानी हमें याद दिलाती है",
+  "hero.storyQuote": "एक छोटा कदम आगे बढ़ना भी प्रगति है।",
+  "hero.storyArtAlt": "इस कहानी के लिए चित्रित कला",
   "hero.takeaway1": "सहारा माँगना एक शक्ति है",
   "hero.takeaway2": "छोटे कदम भी हमें आगे ले जाते हैं",
   "hero.takeaway3": "आशा धीरे-धीरे लौट सकती है",

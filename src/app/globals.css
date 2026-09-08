@@ -378,23 +378,21 @@ body {
   overflow-x: clip;
   color: var(--foreground);
   background:
-    radial-gradient(ellipse 42% 48% at 92% 18%, rgba(16, 185, 129, 0.08), transparent 70%),
-    radial-gradient(ellipse 38% 42% at 6% 88%, rgba(37, 99, 235, 0.07), transparent 68%),
+    radial-gradient(ellipse 36% 40% at 8% 88%, rgba(37, 99, 235, 0.05), transparent 70%),
     #f7f4ee;
 }
 
 .dark .home-hero {
   background:
-    radial-gradient(ellipse 42% 48% at 92% 18%, rgba(16, 185, 129, 0.1), transparent 70%),
-    radial-gradient(ellipse 38% 42% at 6% 88%, rgba(37, 99, 235, 0.12), transparent 68%),
+    radial-gradient(ellipse 36% 40% at 8% 88%, rgba(37, 99, 235, 0.1), transparent 70%),
     #0b1524;
 }
 
 .home-hero-inner {
   position: relative;
   z-index: 1;
-  padding-top: 1.5rem;
-  padding-bottom: 1.25rem;
+  padding-top: 1.1rem;
+  padding-bottom: 0.85rem;
 }
 
 .hero-eyebrow {
@@ -469,9 +467,9 @@ body {
 }
 
 .featured-hero-kicker {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #0f766e;
 }
@@ -482,13 +480,13 @@ body {
 
 .featured-hero-tag {
   display: inline-flex;
-  margin-top: 0.85rem;
+  margin-top: 0.55rem;
   max-width: 100%;
   border-radius: 999px;
-  padding: 0.28rem 0.75rem;
+  padding: 0.32rem 0.85rem;
   background: rgba(37, 99, 235, 0.08);
   color: var(--hope-blue);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 650;
   letter-spacing: 0.04em;
   overflow-wrap: anywhere;
@@ -499,12 +497,12 @@ body {
 }
 
 .featured-hero-title {
-  margin-top: 0.7rem;
+  margin-top: 0.45rem;
   max-width: 100%;
   font-family: var(--font-playfair), ui-serif, serif;
-  font-size: clamp(1.7rem, 3.2vw, 2.85rem);
+  font-size: clamp(2.5rem, 4.4vw, 3.85rem);
   font-weight: 600;
-  line-height: 1.18;
+  line-height: 1.12;
   letter-spacing: -0.03em;
   color: #0f172a;
   overflow-wrap: break-word;
@@ -516,22 +514,48 @@ body {
 }
 
 .featured-hero-intro {
-  margin-top: 0.85rem;
-  max-width: min(100%, 36rem);
-  font-size: clamp(0.95rem, 1.4vw, 1.08rem);
-  line-height: 1.7;
-  color: var(--muted);
+  margin-top: 0.7rem;
+  max-width: 100%;
+  font-size: clamp(1.125rem, 1.35vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.68;
+  color: #1e293b;
   overflow-wrap: break-word;
 }
 
+.dark .featured-hero-intro {
+  color: #cbd5e1;
+}
+
+.featured-hero-quote {
+  margin-top: 0.9rem;
+  max-width: 100%;
+  border-radius: 1.05rem;
+  padding: 0.9rem 1.1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(15, 118, 110, 0.14);
+  font-family: var(--font-playfair), ui-serif, serif;
+  font-size: clamp(1.08rem, 1.4vw, 1.22rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #0f172a;
+}
+
+.dark .featured-hero-quote {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(94, 234, 212, 0.18);
+  color: #e8eef8;
+}
+
 .featured-hero-remind {
-  margin-top: 1.15rem;
+  margin-top: 1rem;
 }
 
 .featured-hero-remind-label {
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   color: #0f766e;
 }
 
@@ -540,9 +564,9 @@ body {
 }
 
 .featured-hero-points {
-  margin-top: 0.55rem;
+  margin-top: 0.7rem;
   display: grid;
-  gap: 0.42rem;
+  gap: 0.58rem;
   padding: 0;
   list-style: none;
 }
@@ -550,29 +574,35 @@ body {
 .featured-hero-points li {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
-  max-width: 36rem;
-  font-size: 0.92rem;
-  line-height: 1.45;
-  color: var(--foreground);
+  gap: 0.6rem;
+  max-width: 100%;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #0f172a;
+}
+
+.dark .featured-hero-points li {
+  color: #e2e8f0;
 }
 
 .featured-hero-check {
-  width: 1rem;
-  height: 1rem;
+  width: 1.15rem;
+  height: 1.15rem;
   flex: 0 0 auto;
   margin-top: 0.18rem;
   color: #059669;
 }
 
 .featured-hero-cta {
-  margin-top: 1.2rem;
+  margin-top: 1.05rem;
 }
 
 .featured-hero-button {
   max-width: 100%;
-  height: 2.65rem;
-  padding-inline: 1.2rem;
+  height: 2.9rem;
+  padding-inline: 1.45rem;
+  font-size: 0.95rem;
   white-space: normal;
   text-align: center;
 }
@@ -581,19 +611,6 @@ body {
   position: relative;
   min-width: 0;
   touch-action: pan-y;
-}
-
-.featured-hero-media::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  right: -6%;
-  top: 10%;
-  width: 42%;
-  height: 42%;
-  border-radius: 999px;
-  background: rgba(16, 185, 129, 0.12);
-  filter: blur(8px);
 }
 
 .featured-hero-photo {
@@ -704,38 +721,47 @@ body {
 @media (min-width: 768px) {
   .featured-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
     grid-template-areas: "main media";
-    column-gap: 2.5rem;
-    align-items: center;
+    column-gap: 0.95rem;
+    align-items: stretch;
   }
 
   .featured-hero-main {
     grid-area: main;
-    align-self: center;
-    gap: 1.25rem;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .featured-hero-copy {
+    flex: 1 1 auto;
   }
 
   .featured-hero-media {
     grid-area: media;
-    align-self: center;
+    display: flex;
+    height: 100%;
+    min-height: 0;
   }
 
   .featured-hero-photo {
     margin-inline: 0;
-    max-width: min(100%, 32rem);
-    max-height: min(38rem, calc(100svh - 8rem));
-    aspect-ratio: 3 / 4;
+    width: 100%;
+    max-width: none;
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: auto;
   }
 }
 
 @media (min-width: 1280px) {
   .featured-hero {
-    column-gap: 3rem;
-  }
-
-  .featured-hero-photo {
-    max-width: 34rem;
+    column-gap: 1.1rem;
   }
 }
 
@@ -1496,37 +1522,47 @@ html[data-locale="ml"] .featured-hero-kicker {
 
 html[data-locale="te"] h1.featured-hero-title {
   font-family: "Noto Sans Telugu", "Noto Sans", sans-serif !important;
-  font-size: clamp(1.32rem, 2.7vw, 2.05rem);
-  line-height: 1.4;
+  font-size: clamp(1.9rem, 3.5vw, 2.85rem);
+  line-height: 1.32;
   letter-spacing: 0;
   font-weight: 600;
   max-width: 100%;
 }
 
 html[data-locale="te"] .featured-hero-intro {
-  max-width: min(100%, 34rem);
-  font-size: 0.95rem;
+  max-width: 100%;
+  font-size: clamp(1.08rem, 1.3vw, 1.2rem);
   line-height: 1.75;
+  color: #1e293b;
+}
+
+html[data-locale="te"] .featured-hero-quote {
+  font-family: "Noto Sans Telugu", "Noto Sans", sans-serif !important;
+  font-size: clamp(1.02rem, 1.3vw, 1.14rem);
+  font-style: normal;
+  line-height: 1.65;
+  letter-spacing: 0;
 }
 
 html[data-locale="te"] .featured-hero-remind-label {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: 0;
 }
 
 html[data-locale="te"] .featured-hero-points li {
-  font-size: 0.86rem;
-  line-height: 1.55;
+  font-size: 1.06rem;
+  line-height: 1.6;
+  color: #0f172a;
 }
 
 html[data-locale="te"] .featured-hero-tag {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   letter-spacing: 0;
 }
 
 html[data-locale="te"] .featured-hero-button {
-  font-size: 0.82rem;
-  padding-inline: 1rem;
+  font-size: 0.9rem;
+  padding-inline: 1.15rem;
   white-space: normal;
   text-wrap: balance;
 }
@@ -1731,8 +1767,8 @@ html[data-locale="hi"] h1.featured-hero-title,
 html[data-locale="ta"] h1.featured-hero-title,
 html[data-locale="kn"] h1.featured-hero-title,
 html[data-locale="ml"] h1.featured-hero-title {
-  font-size: clamp(1.4rem, 2.9vw, 2.2rem);
-  line-height: 1.38;
+  font-size: clamp(1.95rem, 3.5vw, 3.05rem);
+  line-height: 1.3;
   letter-spacing: 0;
   max-width: 100%;
 }
@@ -1741,13 +1777,42 @@ html[data-locale="hi"] .featured-hero-intro,
 html[data-locale="ta"] .featured-hero-intro,
 html[data-locale="kn"] .featured-hero-intro,
 html[data-locale="ml"] .featured-hero-intro {
+  font-size: clamp(1.1rem, 1.35vw, 1.22rem);
   line-height: 1.75;
+  color: #1e293b;
+}
+
+html[data-locale="hi"] .featured-hero-quote,
+html[data-locale="ta"] .featured-hero-quote,
+html[data-locale="kn"] .featured-hero-quote,
+html[data-locale="ml"] .featured-hero-quote {
+  font-style: normal;
+  font-size: clamp(1.04rem, 1.3vw, 1.16rem);
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+html[data-locale="hi"] .featured-hero-quote {
+  font-family: "Noto Serif Devanagari", "Noto Sans Devanagari", sans-serif;
+}
+
+html[data-locale="ta"] .featured-hero-quote {
+  font-family: "Noto Serif Tamil", "Noto Sans Tamil", sans-serif;
+}
+
+html[data-locale="kn"] .featured-hero-quote {
+  font-family: "Noto Serif Kannada", "Noto Sans Kannada", sans-serif;
+}
+
+html[data-locale="ml"] .featured-hero-quote {
+  font-family: "Noto Serif Malayalam", "Noto Sans Malayalam", sans-serif;
 }
 
 html[data-locale="hi"] .featured-hero-remind-label,
 html[data-locale="ta"] .featured-hero-remind-label,
 html[data-locale="kn"] .featured-hero-remind-label,
 html[data-locale="ml"] .featured-hero-remind-label {
+  font-size: 0.9rem;
   letter-spacing: 0;
 }
 
@@ -1755,8 +1820,9 @@ html[data-locale="hi"] .featured-hero-points li,
 html[data-locale="ta"] .featured-hero-points li,
 html[data-locale="kn"] .featured-hero-points li,
 html[data-locale="ml"] .featured-hero-points li {
-  font-size: 0.88rem;
-  line-height: 1.55;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: #0f172a;
 }
 
 html[data-locale="ta"] body,
@@ -1928,7 +1994,7 @@ html[data-contrast="high"] .sunrise-orb {
 
 @media (max-width: 767px) {
   .featured-hero {
-    gap: 1.15rem;
+    gap: 1.1rem;
   }
 
   .featured-hero-copy {
@@ -1937,11 +2003,21 @@ html[data-contrast="high"] .sunrise-orb {
 
   .featured-hero-title {
     max-width: 100%;
-    font-size: clamp(1.55rem, 7vw, 2.15rem);
+    font-size: clamp(1.85rem, 8vw, 2.45rem);
   }
 
   .featured-hero-intro {
     max-width: 100%;
+    font-size: 1.05rem;
+  }
+
+  .featured-hero-quote {
+    font-size: 1.05rem;
+  }
+
+  .featured-hero-points li {
+    max-width: none;
+    font-size: 1rem;
   }
 
   .featured-hero-photo {
@@ -1952,10 +2028,6 @@ html[data-contrast="high"] .sunrise-orb {
 
   .featured-hero-button {
     width: 100%;
-  }
-
-  .featured-hero-points li {
-    max-width: none;
   }
 }
 
@@ -2001,14 +2073,26 @@ html[data-contrast="high"] .sunrise-orb {
   }
 
   html[data-locale="te"] h1.featured-hero-title {
-    font-size: clamp(1.25rem, 6.2vw, 1.7rem);
-    line-height: 1.4;
+    font-size: clamp(1.55rem, 6.6vw, 2.05rem);
+    line-height: 1.35;
     max-width: 100%;
   }
 
   html[data-locale="te"] .featured-hero-intro {
     max-width: 100%;
-    font-size: 0.9rem;
+    font-size: 1.02rem;
+  }
+
+  html[data-locale="te"] .featured-hero-quote {
+    font-size: 1.02rem;
+  }
+
+  html[data-locale="hi"] h1.featured-hero-title,
+  html[data-locale="ta"] h1.featured-hero-title,
+  html[data-locale="kn"] h1.featured-hero-title,
+  html[data-locale="ml"] h1.featured-hero-title {
+    font-size: clamp(1.6rem, 6.8vw, 2.15rem);
+    line-height: 1.32;
   }
 
   html[data-locale="te"] .hero-sub {

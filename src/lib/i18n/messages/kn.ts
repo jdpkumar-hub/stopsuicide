@@ -28,6 +28,8 @@ const kn: Messages = {
   "hero.share": "ನಿಮ್ಮ ಕಥೆ ಹಂಚಿಕೊಳ್ಳಿ",
   "hero.readStory": "ಅವರ ಕಥೆ ಓದಿ",
   "hero.reminderHeading": "ಈ ಕಥೆ ನಮಗೆ ನೆನಪಿಸುವುದು",
+  "hero.storyQuote": "ಸಣ್ಣ ಹೆಜ್ಜೆ ಮುಂದೆ ಇಟ್ಟರೂ ಅದು ಮುನ್ನಡೆ.",
+  "hero.storyArtAlt": "ಈ ಕಥೆಗಾಗಿ ರಚಿಸಿದ ಚಿತ್ರ",
   "hero.takeaway1": "ಸಹಾಯ ಕೇಳುವುದು ಒಂದು ಶಕ್ತಿ",
   "hero.takeaway2": "ಸಣ್ಣ ಹೆಜ್ಜೆಗಳೂ ಮುಂದಕ್ಕೆ ಕೊಂಡೊಯ್ಯುತ್ತವೆ",
   "hero.takeaway3": "ಆಶೆ ನಿಧಾನವಾಗಿ ಹಿಂದಿರುಗಬಹುದು",

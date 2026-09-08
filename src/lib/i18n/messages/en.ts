@@ -26,6 +26,8 @@ export const en = {
   "hero.share": "Share Your Story",
   "hero.readStory": "Read Their Story",
   "hero.reminderHeading": "What this story reminds us",
+  "hero.storyQuote": "A small step forward is still progress.",
+  "hero.storyArtAlt": "Illustrative artwork for this story",
   "hero.takeaway1": "Asking for support is a strength",
   "hero.takeaway2": "Small steps still move us forward",
   "hero.takeaway3": "Hope can return gradually",
