@@ -195,7 +195,8 @@ export function HomeSections({
             </div>
           </FadeIn>
           <FadeIn delay={0.08}>
-            <h2 className="font-serif text-4xl sm:text-5xl">{t("home.meditation")}</h2>
+            <p className="kicker text-hope-blue">{t("home.meditation")}</p>
+            <h2 className="mt-2 font-serif text-4xl sm:text-5xl">{t("home.meditation")}</h2>
             <p className="mt-3 max-w-xl text-muted">{t("home.meditationSub")}</p>
             <Button href="/videos?topic=meditation" className="mt-6">
               {t("home.meditationCta")}
